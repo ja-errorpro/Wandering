@@ -1,4 +1,4 @@
-package com.example.myapp
+package tw.cycugdgoc.wandering
 
 import io.flutter.embedding.android.FlutterActivity
 

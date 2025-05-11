@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "947646392748",
+    "project_id": "wandering-2b097",
+    "storage_bucket": "wandering-2b097.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:947646392748:android:0cc4109cda940f22cdb209",
+        "android_client_info": {
+          "package_name": "tw.cycugdgoc.wandering"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAkL3QQLHpU1oTsRZ2rnVLseG8UYtnhf0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

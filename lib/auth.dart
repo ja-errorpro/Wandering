@@ -1,8 +1,6 @@
-// import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class AuthModel extends ChangeNotifier {}
-/*
 class AuthModel extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   User? _user;
@@ -42,6 +40,7 @@ class AuthModel extends ChangeNotifier {
 
   Future<void> register(
     BuildContext context,
+    String username,
     String email,
     String password,
   ) async {
@@ -53,6 +52,7 @@ class AuthModel extends ChangeNotifier {
         password: password,
       );
       UserCredential result = await _auth.signInWithCredential(credential);
+      await user?.updateDisplayName(username);
 
       print('userCredential : $userCredential');
       print('credential : $credential');
@@ -68,4 +68,4 @@ class AuthModel extends ChangeNotifier {
   Future<void> logout() async {
     await _auth.signOut();
   }
-}*/
+}

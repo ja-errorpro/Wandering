@@ -1,17 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'icons.dart'; // 匯入圖片 Icon
-import 'register.dart'; // 匯入註冊
-import 'preference_selection.dart'; // 匯入偏好設定
+import 'page/all_page.dart'; // 匯入所有頁面
 import 'permissions.dart'; // 向使用者要求權限
 import 'package:provider/provider.dart';
-// import 'auth.dart';
+import 'auth.dart'; // 登入
+
+Future<bool> isFirstLaunch() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  // 檢查 'first_launch' 這個 key 是否存在或其值為 true
+  bool isFirst = prefs.getBool('first_launch') ?? true; // 預設為 true
+  return isFirst;
+}
+
+void setFirstLaunchDone() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  // 設定 'first_launch' 為 false，表示 App 已經開啟過
+  await prefs.setBool('first_launch', false);
+}
 
 void main() async {
-  // await Firebase.initializeApp();
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  // runApp(MyApp()); // 假設你的主頁面路由是 '/'
+  runApp(
+    ChangeNotifierProvider(create: (context) => AuthModel(), child: MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -56,14 +73,34 @@ class _MyHomePageState extends State<MyHomePage> {
     return HomePage(context);
   }
 
+  void _EnterWelcomePage(BuildContext context) async {
+    bool firstLaunch = await isFirstLaunch();
+
+    if (true) {
+      // 如果是第一次開啟，導航到歡迎頁面
+      // 使用 Navigator 替換當前頁面為 Register 頁面
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const WelcomePage()),
+        );
+      });
+      // runApp(MyApp(initialRoute: '/register')); // 假設你的註冊頁面路由是 '/register'
+      setFirstLaunchDone(); // 設定標誌為已開啟過
+    }
+    // 不是第一次開啟，或者剛開啟過歡迎頁面，導航到主頁
+  }
+
   Widget HomePage(BuildContext context) {
+    // 判斷是否需要導航到歡迎頁面
+    _EnterWelcomePage(context);
+
     if (true) {
       // !auth.isAuthenticated
       // 使用者未驗證，導航到 Register 頁面
       // 使用 Navigator 替換當前頁面為 Register 頁面
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const Register()),
+          MaterialPageRoute(builder: (context) => const LoginOrRegister()),
         );
       });
       // 在導航時返回一個空的容器或載入指示器
