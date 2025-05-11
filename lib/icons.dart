@@ -5,10 +5,6 @@ class MainIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(
-      'icons/Wandering.png',
-      width: 48,
-      height: 48,
-    );
+    return Image.asset('assets/images/wandering.png', width: 240, height: 240);
   }
 }
