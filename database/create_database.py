@@ -5,14 +5,15 @@ from collections import deque
 import json
 
 API_KEY = "AIzaSyAUBEI-N5zgzAmFbDcyoU-gdPiiPmuw-i8"
-# "Taipei Main Station": "25.047924, 121.517081",  #台北車站
-INITIAL_LOCATION = [("Keelung North Railway Station", "25.134274343711827, 121.74005245320404"), # 基隆北站
+INITIAL_LOCATION = [
+                    ("Keelung North Railway Station", "25.134274343711827, 121.74005245320404"), # 基隆北站
                     ("Qi Du Railway Station", "25.09468489648192, 121.7127353316717"),  # 七堵車站
                     ("Banqiao Railway Station", "25.014196157791464, 121.46380554247673"), # 板橋車站
                     ("Shulin Railway Station", "24.991224628773146, 121.42488153989889"), # 樹林車站
                     ("Ruifang Railway Station", "25.10882632614538, 121.80596281436307"), # 瑞芳車站
                     ("Nangang Railway Station", "25.05326442718221, 121.60700774062991"), # 南港車站
                     ("Songshan Railway Station", "25.049369808852937, 121.57825488420708"), # 松山車站
+                    ("Taipei Main Station", "25.04754417535744, 121.51729039749631"),  #台北車站
                     ("Wanhua Railway Station", "25.03343177648604, 121.50036814247721"), # 萬華車站
                     ("Taoyuan Railway Station", "24.989085294212295, 121.31449364062816"), # 桃園車站
                     ("Zhongli Railway Station", "24.95377498709887, 121.2260759940431"), # 中壢車站
@@ -49,7 +50,7 @@ def get_places_in_radius(location, radius, place_type, api_key, language):
     抓取指定區域內的景點資料
     """
     gmaps = googlemaps.Client(key=api_key)
-    time.sleep(2)
+    time.sleep(1)
     places_result = gmaps.places_nearby(location=location, radius=radius, type=place_type, language=language)
     return places_result['results'], places_result.get('next_page_token')
 
@@ -62,13 +63,12 @@ def save_to_csv(data, filename):
             writer = csv.writer(f)
             # 寫入標題列
             writer.writerow([
-                "place_id", "name", "address", "lat", "lng", "rating", "details",
-                "search_location", "search_radius"
+                "place_id", "name", "address", "lat", "lng", "rating", "details"
             ])
 
             for place in data:
                 # 取得地點詳細資料
-                time.sleep(2)  # 避免 API 請求過快
+                time.sleep(1)  # 避免 API 請求過快
                 gmaps = googlemaps.Client(key=API_KEY)  # 確保你有 API_KEY
                 place_details = gmaps.place(place_id=place['place_id'], language=LANGUAGE)
                 if place_details and place_details['result']:
@@ -82,9 +82,6 @@ def save_to_csv(data, filename):
                     longitude = None
                     rating = None
                     details_json = None
-                #  search_location, search_radius 從 place 提取
-                search_location = place.get('search_location')
-                search_radius = place.get('search_radius')
                 # 寫入資料列
                 writer.writerow([
                     place['place_id'],
@@ -93,9 +90,7 @@ def save_to_csv(data, filename):
                     latitude,
                     longitude,
                     rating,
-                    details_json,
-                    search_location,
-                    search_radius
+                    details_json
                 ])
         print(f"資料已成功儲存到 {filename}")
     except Exception as e:
