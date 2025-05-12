@@ -31,9 +31,12 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  @override
+  _MyApp createState() => _MyApp();
+}
 
+class _MyApp extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -77,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
     bool firstLaunch = await isFirstLaunch();
 
     if (firstLaunch) {
-      // 如果是第一次開啟，導航到歡迎頁面
+      // 如果是第一次開啟，導航到 GuidingPage 頁面
       // 使用 Navigator 替換當前頁面為 Register 頁面
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pushReplacement(
@@ -99,7 +102,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildHomePage(BuildContext context, AuthModel auth) {
-    auth.logout();
     if (!auth.isAuthenticated) {
       // !auth.isAuthenticated
       // 使用者未驗證，導航到 Register 頁面

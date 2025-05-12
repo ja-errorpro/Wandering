@@ -1,20 +1,103 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import './../preference_data.dart'; // 確保導入你的 preference_data.dart (包含 AccommodationType 枚舉和 UserPreferences 類)
+import 'package:provider/provider.dart'; // 導入 Provider
+import './../preference_data.dart'; // 確保導入你的 preference_data.dart (包含 LocationType 枚舉和 UserPreferences 類)
 import './../database_helper.dart'; // 導入資料庫幫助類
-import 'AvoidTypeSelection_page.dart'; // 導入下一個頁面
+import 'AccommodationTypeSelection_page.dart'; // 導入下一個頁面
 
-class AccommodationTypeSelectionPage extends StatefulWidget {
-  const AccommodationTypeSelectionPage({super.key});
+// 定義 LocationType 的圖示和顏色 (範例，你可以根據你的設計添加所有地點類型)
+// 建議在 preference_data.dart 中為 LocationType 添加相關屬性
+extension LocationTypeDetails on LocationType {
+  IconData get icon {
+    switch (this) {
+      case LocationType.museum:
+        return Icons.account_balance;
+      case LocationType.marketNightMarket:
+        return Icons.shopping_bag;
+      case LocationType.trailNature:
+        return Icons.nature;
+      case LocationType.cafe:
+        return Icons.coffee;
+      case LocationType.landmarkBuilding:
+        return Icons.apartment;
+      case LocationType.beachLakeside:
+        return Icons.beach_access;
+      case LocationType.templeReligiousSite:
+        return Icons.temple_hindu;
+      case LocationType.artsSpace:
+        return Icons.book;
+      case LocationType.parkSquare:
+        return Icons.park;
+      case LocationType.nightViewpoint:
+        return Icons.nightlight_round;
+      case LocationType.oldStreet: // 添加 Old Street 的圖示
+        return Icons.streetview;
+      default:
+        return Icons.help_outline; // 預設圖示
+    }
+  }
 
-  @override
-  State<AccommodationTypeSelectionPage> createState() =>
-      _AccommodationTypeSelectionPageState();
+  Color get color {
+    switch (this) {
+      case LocationType.museum:
+        return Colors.blue;
+      case LocationType.marketNightMarket:
+        return Colors.amber;
+      case LocationType.trailNature:
+        return Colors.green;
+      case LocationType.cafe:
+        return Colors.redAccent;
+      case LocationType.landmarkBuilding:
+        return Colors.red;
+      case LocationType.beachLakeside:
+        return Colors.lightBlue;
+      case LocationType.templeReligiousSite:
+        return Colors.deepPurple;
+      case LocationType.artsSpace:
+        return Colors.brown;
+      case LocationType.parkSquare:
+        return Colors.greenAccent;
+      case LocationType.nightViewpoint:
+        return Colors.deepPurpleAccent;
+       case LocationType.oldStreet: // 添加 Old Street 的顏色
+        return Colors.orangeAccent;
+      default:
+        return Colors.grey; // 預設顏色
+    }
+  }
+
+  String get label {
+    // 根據設計圖調整 Old Street 的標籤
+    if (this == LocationType.oldStreet) {
+      return '老街';
+    }
+    // 其他使用之前的邏輯獲取文字標籤
+    switch (this) {
+       case LocationType.museum: return '博物館';
+       case LocationType.landmarkBuilding: return '地標建築';
+       case LocationType.marketNightMarket: return '市場/夜市';
+       case LocationType.parkSquare: return '公園/廣場';
+       case LocationType.cafe: return '咖啡廳';
+       case LocationType.artsSpace: return '書局/藝廊';
+       case LocationType.templeReligiousSite: return '廟宇/宗教地';
+       case LocationType.nightViewpoint: return '夜景觀景點';
+       case LocationType.trailNature: return '步道/自然';
+       case LocationType.beachLakeside: return '海邊/湖畔';
+       default: return this.toString().split('.').last;
+    }
+  }
 }
 
-class _AccommodationTypeSelectionPageState
-    extends State<AccommodationTypeSelectionPage> {
+
+class LocationTypeSelectionPage extends StatefulWidget {
+  const LocationTypeSelectionPage({super.key});
+
+  @override
+  State<LocationTypeSelectionPage> createState() =>
+      _LocationTypeSelectionPageState();
+}
+
+class _LocationTypeSelectionPageState extends State<LocationTypeSelectionPage> {
 
   // 在 State 初始化時從資料庫加載偏好
   @override
@@ -86,7 +169,6 @@ class _AccommodationTypeSelectionPageState
     );
   }
 
-  // 驗證選擇數量是否在指定區間內 (通用函數)
   bool _isSelectionCountValid(
       Set<String> selectedSet, int minCount, int maxCount) {
     return selectedSet.length >= minCount && selectedSet.length <= maxCount;
@@ -94,209 +176,144 @@ class _AccommodationTypeSelectionPageState
 
   @override
   Widget build(BuildContext context) {
+    // 使用 Consumer 來監聽 UserPreferences 的變化並重建 UI
     return Scaffold(
-      appBar: AppBar(title: const Text('選擇偏好住宿類型')),
+      appBar: AppBar(title: const Text('選擇偏好地點類型')),
       body: Consumer<UserPreferences>(
         builder: (context, userPreferences, child) {
-          // 根據設計圖修改 UI 結構
+          // 使用 GridView.builder 構建網格佈局
           return Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  '選擇你的住宿偏好',
-                  textAlign: TextAlign.center,
+                  '選擇你喜愛的地點類型', // 更新標題文字
                   style: GoogleFonts.lato(
-                    fontSize: 24,
+                    fontSize: 24, // 調整字體大小
                     fontWeight: FontWeight.bold,
-                    color: Colors.blue.shade700, // 根據設計圖調整顏色
+                    color: Colors.blueAccent, // 設定標題顏色
                   ),
+                  textAlign: TextAlign.center, // 標題置中
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  '你偏好哪些住宿類型？(可複選)',
-                   textAlign: TextAlign.center,
-                   style: GoogleFonts.lato(
-                    fontSize: 16,
-                    color: Colors.grey.shade600,
-                   ),
+                  '以下哪些地方會吸引你停下腳步?(可複選)', // 副標題
+                  style: GoogleFonts.lato(fontSize: 16, color: Colors.grey[700]),
+                  textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
-                Expanded( // 使用 Expanded 使 GridView 填充剩餘空間
-                  child: GridView.count(
-                    crossAxisCount: 2, // 每行兩個項目
-                    crossAxisSpacing: 16.0, // 水平間距
-                    mainAxisSpacing: 16.0, // 垂直間距
-                    childAspectRatio: 1.2, // 控制每個網格項目的長寬比
-                    children: AccommodationType.values.map((type) {
-                      final typeValue = type.toString().split('.').last;
-                      final isSelected = userPreferences.accommodationTypes.contains(typeValue);
+                Expanded(
+                  // 使用 Expanded 讓 GridView 佔滿剩餘空間
+                  child: GridView.builder(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3, // 每行顯示 3 個
+                      crossAxisSpacing: 12.0, // 水平間距
+                      mainAxisSpacing: 12.0, // 垂直間距
+                      childAspectRatio: 0.8, // 調整每個網格項目的長寬比
+                    ),
+                    itemCount: LocationType.values.length,
+                    itemBuilder: (context, index) {
+                      final locationType = LocationType.values[index];
+                      final typeValue = locationType.label; // 使用 extension 獲取 label
+                      final isSelected = userPreferences.locationTypes.contains(typeValue); // 從 UserPreferences 中獲取選擇狀態
 
-                      // 根據設計圖構建帶有圖標和文字的選擇卡片
-                      Widget icon;
-                      String label;
-                      // 根據 AccommodationType 設置圖標和文字
-                       switch (type) {
-                         case AccommodationType.hostel:
-                           icon = Icon(Icons.king_bed, size: 40, color: isSelected ? Colors.white : Colors.blue);
-                           label = '青年旅館';
-                           break;
-                         case AccommodationType.bedAndBreakfast:
-                            icon = Icon(Icons.home, size: 40, color: isSelected ? Colors.white : Colors.green);
-                            label = '民宿';
-                            break;
-                         case AccommodationType.starHotel:
-                            icon = Icon(Icons.star, size: 40, color: isSelected ? Colors.white : Colors.orange);
-                            label = '星級飯店';
-                            break;
-                         case AccommodationType.luxuryResort:
-                            icon = Icon(Icons.beach_access, size: 40, color: isSelected ? Colors.white : Colors.redAccent);
-                            label = '豪華渡假村';
-                            break;
-                         case AccommodationType.campingWildCamping:
-                            icon = Icon(Icons.camping, size: 40, color: isSelected ? Colors.white : Colors.teal);
-                            label = '露營/野營';
-                            break;
-                         case AccommodationType.apartmentSuite:
-                            icon = Icon(Icons.apartment, size: 40, color: isSelected ? Colors.white : Colors.pink);
-                            label = '公寓/套房';
-                            break;
-                         case AccommodationType.any:
-                           icon = Icon(Icons.hotel, size: 40, color: isSelected ? Colors.white : Colors.grey);
-                           label = '任意皆可';
-                           break;
-                         case AccommodationType.flexibleMix:
-                            icon = Icon(Icons.shuffle, size: 40, color: isSelected ? Colors.white : Colors.cyan);
-                            label = '靈活混搭';
-                           break;
-                       }
-
-                      return InkWell( // 使用 InkWell 實現可點擊效果
+                      return InkWell(
+                        // 使用 InkWell 使卡片可點擊
                         onTap: () {
-                          // **住宿類型選擇邏輯：考慮 any 和 flexibleMix 的互斥性**
-                          final currentSelection = Set<String>.from(userPreferences.accommodationTypes);
-
-                          // 如果選擇的是 Any 或 Flexible Mix
-                          if (type == AccommodationType.any || type == AccommodationType.flexibleMix) {
-                              // 如果當前已經選擇了 Any 或 Flexible Mix 以外的其他選項，則提示錯誤或清空其他選項
-                              if (currentSelection.isNotEmpty &&
-                                  !currentSelection.contains('any') &&
-                                  !currentSelection.contains('flexibleMix')) {
-                                  // 提示用戶 Any/Flexible Mix 不能與其他選項同時選擇
-                                  _showSelectionCountWarningDialog(PreferenceCategory.accommodationTypes, 1, 1); // 這裡根據 Any/Flexible Mix 的規則提示只能選擇一項
-                                  return;
-                              }
-
-                              // 如果選擇 Any 或 Flexible Mix，清空其他選項
-                              userPreferences.accommodationTypes.clear();
-                              userPreferences.updatePreference(PreferenceCategory.accommodationTypes, typeValue, true); // 只選擇當前這個
-
-                          } else {
-                              // 如果選擇的是其他選項，清空 Any 和 Flexible Mix
-                              if (currentSelection.contains('any')) {
-                                userPreferences.updatePreference(PreferenceCategory.accommodationTypes, 'any', false);
-                              }
-                              if (currentSelection.contains('flexibleMix')) {
-                                userPreferences.updatePreference(PreferenceCategory.accommodationTypes, 'flexibleMix', false);
-                              }
-
-                              // **檢查選擇數量是否超過最大限制 (對於非 any 和 flexibleMix 選項)**
-                              if (!isSelected && userPreferences.accommodationTypes.length >= 3) {
-                                  _showSelectionCountWarningDialog(
-                                    PreferenceCategory.accommodationTypes,
-                                    1, // 根據 AccommodationType 的規則設置最小選擇數
-                                    3, // 根據 AccommodationType 的規則設置最大選擇數
-                                  );
-                                  return; // 不允許選擇更多
-                              }
-
-                             // 更新 UserPreferences 中的住宿類型
-                             userPreferences.updatePreference(
-                               PreferenceCategory.accommodationTypes,
-                               typeValue,
-                               !isSelected, // 切換選擇狀態
-                             );
+                          // 檢查選擇數量是否超過最大限制 (5項)
+                          if (!isSelected && userPreferences.locationTypes.length >= 5) {
+                            // 只有在未選中且數量超過時才提示
+                            _showSelectionCountWarningDialog(
+                              PreferenceCategory.locationTypes,
+                              1, // 地點類型的最小選擇數
+                              5, // 地點類型的最大選擇數
+                            );
+                            return; // 不允許選擇更多
                           }
 
+                          // 更新 UserPreferences 中的地點類型偏好
+                          userPreferences.updatePreference(
+                            PreferenceCategory.locationTypes,
+                            typeValue,
+                            !isSelected, // 切換選擇狀態
+                          );
 
                           // **在偏好更新後保存到資料庫**
-                           DatabaseHelper.instance.insertOrUpdatePreferences(userPreferences);
+                          DatabaseHelper.instance.insertOrUpdatePreferences(userPreferences);
                         },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: isSelected ? Colors.blueAccent : Colors.white, // 根據選擇狀態改變背景顏色
-                            borderRadius: BorderRadius.circular(8.0),
-                            border: Border.all(
-                              color: isSelected ? Colors.blueAccent : Colors.grey.shade300, // 根據選擇狀態改變邊框顏色
-                              width: 1.5,
-                            ),
-                            boxShadow: isSelected ? [ // 選擇時添加陰影效果
-                              BoxShadow(
-                                color: Colors.blueAccent.withOpacity(0.3),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: Offset(0, 3),
-                              ),
-                            ] : [],
+                        child: Card(
+                          // 使用 Card 創建卡片效果
+                          color:
+                              isSelected
+                                  ? locationType.color.withOpacity(0.8)
+                                  : Colors.white, // 選中時改變背景色
+                          elevation: isSelected ? 8.0 : 2.0, // 選中時提高陰影
+                          shape: RoundedRectangleBorder(
+                            // 圓角邊框
+                            borderRadius: BorderRadius.circular(12.0),
+                            side:
+                                isSelected
+                                    ? BorderSide(
+                                      color: locationType.color,
+                                      width: 2.0,
+                                    )
+                                    : BorderSide.none, // 選中時添加邊框
                           ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              icon,
+                              Icon(
+                                locationType.icon, // 使用 extension 獲取圖標
+                                size: 40,
+                                color: isSelected ? Colors.white : locationType.color, // 根據選擇狀態改變圖標顏色
+                              ),
                               const SizedBox(height: 8),
                               Text(
-                                label,
+                                typeValue, // 使用 extension 獲取標籤
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                   color: isSelected ? Colors.white : Colors.black87, // 根據選擇狀態改變文字顏色
                                 ),
+                                textAlign: TextAlign.center,
                               ),
                             ],
                           ),
                         ),
                       );
-                    }).toList(),
+                    },
                   ),
                 ),
-                 const SizedBox(height: 24), // 按鈕上方留白
-                 ElevatedButton(
+                const SizedBox(height: 24), // 按鈕上方留白
+                ElevatedButton(
                   onPressed: () {
-                     // **驗證當前頁面的選擇數量**
-                     // 住宿類型驗證邏輯：
-                     // 如果選擇了 "any" 或 "flexibleMix"，則只允許選擇一項
-                     // 如果沒有選擇 "any" 或 "flexibleMix"，則必須在 1 到 3 項之間
-                     final currentSelection = Set<String>.from(userPreferences.accommodationTypes);
+                    // 驗證當前頁面的選擇數量 (最少 1 項，最多 5 項)
+                    if (_isSelectionCountValid(
+                      userPreferences.locationTypes,
+                      1,
+                      5,
+                    )) {
+                      // **在導航前保存到資料庫**
+                      DatabaseHelper.instance.insertOrUpdatePreferences(userPreferences);
 
-                     bool isValid = false;
-                     if (currentSelection.contains('any') || currentSelection.contains('flexibleMix')) {
-                         isValid = currentSelection.length == 1; // 如果選擇了 Any 或 Flexible Mix，只能選擇一個
-                         if (!isValid) {
-                            _showSelectionCountWarningDialog(PreferenceCategory.accommodationTypes, 1, 1);
-                         }
-                     } else {
-                          isValid = _isSelectionCountValid(currentSelection, 1, 3); // 其他情況下，必須在 1 到 3 項之間
-                          if (!isValid) {
-                              _showSelectionCountWarningDialog(PreferenceCategory.accommodationTypes, 1, 3);
-                          }
-                     }
-
-
-                     if (isValid) {
-                        // **在導航前保存到資料庫**
-                        DatabaseHelper.instance.insertOrUpdatePreferences(userPreferences);
-
-                        // 導航到下一個偏好設定頁面
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const AvoidTypeSelectionPage(),
-                          ),
-                        );
-                     }
+                      // 導航到下一個偏好設定頁面
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const AccommodationTypeSelectionPage(),
+                        ),
+                      );
+                    } else {
+                      // 顯示警告訊息
+                      _showSelectionCountWarningDialog(
+                        PreferenceCategory.locationTypes,
+                        1,
+                        5,
+                      );
+                    }
                   },
-                   // 根據選擇是否有效來決定按鈕是否啟用
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                     backgroundColor: Colors.teal, // 根據設計圖調整按鈕顏色
