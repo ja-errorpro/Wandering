@@ -65,7 +65,7 @@ class Register extends StatelessWidget {
                 Provider.of<AuthModel>(
                   context,
                   listen: false,
-                ).register(userEmailController.text, passwordController.text);
+                ).register(context, userNameController.text, userEmailController.text, passwordController.text);
                 // 導向到登入頁面
                 
 
