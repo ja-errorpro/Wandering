@@ -72,6 +72,7 @@ flutter:
     - assets/
     - assets/images/
     - assets/fonts/
+    - assets/images/screen_size/9_16.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -90,6 +91,10 @@ flutter:
       fonts:
         - asset: assets/fonts/FontsFree-Net-HolidayFree.ttf
         - asset: assets/fonts/HolidayFree.otf
+    - family: FangZhengFangSongFanTi
+      fonts:
+        - asset: assets/fonts/FangZhengFangSongFanTi-1.ttf
+        # - asset: assets/fonts/HolidayFree.otf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
