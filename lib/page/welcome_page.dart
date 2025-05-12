@@ -56,7 +56,7 @@ class WelcomePage extends StatelessWidget {
                   // TODO: 在這裡導航到下一個頁面 (偏好設定頁面)PreferenceSelectionPage
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => const LoginOrRegister()),
+                      MaterialPageRoute(builder: (context) => Login()),
                     );
                   });
                 },

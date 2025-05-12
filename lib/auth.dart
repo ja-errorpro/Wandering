@@ -1,6 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+enum Errorlog {
+  success,
+  not_register_error,
+  network_error,
+  firebase_error,
+  basic_error,
+}
+
 class AuthModel extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   User? _user;
@@ -17,23 +25,29 @@ class AuthModel extends ChangeNotifier {
 
   bool get isAuthenticated => user != null;
 
-  Future<void> login(String email, String password) async {
+  Future<Errorlog> login(String email, String password) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
+      return Errorlog.success;
     } catch (e) {
       if (e is FirebaseAuthException) {
         if (e.message!.contains('network-error')) {
           print('Network error detected');
+
           // Handle network error
+          return Errorlog.network_error;
         } else if (e.message!.contains('no user record corresponding')) {
           print('not register yet');
           // Handle network error
+          return Errorlog.not_register_error;
         } else {
           print('Firebase Login Error : ${e.message}');
           // Handle other errors
+          return Errorlog.firebase_error;
         }
       } else {
         print('Basic Login Error : $e');
+        return Errorlog.basic_error;
       }
     }
   }

@@ -30,7 +30,7 @@ enum LocationType {
   museum, // Museum (History and art exhibitions)
   landmarkBuilding, // Landmark Building (City landmarks, Historical buildings)
   marketNightMarket, // Market/Night Market (Local snacks and shopping hotspots)
-  oldStreet, // Old Street
+  oldStreet, // Old Street!
   parkSquare, // Park/Square (Community, Green spaces, Picnic areas)
   cafe, // Cafe (Hipster spots, Relaxation)
   artsSpace, // Arts Space (e.g. Bookstores/Art galleries, Places for static, culturally rich activities)
@@ -66,125 +66,96 @@ enum AvoidType {
 // 資料結構來儲存使用者偏好
 // UserPreferences 類別用於管理用戶的偏好選擇
 // 繼承 ChangeNotifier，以便在狀態改變時通知監聽者
-class UserPreferences with ChangeNotifier {
-  final String uid; // 用戶的唯一 ID
+class UserPreferences extends ChangeNotifier {
+  Set<String> travelStyles;
+  Set<String> locationTypes;
+  Set<String> accommodationTypes;
+  Set<String> avoidTypes; // 添加 avoidTypes
 
-  // 使用 Set 來儲存選取的偏好，確保唯一性
-  Set<String> _travelStyles = {};
-  Set<String> _locationTypes = {};
-  Set<String> _accommodationTypes = {};
-  Set<String> _avoidTypes = {};
+  UserPreferences({
+    Set<String>? travelStyles,
+    Set<String>? locationTypes,
+    Set<String>? accommodationTypes,
+    Set<String>? avoidTypes, // 添加 avoidTypes 參數
+  }) : travelStyles = travelStyles ?? {},
+       locationTypes = locationTypes ?? {},
+       accommodationTypes = accommodationTypes ?? {},
+       avoidTypes = avoidTypes ?? {}; // 初始化 avoidTypes
 
-  UserPreferences({required this.uid});
-
-  // Getters 讓外部可以訪問選取的偏好 (只讀)
-  Set<String> get travelStyles => _travelStyles;
-  Set<String> get locationTypes => _locationTypes;
-  Set<String> get accommodationTypes => _accommodationTypes;
-  Set<String> get avoidTypes => _avoidTypes;
-
-  // 更新特定類別的偏好
+  // 更新偏好 (您原有的方法)
   void updatePreference(
-      PreferenceCategory category, String itemValue, bool isSelected) {
+    PreferenceCategory category,
+    String value,
+    bool isSelected,
+  ) {
     switch (category) {
       case PreferenceCategory.travelStyles:
         if (isSelected) {
-          _travelStyles.add(itemValue);
+          travelStyles.add(value);
         } else {
-          _travelStyles.remove(itemValue);
+          travelStyles.remove(value);
         }
         break;
       case PreferenceCategory.locationTypes:
         if (isSelected) {
-          _locationTypes.add(itemValue);
+          locationTypes.add(value);
         } else {
-          _locationTypes.remove(itemValue);
+          locationTypes.remove(value);
         }
         break;
       case PreferenceCategory.accommodationTypes:
         if (isSelected) {
-          _accommodationTypes.add(itemValue);
+          accommodationTypes.add(value);
         } else {
-          _accommodationTypes.remove(itemValue);
+          accommodationTypes.remove(value);
         }
         break;
-      case PreferenceCategory.avoidTypes:
+      case PreferenceCategory.avoidTypes: // 添加 avoidTypes 的更新邏輯
         if (isSelected) {
-          _avoidTypes.add(itemValue);
+          avoidTypes.add(value);
         } else {
-          _avoidTypes.remove(itemValue);
+          avoidTypes.remove(value);
         }
         break;
     }
-    // 通知所有監聽者，狀態已改變
-    notifyListeners();
+    notifyListeners(); // 通知監聽者偏好已更改
   }
 
-  // 將偏好轉換為 Map，方便儲存到 Firestore
+  // 將 UserPreferences 對象轉換為 Map (用於保存到資料庫)
   Map<String, dynamic> toMap() {
     return {
-      'uid': uid,
-      'travelStyles': _travelStyles.toList(), // Set 轉換為 List 方便儲存
-      'locationTypes': _locationTypes.toList(),
-      'accommodationTypes': _accommodationTypes.toList(),
-      'avoidTypes': _avoidTypes.toList(),
-      // 'timestamp': FieldValue.serverTimestamp(), // 添加時間戳
+      // 注意：這裡將 Set 轉換為逗號分隔的字符串
+      'travelStyles': travelStyles.join(','),
+      'locationTypes': locationTypes.join(','),
+      'accommodationTypes': accommodationTypes.join(','),
+      'avoidTypes': avoidTypes.join(','), // 添加 avoidTypes
     };
   }
 
-  // 從 Map 創建 UserPreferences 對象，方便從 Firestore 載入
+  // 從 Map 創建 UserPreferences 對象 (用於從資料庫讀取)
   factory UserPreferences.fromMap(Map<String, dynamic> map) {
+    // 注意：這裡將逗號分隔的字符串轉換回 Set
     return UserPreferences(
-      uid: map['uid'] as String,
-    )
-      .._travelStyles = Set<String>.from(map['travelStyles'] as List)
-      .._locationTypes = Set<String>.from(map['locationTypes'] as List)
-      .._accommodationTypes = Set<String>.from(map['accommodationTypes'] as List)
-      .._avoidTypes = Set<String>.from(map['avoidTypes'] as List);
+      travelStyles: Set<String>.from(map['travelStyles']?.split(',') ?? []),
+      locationTypes: Set<String>.from(map['locationTypes']?.split(',') ?? []),
+      accommodationTypes: Set<String>.from(
+        map['accommodationTypes']?.split(',') ?? [],
+      ),
+      avoidTypes: Set<String>.from(
+        map['avoidTypes']?.split(',') ?? [],
+      ), // 添加 avoidTypes
+    );
   }
 
-  // TODO: 實現將偏好儲存到 Firebase Firestore 的方法
-  Future<void> savePreferences() async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('user_preferences')
-          .doc(uid)
-          .set(toMap());
-      print('用戶偏好已成功儲存到 Firestore');
-    } catch (e) {
-      print('儲存用戶偏好時發生錯誤: $e');
-      // 處理錯誤，例如顯示錯誤訊息給用戶
-    }
-  }
-
-  // TODO: 實現從 Firebase Firestore 載入偏好的方法
-  Future<void> loadPreferences() async {
-    try {
-      final doc = await FirebaseFirestore.instance
-          .collection('user_preferences')
-          .doc(uid)
-          .get();
-      if (doc.exists) {
-        final data = doc.data();
-        if (data != null) {
-          _travelStyles = Set<String>.from(data['travelStyles'] as List);
-          _locationTypes = Set<String>.from(data['locationTypes'] as List);
-          _accommodationTypes =
-              Set<String>.from(data['accommodationTypes'] as List);
-          _avoidTypes = Set<String>.from(data['avoidTypes'] as List);
-          notifyListeners(); // 載入後通知監聽者更新 UI
-          print('用戶偏好已從 Firestore 載入');
-        }
-      } else {
-        print('Firestore 中找不到用戶偏好數據');
-        // 用戶第一次設定偏好，不需要載入
-      }
-    } catch (e) {
-      print('載入用戶偏好時發生錯誤: $e');
-      // 處理錯誤
-    }
+  // 判斷偏好是否為空的方法 (用於檢查用戶是否已經設定過偏好)
+  bool get isEmpty {
+    return travelStyles.isEmpty &&
+        locationTypes.isEmpty &&
+        accommodationTypes.isEmpty &&
+        avoidTypes.isEmpty; // 包含 avoidTypes
   }
 }
+
 // 獲取當前登入使用者的 UID
 String? getCurrentUserUid() {
   final user = FirebaseAuth.instance.currentUser;

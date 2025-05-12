@@ -118,7 +118,7 @@ class _AvoidTypeSelectionPageState extends State<AvoidTypeSelectionPage> {
 
                      // 在最後一個偏好頁面儲存偏好
                      print('所有偏好已選擇，準備儲存：${userPreferences.toMap()}');
-                     await userPreferences.savePreferences(); // 調用儲存方法
+                    //  await userPreferences.savePreferences(); // 調用儲存方法
 
                      // 導航到完成頁面或主頁面
                      // Navigator.pushReplacementNamed(context, '/completion_page'); // 導航到完成頁面

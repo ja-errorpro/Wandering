@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 import './../preference_data.dart'; // 確保導入你的 preference_data.dart
+import './../savePreferencesLocally.dart'; // 導入並使用別名
 import 'LocationStyleSelection_page.dart'; // 導入下一個頁面
 
 class TravelStyleSelectionPage extends StatefulWidget {
@@ -127,13 +129,18 @@ class _TravelStyleSelectionPageState extends State<TravelStyleSelectionPage> {
                 ),
                 const Spacer(), // 將按鈕推到底部
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    // 加上 async 因為保存偏好可能是非同步操作
                     // 驗證當前頁面的選擇數量
                     if (_isSelectionCountValid(
                       userPreferences.travelStyles,
                       1,
                       3,
                     )) {
+                      // 保存偏好設定到本地
+                      await savePreferencesLocally(
+                        userPreferences,
+                      ); // 假設保存函數名為 savePreferences 並接受 UserPreferences 物件
                       // 導航到下一個偏好設定頁面
                       Navigator.push(
                         context,

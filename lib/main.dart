@@ -76,12 +76,12 @@ class _MyHomePageState extends State<MyHomePage> {
   void _EnterWelcomePage(BuildContext context) async {
     bool firstLaunch = await isFirstLaunch();
 
-    if (true) {
+    if (firstLaunch) {
       // 如果是第一次開啟，導航到歡迎頁面
       // 使用 Navigator 替換當前頁面為 Register 頁面
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const WelcomePage()),
+          MaterialPageRoute(builder: (context) => const GuidingPage()),
         );
       });
       // runApp(MyApp(initialRoute: '/register')); // 假設你的註冊頁面路由是 '/register'
@@ -93,47 +93,51 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget HomePage(BuildContext context) {
     // 判斷是否需要導航到歡迎頁面
     _EnterWelcomePage(context);
+    return Consumer<AuthModel>(
+      builder: (context, auth, child) => _buildHomePage(context, auth),
+    );
+  }
 
-    if (true) {
+  Widget _buildHomePage(BuildContext context, AuthModel auth) {
+    auth.logout();
+    if (!auth.isAuthenticated) {
       // !auth.isAuthenticated
       // 使用者未驗證，導航到 Register 頁面
       // 使用 Navigator 替換當前頁面為 Register 頁面
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const LoginOrRegister()),
-        );
-      });
+
       // 在導航時返回一個空的容器或載入指示器
-      return Container();
+      return MaterialApp(home: Login());
     } else {
       // 使用者已驗證，顯示主要內容
-      return Scaffold(
-        appBar: AppBar(
-          leading: const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: MainIcon(), // 顯示自訂圖片 icon
+      return MaterialApp(
+        home: Scaffold(
+          appBar: AppBar(
+            leading: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: MainIcon(), // 顯示自訂圖片 icon
+            ),
+            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+            title: Text(widget.title),
           ),
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: Text(widget.title),
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const MainIcon(), // 主頁面也顯示一次 Icon
-              const SizedBox(height: 16),
-              const Text('You have pushed the button this many times:'),
-              Text(
-                '$_counter',
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-            ],
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const MainIcon(), // 主頁面也顯示一次 Icon
+                const SizedBox(height: 16),
+                const Text('You have pushed the button this many times:'),
+                Text(
+                  '$_counter',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+              ],
+            ),
           ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _incrementCounter,
-          tooltip: 'Increment',
-          child: const Icon(Icons.add),
+          floatingActionButton: FloatingActionButton(
+            onPressed: _incrementCounter,
+            tooltip: 'Increment',
+            child: const Icon(Icons.add),
+          ),
         ),
       );
     }

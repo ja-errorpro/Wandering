@@ -1,22 +1,106 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import './../preference_data.dart';  // 確保導入你的 preference_data.dart
+import './../preference_data.dart'; // 確保導入你的 preference_data.dart 和 LocationType 定義
 import 'AccommodationTypeSelection_page.dart'; // 導入下一個頁面
+import './../savePreferencesLocally.dart' as savePreferencesLocally; // 導入本地保存函數
+
+// 定義 LocationType 的圖示和顏色 (範例，你需要根據你的設計添加所有地點類型)
+// 建議在 preference_data.dart 中為 LocationType 添加相關屬性
+extension LocationTypeDetails on LocationType {
+  IconData get icon {
+    switch (this) {
+      case LocationType.museum:
+        return Icons.account_balance;
+      case LocationType.marketNightMarket:
+        return Icons.shopping_bag;
+      case LocationType.trailNature:
+        return Icons.nature;
+      case LocationType.cafe:
+        return Icons.coffee;
+      case LocationType.landmarkBuilding:
+        return Icons.apartment;
+      case LocationType.beachLakeside:
+        return Icons.beach_access;
+      case LocationType.templeReligiousSite:
+        return Icons.temple_hindu;
+      case LocationType.artsSpace:
+        return Icons.book;
+      case LocationType.parkSquare:
+        return Icons.park;
+      case LocationType.nightViewpoint:
+        return Icons.nightlight_round;
+      // 添加其他地點類型的圖示
+      default:
+        return Icons.help_outline; // 預設圖示
+    }
+  }
+
+  Color get color {
+    switch (this) {
+      case LocationType.museum:
+        return Colors.blue;
+      case LocationType.marketNightMarket:
+        return Colors.amber;
+      case LocationType.trailNature:
+        return Colors.green;
+      case LocationType.cafe:
+        return Colors.redAccent;
+      case LocationType.landmarkBuilding:
+        return Colors.red;
+      case LocationType.beachLakeside:
+        return Colors.lightBlue;
+      case LocationType.templeReligiousSite:
+        return Colors.deepPurple;
+      case LocationType.artsSpace:
+        return Colors.brown;
+      case LocationType.parkSquare:
+        return Colors.greenAccent;
+      case LocationType.nightViewpoint:
+        return Colors.deepPurpleAccent;
+      // 添加其他地點類型的顏色
+      default:
+        return Colors.grey; // 預設顏色
+    }
+  }
+
+  String get label {
+    return this.toString().split('.').last; // 使用之前的邏輯獲取文字標籤
+  }
+}
 
 class LocationTypeSelectionPage extends StatefulWidget {
   const LocationTypeSelectionPage({super.key});
 
   @override
-  State<LocationTypeSelectionPage> createState() => _LocationTypeSelectionPageState();
+  State<LocationTypeSelectionPage> createState() =>
+      _LocationTypeSelectionPageState();
 }
 
 class _LocationTypeSelectionPageState extends State<LocationTypeSelectionPage> {
-   // 顯示選擇數量警告視窗 (通用函數)
+  Set<String> _selectedLocationTypes = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPreferences();
+  }
+
+  Future<void> _loadPreferences() async {
+    final loadedPreferences =
+        await savePreferencesLocally.loadPreferencesLocally();
+    if (loadedPreferences != null) {
+      setState(() {
+        _selectedLocationTypes = loadedPreferences.locationTypes;
+      });
+    }
+  }
+
   void _showSelectionCountWarningDialog(
-      PreferenceCategory category, int minCount, int maxCount) {
-    // ... 你的警告視窗實現 ...
-     String message = '';
+    PreferenceCategory category,
+    int minCount,
+    int maxCount,
+  ) {
+    String message = '';
     String categoryName = '';
 
     switch (category) {
@@ -59,8 +143,11 @@ class _LocationTypeSelectionPageState extends State<LocationTypeSelectionPage> {
     );
   }
 
-   // 驗證選擇數量是否在指定區間內 (通用函數)
-  bool _isSelectionCountValid(Set<String> selectedSet, int minCount, int maxCount) {
+  bool _isSelectionCountValid(
+    Set<String> selectedSet,
+    int minCount,
+    int maxCount,
+  ) {
     return selectedSet.length >= minCount && selectedSet.length <= maxCount;
   }
 
@@ -68,76 +155,79 @@ class _LocationTypeSelectionPageState extends State<LocationTypeSelectionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('選擇偏好地點類型')),
-      body: Consumer<UserPreferences>(
-        builder: (context, userPreferences, child) {
-          // 在這裡構建地點類型的選擇 UI
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  '偏好地點類型 (最少選擇1項，最多5項)', // TODO: 設定地點類型的最小和最大選擇數量
-                  style: GoogleFonts.lato(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 12),
-                Wrap(
-                  spacing: 8.0,
-                  runSpacing: 8.0,
-                  children: LocationType.values.map((type) {
-                     final typeValue = type.toString().split('.').last;
-                    final isSelected = userPreferences.locationTypes.contains(typeValue);
-                    return FilterChip(
-                      label: Text(typeValue),
-                      selected: isSelected,
-                      onSelected: (bool selected) {
-                         // 檢查選擇數量是否超過最大限制
-                        if (selected && userPreferences.locationTypes.length >= 5) { // TODO: 使用地點類型的最大選擇數量
-                          _showSelectionCountWarningDialog(
-                            PreferenceCategory.locationTypes,
-                            1, // TODO: 使用地點類型的最小選擇數量
-                            5, // TODO: 使用地點類型的最大選擇數量
-                          );
-                          return; // 不允許選擇更多
-                        }
-                        // 更新 UserPreferences 中的地點類型
-                        userPreferences.updatePreference(
-                          PreferenceCategory.locationTypes,
-                          typeValue,
-                          selected,
-                        );
-                      },
-                    );
-                  }).toList(),
-                ),
-                 const Spacer(), // 將按鈕推到底部
-                ElevatedButton(
-                  onPressed: () {
-                     // 驗證當前頁面的選擇數量
-                     if (_isSelectionCountValid(userPreferences.locationTypes, 1, 5)) { // TODO: 使用地點類型的最小和最大選擇數量
-                        // 導航到下一個偏好設定頁面
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const AccommodationTypeSelectionPage(),
-                          ),
-                        );
-                     } else {
-                       // 顯示警告訊息
-                       _showSelectionCountWarningDialog(
-                         PreferenceCategory.locationTypes,
-                         1, // TODO: 使用地點類型的最小選擇數量
-                         5, // TODO: 使用地點類型的最大選擇數量
-                       );
-                     }
-                  },
-                  child: const Text('下一頁'),
-                ),
-              ],
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              '選擇你喜愛的地點類型', // 更新標題文字
+              style: GoogleFonts.lato(
+                fontSize: 24, // 調整字體大小
+                fontWeight: FontWeight.bold,
+                color: Colors.blueAccent, // 設定標題顏色
+              ),
+              textAlign: TextAlign.center, // 標題置中
             ),
-          );
-        },
-      ),
-    );
-  }
-}
+            const SizedBox(height: 8),
+            Text(
+              '以下哪些地方會吸引你停下腳步?(可複選)', // 副標題
+              style: GoogleFonts.lato(fontSize: 16, color: Colors.grey[700]),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            Expanded(
+              // 使用 Expanded 讓 GridView 佔滿剩餘空間
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3, // 每行顯示 3 個
+                  crossAxisSpacing: 12.0, // 水平間距
+                  mainAxisSpacing: 12.0, // 垂直間距
+                  childAspectRatio: 0.8, // 調整每個網格項目的長寬比
+                ),
+                itemCount: LocationType.values.length,
+                itemBuilder: (context, index) {
+                  final locationType = LocationType.values[index];
+                  final typeValue = locationType.label; // 使用 extension 獲取 label
+                  final isSelected = _selectedLocationTypes.contains(typeValue);
+
+                  return InkWell(
+                    // 使用 InkWell 使卡片可點擊
+                    onTap: () {
+                      // 檢查選擇數量是否超過最大限制 (5項)
+                      if (!isSelected && _selectedLocationTypes.length >= 5) {
+                        // 只有在未選中且數量超過時才提示
+                        _showSelectionCountWarningDialog(
+                          PreferenceCategory.locationTypes,
+                          1,
+                          5,
+                        );
+                        return; // 不允許選擇更多
+                      }
+
+                      setState(() {
+                        if (isSelected) {
+                          _selectedLocationTypes.remove(typeValue);
+                        } else {
+                          _selectedLocationTypes.add(typeValue);
+                        }
+                      });
+                    },
+                    child: Card(
+                      // 使用 Card 創建卡片效果
+                      color:
+                          isSelected
+                              ? locationType.color.withOpacity(0.8)
+                              : Colors.white, // 選中時改變背景色
+                      elevation: isSelected ? 8.0 : 2.0, // 選中時提高陰影
+                      shape: RoundedRectangleBorder(
+                        // 圓角邊框
+                        borderRadius: BorderRadius.circular(12.0),
+                        side:
+                            isSelected
+                                ? BorderSide(
+                                  color: locationType.color,
+                                  width: 2.0,
+                                )
+                                : BorderSide.none, // 選中時添加邊框
+ 
