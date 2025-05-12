@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'icons.dart'; // 匯入圖片 Icon
 import 'page/all_page.dart'; // 匯入所有頁面
@@ -105,12 +104,29 @@ class _MyHomePageState extends State<MyHomePage> {
     if (!auth.isAuthenticated) {
       // !auth.isAuthenticated
       // 使用者未驗證，導航到 Register 頁面
-      // 使用 Navigator 替換當前頁面為 Register 頁面
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => Login()),
+        );
+      });
 
       // 在導航時返回一個空的容器或載入指示器
       return MaterialApp(home: Login());
     } else {
-      // 使用者已驗證，顯示主要內容
+      // 使用者已驗證，導航到 ExplorePage
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => ExplorePage()), // 導航到 ExplorePage
+        );
+      });
+      // 在導航時返回一個空的容器或載入指示器
+      return Container(); // 或者一個載入指示器
+    }
+  }
+}
+
+
+/*  // 使用者已驗證，顯示主要內容
       return MaterialApp(
         home: Scaffold(
           appBar: AppBar(
@@ -141,7 +157,4 @@ class _MyHomePageState extends State<MyHomePage> {
             child: const Icon(Icons.add),
           ),
         ),
-      );
-    }
-  }
-}
+      ); */
