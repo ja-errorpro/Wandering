@@ -1,9 +1,7 @@
-// Suggested code may be subject to a license. Learn more: ~LicenseLog:2464357609.
+// Suggested code may be subject to a license. Learn more: ~LicenseLog:968994147.
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart'; // 導入 Provider 套件
-import 'package:firebase_auth/firebase_auth.dart';
 import './../preference_data.dart'; // PreferenceData 類別
-import 'TravelStyleSelection_page.dart'; // 導入下一個頁面
+import 'all_page.dart'; // 匯入 導入下一個頁面
 
 class PreferenceSelectionPage extends StatefulWidget {
   const PreferenceSelectionPage({super.key});
@@ -14,40 +12,124 @@ class PreferenceSelectionPage extends StatefulWidget {
 }
 
 class _PreferenceSelectionPageState extends State<PreferenceSelectionPage> {
-  // 在 State 初始化時執行檢查和導航
+  late String str_output;
+  @override // Make this a StatelessWidget
+  Widget build(BuildContext context) {
+    // remove State class and initState
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          translate('Set your preferences'),
+          style: TextStyle(
+            fontSize: 24,
+            color: const Color.fromARGB(255, 255, 255, 255),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.transparent, // 設置 AppBar 背景透明
+        elevation: 0, // 去掉 AppBar 陰影
+        iconTheme: IconThemeData(
+          color: const Color.fromARGB(255, 255, 255, 255),
+        ), // 設置返回按鈕顏色
+      ),
+      extendBodyBehindAppBar: true, //
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            // 依據螢幕大小添加圖片背景
+            image: AssetImage(screenSize), // 使用指定的圖片路徑
+            fit: BoxFit.cover, // 圖片填充方式
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  '每一次旅行，都從認識你開始。',textAlign: TextAlign.center, // Title // Set Your Preferences
+                  style: TextStyle(
+                    fontFamily: 'ChenYuluoyan', // 使用自定義字體
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                  
+                ),
+                const SizedBox(height: 80),
+                const Text( // Title // Set Your Preferences
+                  '開始設定你的旅遊偏好，\n以獲得更精確的推薦。',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'ChenYuluoyan', // 使用自定義字體
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 40),
+                ElevatedButton(
+                  // Get Started button
+                  onPressed: () {
+                    Navigator.push(
+                      // Use push to allow back navigation
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const TravelStyleSelectionPage(),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.tealAccent, // Turquoise background
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 40,
+                      vertical: 15,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        30,
+                      ), // Rounded corners
+                    ),
+                  ),
+                  child: const Text(
+                    '開始', // Button text
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Remove the State class
+/*
+class _PreferenceSelectionPageState extends State<PreferenceSelectionPage> {
   @override
   void initState() {
     super.initState();
-    // 在下一幀繪製完成後執行導航，確保 context 是可用的
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkUserPreferencesAndNavigate();
     });
   }
 
-  // 檢查用戶偏好並導航的方法 可刪除
   Future<void> _checkUserPreferencesAndNavigate() async {
-    // 獲取 UserPreferences 實例
-    // listen: false 因為我們只讀取它的狀態一次，不需要在它改變時重建這個 Widget
     final userPreferences = Provider.of<UserPreferences>(
       context,
       listen: false,
     );
 
-    // TODO: 這裡需要判斷用戶的偏好是否為空
-    // 這取決於你的 UserPreferences 類別如何定義“空偏好”
-    // 一種簡單的判斷方式是檢查所有偏好集合是否都為空
     bool preferencesAreEmpty =
         userPreferences.travelStyles.isEmpty &&
         userPreferences.locationTypes.isEmpty &&
-        userPreferences
-            .accommodationTypes
-            .isEmpty; // && userPreferences.avoidTypes.isEmpty
+        userPreferences.accommodationTypes.isEmpty;
 
     if (preferencesAreEmpty) {
-      // preferencesAreEmpty
       print('用戶偏好為空，導航到旅行風格選擇頁面');
-      // 導航到旅行風格選擇頁面
-      // 使用 pushReplacement 以防止用戶返回這個檢查頁面
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -62,30 +144,15 @@ class _PreferenceSelectionPageState extends State<PreferenceSelectionPage> {
           builder: (context) => const TravelStyleSelectionPage(),
         ),
       );
-      // 導航到主頁面
-      // 使用 pushReplacement 以防止用戶返回這個檢查頁面
-      // Navigator.pushReplacementNamed(
-      //   context,
-      //   '/home', // 替換為你的主頁面路由名稱
-      // );
-
-      // 如果你沒有使用命名路由，可以使用 MaterialPageRoute
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => const HomePage(), // 替換為你的主頁面 Widget
-      //   ),
-      // );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // 在檢查和導航過程中，可以顯示一個加載指示器
     return Scaffold(
       appBar: AppBar(
-        title: const Text('設定您的偏好'), // 更新 AppBar 標題
-        automaticallyImplyLeading: false, // 移除返回按鈕，因為這是初始設定頁面
+        title: const Text('設定您的偏好'),
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Column(
@@ -114,3 +181,6 @@ class _PreferenceSelectionPageState extends State<PreferenceSelectionPage> {
     );
   }
 }
+*/
+
+

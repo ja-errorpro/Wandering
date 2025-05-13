@@ -35,8 +35,19 @@ class _ExplorePageState extends State<ExplorePage> {
       appBar: AppBar(
         title: Text('Explore'),
       ),
-      body: Center(
+      
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            // 依據螢幕大小添加圖片背景
+            image: AssetImage(
+              screenSize,
+            ), // 使用指定的圖片路徑
+            fit: BoxFit.cover, // 圖片填充方式
+          ),
+        ),
         child: Text('Explore Page - Selected Index: $_selectedIndex'),
+        
       ),
       bottomNavigationBar: CustomBottomNavigationBar( // 使用自訂的底部導航欄
         selectedIndex: _selectedIndex,
