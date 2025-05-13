@@ -86,7 +86,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: <Widget>[
                   buildFeatureButton(Icons.assignment, '行程記錄'),
                   buildFeatureButton(Icons.bookmark, '我的收藏'),
-                  buildFeatureButton(Icons.settings, '設定'),
+                  buildFeatureButton(Icons.monitor_heart, '偏好設定'),
                 ],
               ),
             ),

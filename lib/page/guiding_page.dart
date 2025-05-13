@@ -42,23 +42,6 @@ class GuidingPage extends StatelessWidget {
                         ).createShader(const Rect.fromLTWH(0.0, 0.0, 300.0, 70.0)), // 根據需要調整 Rect
                     ),
                   ),
-                  // Text(
-                  //   'dering',
-                  //   style: GoogleFonts.pacifico( // 使用類似的字體
-                  //     fontSize: 48.0,
-                  //     fontWeight: FontWeight.bold,
-                  //     foreground: Paint()
-                  //       ..shader = const LinearGradient(
-                  //         colors: <Color>[
-                  //           Color.fromARGB(255, 122, 243, 126), // 綠色
-                  //           Color.fromARGB(255, 124, 196, 255), // 藍色
-                  //           // Colors.green, // 綠色
-                  //           // Colors.orange, // 橙色
-                  //           // Colors.red, // 紅色
-                  //         ],
-                  //       ).createShader(const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0)), // 根據需要調整 Rect
-                  //   ),
-                  // ),
                 ],
               ),
               const SizedBox(height: 16.0), // 添加間距
@@ -68,6 +51,7 @@ class GuidingPage extends StatelessWidget {
                 '不知道去哪旅行，太懶得規劃？',
                 textAlign: TextAlign.center,
                 style: TextStyle(
+                  fontFamily: 'ChenYuluoyan', // 使用自定義字體
                   fontSize: 18.0,
                   color: Colors.grey[700],
                 ),

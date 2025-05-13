@@ -7,7 +7,7 @@ import 'dart:ui' as ui;
 
 // 全域變數
 String screenSize = 'assets/images/screen_size/9_16.png';
-String language = 'ja';
+String language = 'zh-TW';
 
 final Map<String, Map<String, String>> _translations = {
   '你好': {'en': 'Hello', 'zh-TW': '你好', 'ja': 'こんにちは'},
