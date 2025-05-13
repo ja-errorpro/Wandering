@@ -114,11 +114,6 @@ class _MyHomePageState extends State<MyHomePage> {
     if (!auth.isAuthenticated) {
       // !auth.isAuthenticated
       // 使用者未驗證，導航到 Register 頁面
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(
-          context,
-        ).pushReplacement(MaterialPageRoute(builder: (context) => Login()));
-      });
 
       // 在導航時返回一個空的容器或載入指示器
       return MaterialApp(home: Login());

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'all_page.dart'; // 匯入 導入下一個頁面
-
+import 'package:Wandering/auth.dart';
+import 'package:provider/provider.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -16,10 +17,9 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('設定'),
-      ),
-      body: SingleChildScrollView( // 確保頁面內容可以滾動
+      appBar: AppBar(title: Text('設定')),
+      body: SingleChildScrollView(
+        // 確保頁面內容可以滾動
         child: ExpansionPanelList(
           elevation: 1, // 設定陰影
           expandedHeaderPadding: EdgeInsets.all(0), // 設定展開時 Header 的內邊距
@@ -35,7 +35,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 return ListTile(
                   title: Text('帳號與登入管理'),
                   trailing: Icon(
-                    isExpanded ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_right,
+                    isExpanded
+                        ? Icons.keyboard_arrow_down
+                        : Icons.keyboard_arrow_right,
                   ),
                 );
               },
@@ -54,11 +56,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ListTile(
                     title: Text('登出'),
                     onTap: () {
-                      // WidgetsBinding.instance.addPostFrameCallback((_) {
-                      //   Navigator.of(context).pushReplacement(
-                      //     MaterialPageRoute(builder: (context) => logout()),
-                      //   );
-                      // });
+                      Provider.of<AuthModel>(context, listen: false).logout();
                     },
                   ),
                   ListTile(
@@ -86,7 +84,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
 
             // 外觀與操作
-             ExpansionPanel(
+            ExpansionPanel(
               headerBuilder: (BuildContext context, bool isExpanded) {
                 return ListTile(
                   title: Text('外觀與操作'),
@@ -99,7 +97,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
 
             // 通知與提醒
-             ExpansionPanel(
+            ExpansionPanel(
               headerBuilder: (BuildContext context, bool isExpanded) {
                 return ListTile(
                   title: Text('通知與提醒'),
@@ -112,7 +110,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
 
             // 關於與支援
-             ExpansionPanel(
+            ExpansionPanel(
               headerBuilder: (BuildContext context, bool isExpanded) {
                 return ListTile(
                   title: Text('關於與支援'),
@@ -123,11 +121,9 @@ class _SettingsPageState extends State<SettingsPage> {
               isExpanded: false, // 保持關閉狀態
               canTapOnHeader: true, // 允許點擊 Header 觸發回調 (如果需要處理點擊事件)
             ),
-
           ],
         ),
       ),
     );
   }
 }
-
