@@ -19,7 +19,7 @@ class _PreferenceSelectionPageState extends State<PreferenceSelectionPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          translate('Set your preferences'),
+          translate('設定你的偏好'),
           style: TextStyle(
             fontSize: 24,
             color: const Color.fromARGB(255, 255, 255, 255),
@@ -48,27 +48,27 @@ class _PreferenceSelectionPageState extends State<PreferenceSelectionPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  '每一次旅行，都從認識你開始。',textAlign: TextAlign.center, // Title // Set Your Preferences
+                  '每一次旅行，\n都從認識你開始。',textAlign: TextAlign.center, // Title // Set Your Preferences
                   style: TextStyle(
                     fontFamily: 'ChenYuluoyan', // 使用自定義字體
-                    fontSize: 28,
+                    fontSize: 32,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                   
                 ),
                 const SizedBox(height: 80),
-                const Text( // Title // Set Your Preferences
-                  '開始設定你的旅遊偏好，\n以獲得更精確的推薦。',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: 'ChenYuluoyan', // 使用自定義字體
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(height: 40),
+                // const Text( // Title // Set Your Preferences
+                //   '開始設定你的旅遊偏好，\n以獲得更精確的推薦。',
+                //   textAlign: TextAlign.center,
+                //   style: TextStyle(
+                //     fontFamily: 'ChenYuluoyan', // 使用自定義字體
+                //     fontSize: 20,
+                //     // fontWeight: FontWeight,
+                //     color: Colors.white,
+                //   ),
+                // ),
+                // const SizedBox(height: 20),
                 ElevatedButton(
                   // Get Started button
                   onPressed: () {
@@ -94,7 +94,18 @@ class _PreferenceSelectionPageState extends State<PreferenceSelectionPage> {
                   ),
                   child: const Text(
                     '開始', // Button text
-                    style: TextStyle(fontSize: 18, color: Colors.white),
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                      shadows: [
+                        Shadow(
+                          offset: Offset(2.0, 2.0), // 陰影偏移
+                          blurRadius: 3.0, // 模糊半徑
+                          // const Color.fromARGB(255, 255, 255, 255),
+                          color: const Color.fromARGB(255, 0, 94, 234), // 陰影顏色
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

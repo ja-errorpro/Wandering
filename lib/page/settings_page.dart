@@ -2,6 +2,148 @@ import 'package:flutter/material.dart';
 import 'all_page.dart'; // 匯入 導入下一個頁面
 import 'package:Wandering/auth.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
+
+class SettingsPage extends StatefulWidget {
+  const SettingsPage({Key? key}) : super(key: key);
+
+  @override
+  _SettingsPageState createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  // 控制各分類是否展開
+  bool _isAccountExpanded = false;
+  bool _isPreferenceExpanded = false;
+  bool _isAppearanceExpanded = false;
+  bool _isNotificationExpanded = false;
+  bool _isSupportExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFB2F5EA), // 淺藍綠背景
+      appBar: AppBar(
+        title: const Text('設定'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          _buildExpansionTile(
+            title: '帳號與登入管理',
+            isExpanded: _isAccountExpanded,
+            onExpansionChanged: (expanded) =>
+                setState(() => _isAccountExpanded = expanded),
+              children: [
+                ListTile(
+                  title: Text('登入'),
+                  onTap: () {
+                    // 跳轉到登入頁面
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => Login()));
+                  },
+                ),
+                ListTile(
+                  title: Text('登出'),
+                  onTap: () {
+                    // 執行登出操作
+                    Provider.of<AuthModel>(context, listen: false).logout();
+                  },
+                ),
+                ListTile(
+                  title: Text('刪除帳號'),
+                  onTap: () {
+                    // 執行刪除帳號操作
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('確認刪除'),
+                        content: Text('您確定要刪除帳號嗎？此操作無法撤銷。'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: Text('取消'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              // TODO: 執行刪除帳號邏輯
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('確認'),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ],
+          ),
+          _buildExpansionTile(
+            title: '外觀與操作',
+            isExpanded: _isAppearanceExpanded,
+            onExpansionChanged: (expanded) =>
+                setState(() => _isAppearanceExpanded = expanded),
+            children: const [
+              ListTile(title: Text('主題模式')),
+              ListTile(title: Text('字體大小')),
+              ListTile(title: Text('導航模式切換')),
+            ],
+          ),
+          _buildExpansionTile(
+            title: '通知與提醒',
+            isExpanded: _isNotificationExpanded,
+            onExpansionChanged: (expanded) =>
+                setState(() => _isNotificationExpanded = expanded),
+            children: const [
+              ListTile(title: Text('系統推播開關')),
+              ListTile(title: Text('行程到期提醒')),
+            ],
+          ),
+          _buildExpansionTile(
+            title: '關於與支援',
+            isExpanded: _isSupportExpanded,
+            onExpansionChanged: (expanded) =>
+                setState(() => _isSupportExpanded = expanded),
+            children: const [
+              ListTile(title: Text('App版本資訊')),
+              ListTile(title: Text('聯絡我們')),
+              ListTile(title: Text('法律條款')),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildExpansionTile({
+    required String title,
+    required bool isExpanded,
+    required void Function(bool) onExpansionChanged,
+    required List<Widget> children,
+  }) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.4), // 模擬玻璃擬態
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: ExpansionTile(
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.transparent,
+        collapsedBackgroundColor: Colors.transparent,
+        onExpansionChanged: onExpansionChanged,
+        childrenPadding: const EdgeInsets.only(left: 16, right: 16),
+        children: children,
+      ),
+    );
+  }
+}
+
+
+
+/*
+
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -17,15 +159,30 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('設定')),
+      appBar: AppBar(
+        title: const Text('設定'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: SingleChildScrollView(
         // 確保頁面內容可以滾動
         child: ExpansionPanelList(
           elevation: 1, // 設定陰影
-          expandedHeaderPadding: EdgeInsets.all(0), // 設定展開時 Header 的內邊距
+          expandedHeaderPadding: EdgeInsets.zero, // 設定展開時 Header 的內邊距
           expansionCallback: (int index, bool isExpanded) {
             setState(() {
-              _isExpanded[index] = !isExpanded; // 切換展開狀態
+              // Collapse all panels except the one that was tapped
+              for (int i = 0; i < _isExpanded.length; i++) {
+                if (i == index) {
+                  _isExpanded[i] = !isExpanded;
+                } else {
+                  _isExpanded[i] = false;
+                }
+              }
             });
           },
           children: [
@@ -33,7 +190,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ExpansionPanel(
               headerBuilder: (BuildContext context, bool isExpanded) {
                 return ListTile(
-                  title: Text('帳號與登入管理'),
+                  title: const Text('帳號與登入管理'),
                   trailing: Icon(
                     isExpanded
                         ? Icons.keyboard_arrow_down
@@ -44,7 +201,7 @@ class _SettingsPageState extends State<SettingsPage> {
               body: Column(
                 children: [
                   ListTile(
-                    title: Text('登入'),
+                    title: const Text('登入'),
                     onTap: () {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         Navigator.of(context).pushReplacement(
@@ -54,13 +211,13 @@ class _SettingsPageState extends State<SettingsPage> {
                     },
                   ),
                   ListTile(
-                    title: Text('登出'),
+                    title: const Text('登出'),
                     onTap: () {
                       Provider.of<AuthModel>(context, listen: false).logout();
                     },
                   ),
                   ListTile(
-                    title: Text('刪除帳號'),
+                    title: const Text('刪除帳號'),
                     onTap: () {
                       // TODO: 執行刪除帳號操作
                     },
@@ -68,58 +225,75 @@ class _SettingsPageState extends State<SettingsPage> {
                 ],
               ),
               isExpanded: _isExpanded[0],
+              canTapOnHeader: true, // 允許點擊 Header 觸發回調
             ),
 
             // 偏好與語言
             ExpansionPanel(
               headerBuilder: (BuildContext context, bool isExpanded) {
                 return ListTile(
-                  title: Text('偏好與語言'),
-                  trailing: Icon(Icons.keyboard_arrow_right), // 這個不會展開，所以箭頭固定
+                  title: const Text('偏好與語言'),
+                  trailing: Icon(
+                    isExpanded
+                        ? Icons.keyboard_arrow_down
+                        : Icons.keyboard_arrow_right,
+                  ),
                 );
               },
-              body: SizedBox(), // 這個面板沒有子選項，body 可以是空的或顯示其他內容
-              isExpanded: false, // 保持關閉狀態
-              canTapOnHeader: true, // 允許點擊 Header 觸發回調 (如果需要處理點擊事件)
+              body: const SizedBox(), // 這個面板沒有子選項，body 可以是空的或顯示其他內容
+              isExpanded: _isExpanded[1],
+              canTapOnHeader: true, // 允許點擊 Header 觸發回調
             ),
 
             // 外觀與操作
             ExpansionPanel(
               headerBuilder: (BuildContext context, bool isExpanded) {
                 return ListTile(
-                  title: Text('外觀與操作'),
-                  trailing: Icon(Icons.keyboard_arrow_right), // 這個不會展開，所以箭頭固定
+                  title: const Text('外觀與操作'),
+                  trailing: Icon(
+                    isExpanded
+                        ? Icons.keyboard_arrow_down
+                        : Icons.keyboard_arrow_right,
+                  ),
                 );
               },
-              body: SizedBox(), // 這個面板沒有子選項，body 可以是空的或顯示其他內容
-              isExpanded: false, // 保持關閉狀態
-              canTapOnHeader: true, // 允許點擊 Header 觸發回調 (如果需要處理點擊事件)
+              body: const SizedBox(), // 這個面板沒有子選項，body 可以是空的或顯示其他內容
+              isExpanded: _isExpanded[2],
+              canTapOnHeader: true, // 允許點擊 Header 觸發回調
             ),
 
             // 通知與提醒
             ExpansionPanel(
               headerBuilder: (BuildContext context, bool isExpanded) {
                 return ListTile(
-                  title: Text('通知與提醒'),
-                  trailing: Icon(Icons.keyboard_arrow_right), // 這個不會展開，所以箭頭固定
+                  title: const Text('通知與提醒'),
+                  trailing: Icon(
+                    isExpanded
+                        ? Icons.keyboard_arrow_down
+                        : Icons.keyboard_arrow_right,
+                  ),
                 );
               },
-              body: SizedBox(), // 這個面板沒有子選項，body 可以是空的或顯示其他內容
-              isExpanded: false, // 保持關閉狀態
-              canTapOnHeader: true, // 允許點擊 Header 觸發回調 (如果需要處理點擊事件)
+              body: const SizedBox(), // 這個面板沒有子選項，body 可以是空的或顯示其他內容
+              isExpanded: _isExpanded[3],
+              canTapOnHeader: true, // 允許點擊 Header 觸發回調
             ),
 
             // 關於與支援
             ExpansionPanel(
               headerBuilder: (BuildContext context, bool isExpanded) {
                 return ListTile(
-                  title: Text('關於與支援'),
-                  trailing: Icon(Icons.keyboard_arrow_right), // 這個不會展開，所以箭頭固定
+                  title: const Text('關於與支援'),
+                  trailing: Icon(
+                    isExpanded
+                        ? Icons.keyboard_arrow_down
+                        : Icons.keyboard_arrow_right,
+                  ),
                 );
               },
-              body: SizedBox(), // 這個面板沒有子選項，body 可以是空的或顯示其他內容
-              isExpanded: false, // 保持關閉狀態
-              canTapOnHeader: true, // 允許點擊 Header 觸發回調 (如果需要處理點擊事件)
+              body: const SizedBox(), // 這個面板沒有子選項，body 可以是空的或顯示其他內容
+              isExpanded: _isExpanded[4],
+              canTapOnHeader: true, // 允許點擊 Header 觸發回調
             ),
           ],
         ),
@@ -127,3 +301,6 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 }
+
+
+ */

@@ -31,16 +31,6 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       extendBodyBehindAppBar: true, // 讓 Body 內容延伸到 AppBar 後面
       body: Container(
-        // decoration: BoxDecoration( // 添加背景漸變
-        //   gradient: LinearGradient(
-        //     begin: Alignment.topCenter,
-        //     end: Alignment.bottomCenter,
-        //     colors: [
-        //       Color(0xFF84fab0), // 漸變開始顏色 (圖片中的綠色)
-        //       Color(0xFF8fd3f4), // 漸變結束顏色 (圖片中的藍色)
-        //     ],
-        //   ),
-        // ),
         decoration: BoxDecoration(
           image: DecorationImage(
             // 依據螢幕大小添加圖片背景
@@ -87,7 +77,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: <Widget>[
                   buildFeatureButton(Icons.assignment, '行程記錄'),
                   buildFeatureButton(Icons.bookmark, '我的收藏'),
-                  buildFeatureButton(Icons.settings, '設定'),
+                  buildFeatureButton(Icons.monitor_heart, '偏好設定'),
                 ],
               ),
             ),
@@ -171,6 +161,12 @@ class _ProfilePageState extends State<ProfilePage> {
       onTap: () {
         // 處理列表項點擊事件
         print('$title 點擊');
+        if (title == '設定') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SettingsPage()),
+          );
+        }
       },
     );
   }
