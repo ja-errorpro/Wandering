@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'dart:ui' as ui;
 
 /*
@@ -26,9 +27,8 @@ String translate(String key) {
   print('翻譯 $key');
   String out = 'null';
   if (_translations.containsKey(key)) {
-    
     out = _translations[key]?[language] ?? _translations[key]?['en'] ?? key;
-    
+
     print('1.翻譯 $out');
     return out;
   }

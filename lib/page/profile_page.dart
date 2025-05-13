@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'all_page.dart'; // 匯入所有頁面
+import 'package:provider/provider.dart';
+import 'package:Wandering/auth.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -11,6 +13,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
+    String uid = Provider.of<AuthModel>(context, listen: false).user!.uid;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -31,9 +34,7 @@ class _ProfilePageState extends State<ProfilePage> {
         decoration: BoxDecoration(
           image: DecorationImage(
             // 依據螢幕大小添加圖片背景
-            image: AssetImage(
-              screenSize,
-            ), // 使用指定的圖片路徑
+            image: AssetImage(screenSize), // 使用指定的圖片路徑
             fit: BoxFit.cover, // 圖片填充方式
           ),
         ),
@@ -62,7 +63,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 SizedBox(height: 5),
                 Text(
-                  'ID 12345678', // 用戶 ID
+                  'ID: $uid', // 用戶 ID
                   style: TextStyle(fontSize: 16, color: Colors.black54),
                 ),
               ],
@@ -125,13 +126,12 @@ class _ProfilePageState extends State<ProfilePage> {
             context,
             MaterialPageRoute(builder: (context) => PreferenceSelectionPage()),
           );
-        } 
-        else if (label == '設定') {
+        } else if (label == '設定') {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => SettingsPage()),
           );
-        } 
+        }
       },
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.black87,
