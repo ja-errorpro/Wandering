@@ -47,20 +47,12 @@ class _LoginState extends State<Login> {
                 const SizedBox(height: 30),
 
                 // 帳號欄位
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey), // 灰色邊框
-                    borderRadius: BorderRadius.circular(100), // 圓角
-                  ),
+                _grayBorderedField(
                   child: _roundedInputField(controller: userEmailController, hint: '帳號', obscure: false),
                 ),
                 const SizedBox(height: 16),
 
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey), // 灰色邊框
-                    borderRadius: BorderRadius.circular(100), // 圓角
-                  ),
+                _grayBorderedField(
                   child: _roundedInputField(controller: passwordController, hint: '密碼', obscure: true),
                 ),
                 const SizedBox(height: 8),
@@ -140,11 +132,25 @@ class _LoginState extends State<Login> {
                   ],
                 ),
                 const SizedBox(height: 16),
-
+/*TextButton(
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const Register()),
+    );
+  },
+  child: const Text(
+    '還沒有帳號？前往註冊',
+    style: TextStyle(color: Colors.cyanAccent),
+  ),
+),*/
                 // 註冊按鈕（白色圓角）
                 OutlinedButton(
                   onPressed: () {
-                    // TODO: 前往註冊頁
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Register()),
+                    );
                   },
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: Colors.grey),
@@ -172,14 +178,14 @@ class _LoginState extends State<Login> {
                     ),
                     Flexible(
                       child: Padding(
-                        padding: const EdgeInsets.only(right: 8.0), // 或左右 padding
+                        padding: const EdgeInsets.only(right: 4.0), // 或左右 padding
                         child: Text.rich(
                           TextSpan(
-                            style: const TextStyle(fontSize: 12, color: Colors.black45),
+                            style: const TextStyle(fontSize: 10, color: Colors.black45),
                             children: [
-                              const TextSpan(text: '勾選即表示你同意 '),
+                              const TextSpan(text: '勾選即表示你同意 Wandering 的'),
                               TextSpan(
-                                text: '使用條款',
+                                text: '《使用條款》',
                                 style: const TextStyle(color: Colors.cyanAccent, decoration: TextDecoration.underline),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
@@ -188,7 +194,7 @@ class _LoginState extends State<Login> {
                               ),
                               const TextSpan(text: ' 和 '),
                               TextSpan(
-                                text: '隱私政策',
+                                text: '《隱私政策》',
                                 style: const TextStyle(color: Colors.cyanAccent, decoration: TextDecoration.underline),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
@@ -225,6 +231,19 @@ class _LoginState extends State<Login> {
       ),
     );
   }
+
+  /// 輸入欄外框
+  Widget _grayBorderedField({required Widget child}) {
+    return Container(
+      padding: const EdgeInsets.all(2),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey.shade400),
+        borderRadius: BorderRadius.circular(32),
+      ),
+      child: child,
+    );
+  }
+
 
   Widget _roundedInputField({
     required TextEditingController controller, // 控制輸入文字的控制器
