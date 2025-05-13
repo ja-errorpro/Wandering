@@ -1,8 +1,10 @@
+import 'package:Wandering/main.dart';
 import 'package:flutter/material.dart';
 import 'all_page.dart'; // 匯入 導入下一個頁面
 import 'package:Wandering/auth.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:Wandering/main.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -36,48 +38,58 @@ class _SettingsPageState extends State<SettingsPage> {
             isExpanded: _isAccountExpanded,
             onExpansionChanged: (expanded) =>
                 setState(() => _isAccountExpanded = expanded),
-              children: [
-                ListTile(
-                  title: Text('登入'),
-                  onTap: () {
-                    // 跳轉到登入頁面
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => Login()));
-                  },
-                ),
-                ListTile(
-                  title: Text('登出'),
-                  onTap: () {
-                    // 執行登出操作
-                    Provider.of<AuthModel>(context, listen: false).logout();
-                  },
-                ),
-                ListTile(
-                  title: Text('刪除帳號'),
-                  onTap: () {
-                    // 執行刪除帳號操作
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text('確認刪除'),
-                        content: Text('您確定要刪除帳號嗎？此操作無法撤銷。'),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(),
-                            child: Text('取消'),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              // TODO: 執行刪除帳號邏輯
-                              Navigator.of(context).pop();
-                            },
-                            child: Text('確認'),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ],
+            children: [
+              ListTile(
+                title: Text('登入'),
+                onTap: () {
+                  // 跳轉到登入頁面
+                  Navigator.of(
+                    context,
+                  ).push(MaterialPageRoute(builder: (context) => Login()));
+                },
+              ),
+              ListTile(
+                title: Text('登出'),
+                onTap: () {
+                  // 執行登出操作
+                  Provider.of<AuthModel>(context, listen: false).logout();
+                  // 退出所有頁面後跳到主頁
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          MyHomePage(title: 'Wandering App Home'),
+                    ),
+                    (route) => false,
+                  );
+                },
+              ),
+              ListTile(
+                title: Text('刪除帳號'),
+                onTap: () {
+                  // 執行刪除帳號操作
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text('確認刪除'),
+                      content: Text('您確定要刪除帳號嗎？此操作無法撤銷。'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: Text('取消'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            // TODO: 執行刪除帳號邏輯
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('確認'),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
           _buildExpansionTile(
             title: '外觀與操作',

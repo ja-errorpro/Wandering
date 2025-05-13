@@ -28,7 +28,6 @@ Future<void> CheckNeccessaryPermissions(BuildContext context) async {
   permission_manager.message = '需要一些權限才能繼續使用';
   permission_manager.deniedmessage = '檢測到權限被拒，請同意權限後才能繼續使用';
   permission_manager.getPermission(context, Permission.location);
-  permission_manager.getPermission(context, Permission.storage);
 }
 
 void main() async {
@@ -56,10 +55,6 @@ class _MyApp extends State<MyApp> {
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Wandering App Home'),
-      supportedLocales: const [
-        Locale('en', ''), // 英文
-        Locale('zh', ''), // 中文
-      ],
     );
   }
 }
