@@ -6,8 +6,6 @@ import 'preference_selection_page.dart';
 import 'package:flutter/gestures.dart'; // 用於處理文字點擊事件
 import 'all_page.dart'; // 匯入所有頁面
 
-
-
 class Login extends StatefulWidget {
   const Login({super.key});
 
@@ -32,7 +30,11 @@ class _LoginState extends State<Login> {
               children: [
                 const SizedBox(height: 40),
                 // Logo 圖示
-                Image.asset('assets/images/wandering_5.PNG', height: 200, width: 200), // 你可替換為設計圖中的圖片
+                Image.asset(
+                  'assets/images/wandering_5.PNG',
+                  height: 200,
+                  width: 200,
+                ), // 你可替換為設計圖中的圖片
                 const SizedBox(height: 10),
                 const Text(
                   '你只要出發，剩下交給我。',
@@ -52,7 +54,11 @@ class _LoginState extends State<Login> {
                     border: Border.all(color: Colors.grey), // 灰色邊框
                     borderRadius: BorderRadius.circular(100), // 圓角
                   ),
-                  child: _roundedInputField(controller: userEmailController, hint: '帳號', obscure: false),
+                  child: _roundedInputField(
+                    controller: userEmailController,
+                    hint: '帳號',
+                    obscure: false,
+                  ),
                 ),
                 const SizedBox(height: 16),
 
@@ -61,7 +67,11 @@ class _LoginState extends State<Login> {
                     border: Border.all(color: Colors.grey), // 灰色邊框
                     borderRadius: BorderRadius.circular(100), // 圓角
                   ),
-                  child: _roundedInputField(controller: passwordController, hint: '密碼', obscure: true),
+                  child: _roundedInputField(
+                    controller: passwordController,
+                    hint: '密碼',
+                    obscure: true,
+                  ),
                 ),
                 const SizedBox(height: 8),
 
@@ -84,8 +94,10 @@ class _LoginState extends State<Login> {
                 GestureDetector(
                   onTap: () {
                     if (agreeTerms) {
-                      Provider.of<AuthModel>(context, listen: false)
-                          .login(userEmailController.text, passwordController.text);
+                      Provider.of<AuthModel>(context, listen: false).login(
+                        userEmailController.text,
+                        passwordController.text,
+                      );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('請先同意使用條款與隱私政策')),
@@ -145,11 +157,20 @@ class _LoginState extends State<Login> {
                 OutlinedButton(
                   onPressed: () {
                     // TODO: 前往註冊頁
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Register()),
+                    );
                   },
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: Colors.grey),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                    padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 40),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 14,
+                      horizontal: 40,
+                    ),
                   ),
                   child: const Text(
                     '註冊',
@@ -172,15 +193,23 @@ class _LoginState extends State<Login> {
                     ),
                     Flexible(
                       child: Padding(
-                        padding: const EdgeInsets.only(right: 8.0), // 或左右 padding
+                        padding: const EdgeInsets.only(
+                          right: 8.0,
+                        ), // 或左右 padding
                         child: Text.rich(
                           TextSpan(
-                            style: const TextStyle(fontSize: 12, color: Colors.black45),
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.black45,
+                            ),
                             children: [
                               const TextSpan(text: '勾選即表示你同意 '),
                               TextSpan(
                                 text: '使用條款',
-                                style: const TextStyle(color: Colors.cyanAccent, decoration: TextDecoration.underline),
+                                style: const TextStyle(
+                                  color: Colors.cyanAccent,
+                                  decoration: TextDecoration.underline,
+                                ),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
                                     _showPolicyDialog(context, '使用條款');
@@ -189,7 +218,10 @@ class _LoginState extends State<Login> {
                               const TextSpan(text: ' 和 '),
                               TextSpan(
                                 text: '隱私政策',
-                                style: const TextStyle(color: Colors.cyanAccent, decoration: TextDecoration.underline),
+                                style: const TextStyle(
+                                  color: Colors.cyanAccent,
+                                  decoration: TextDecoration.underline,
+                                ),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
                                     _showPolicyDialog(context, '隱私政策');
@@ -210,6 +242,7 @@ class _LoginState extends State<Login> {
       ),
     );
   }
+
   void _showPolicyDialog(BuildContext context, String title) {
     showDialog(
       context: context,
@@ -249,4 +282,3 @@ class _LoginState extends State<Login> {
     );
   }
 }
-

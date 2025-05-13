@@ -9,8 +9,6 @@ import 'permissions.dart'; // 向使用者要求權限
 import 'package:provider/provider.dart';
 import 'auth.dart'; // 登入
 import 'permissions.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<bool> isFirstLaunch() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -30,7 +28,6 @@ Future<void> CheckNeccessaryPermissions(BuildContext context) async {
   permission_manager.message = '需要一些權限才能繼續使用';
   permission_manager.deniedmessage = '檢測到權限被拒，請同意權限後才能繼續使用';
   permission_manager.getPermission(context, Permission.location);
-  permission_manager.getPermission(context, Permission.storage);
 }
 
 void main() async {
@@ -58,7 +55,6 @@ class _MyApp extends State<MyApp> {
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Wandering App Home'),
-      supportedLocales: AppLocalizations.supportedLocales,
     );
   }
 }

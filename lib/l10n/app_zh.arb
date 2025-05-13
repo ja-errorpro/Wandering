@@ -6,13 +6,13 @@
     "description": "歡迎語"
     },
 
-    "Welcome": "歡迎！",
-    "@Welcome": {
+    "welcome": "歡迎！",
+    "@welcome": {
         "description": "歡迎語"
     },
     
-    "Personalinfo": "個人資訊",
-    "@Personalinfo": {
+    "personalinfo": "個人資訊",
+    "@personalinfo": {
         "description": "個人資訊"
     }
 }

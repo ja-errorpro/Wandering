@@ -13,7 +13,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    String uid = Provider.of<AuthModel>(context, listen: false).user!.uid;
+    String uid = Provider.of<AuthModel>(context, listen: false).user?.uid ?? '';
     return Scaffold(
       appBar: AppBar(
         title: Text(
