@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'icons.dart'; // 匯入圖片 Icon
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'page/all_page.dart'; // 匯入所有頁面
 import 'permissions.dart'; // 向使用者要求權限
 import 'package:provider/provider.dart';
@@ -55,6 +56,10 @@ class _MyApp extends State<MyApp> {
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Wandering App Home'),
+      supportedLocales: const [
+        Locale('en', ''), // 英文
+        Locale('zh', ''), // 中文
+      ],
     );
   }
 }
