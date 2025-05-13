@@ -19,6 +19,16 @@ class _LoginState extends State<Login> {
   final TextEditingController userEmailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool agreeTerms = false;
+  
+  Future<void> _showError(BuildContext context, LoginError error) async {
+    // 當登入失敗時顯示錯誤訊息
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(error.message),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +87,15 @@ class _LoginState extends State<Login> {
                   onTap: () {
                     if (agreeTerms) {
                       Provider.of<AuthModel>(context, listen: false)
-                          .login(userEmailController.text, passwordController.text);
+                          .login(
+                        userEmailController.text,
+                        passwordController.text,
+                      )
+                          .then((error) {
+                        if (error != Errorlog.success) {
+                          _showError(context, error);
+                        }
+                      });
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('請先同意使用條款與隱私政策')),
@@ -132,18 +150,7 @@ class _LoginState extends State<Login> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                /*TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Register()),
-                    );
-                  },
-                  child: const Text(
-                    '還沒有帳號？前往註冊',
-                    style: TextStyle(color: Colors.cyanAccent),
-                  ),
-                ),*/
+
                 // 註冊按鈕（白色圓角）
                 OutlinedButton(
                   onPressed: () {
@@ -243,7 +250,6 @@ class _LoginState extends State<Login> {
       child: child,
     );
   }
-
 
   Widget _roundedInputField({
     required TextEditingController controller, // 控制輸入文字的控制器
