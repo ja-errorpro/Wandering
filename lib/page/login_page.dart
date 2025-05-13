@@ -18,6 +18,16 @@ class _LoginState extends State<Login> {
   final TextEditingController passwordController = TextEditingController();
   bool agreeTerms = false;
 
+  Future<void> _showError(BuildContext context, LoginError error) async {
+    // 當登入失敗時顯示錯誤訊息
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(error.message),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,10 +104,16 @@ class _LoginState extends State<Login> {
                 GestureDetector(
                   onTap: () {
                     if (agreeTerms) {
-                      Provider.of<AuthModel>(context, listen: false).login(
-                        userEmailController.text,
-                        passwordController.text,
-                      );
+                      Provider.of<AuthModel>(context, listen: false)
+                          .login(
+                            userEmailController.text,
+                            passwordController.text,
+                          )
+                          .then((error) {
+                            if (error != Errorlog.success) {
+                              _showError(context, error);
+                            }
+                          });
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('請先同意使用條款與隱私政策')),

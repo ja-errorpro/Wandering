@@ -9,6 +9,12 @@ enum Errorlog {
   basic_error,
 }
 
+class LoginError implements Exception {
+  final Errorlog error;
+  final String message;
+  LoginError(this.error, this.message);
+}
+
 class AuthModel extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   User? _user;
@@ -25,29 +31,29 @@ class AuthModel extends ChangeNotifier {
 
   bool get isAuthenticated => user != null;
 
-  Future<Errorlog> login(String email, String password) async {
+  Future<LoginError> login(String email, String password) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
-      return Errorlog.success;
+      return LoginError(Errorlog.success, 'Login successful');
     } catch (e) {
       if (e is FirebaseAuthException) {
-        if (e.message!.contains('network-error')) {
+        if (e.message!.contains('network error')) {
           print('Network error detected');
 
           // Handle network error
-          return Errorlog.network_error;
+          return LoginError(Errorlog.network_error, '錯誤：請檢查網路連線');
         } else if (e.message!.contains('no user record corresponding')) {
           print('not register yet');
           // Handle network error
-          return Errorlog.not_register_error;
+          return LoginError(Errorlog.not_register_error, '錯誤：此帳號尚未註冊');
         } else {
           print('Firebase Login Error : ${e.message}');
           // Handle other errors
-          return Errorlog.firebase_error;
+          return LoginError(Errorlog.firebase_error, '錯誤: 請檢查帳號或密碼');
         }
       } else {
         print('Basic Login Error : $e');
-        return Errorlog.basic_error;
+        return LoginError(Errorlog.basic_error, '錯誤: $e');
       }
     }
   }
