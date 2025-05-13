@@ -87,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _EnterWelcomePage(BuildContext context) async {
     bool firstLaunch = await isFirstLaunch();
-    // await CheckNeccessaryPermissions(context);
+    await CheckNeccessaryPermissions(context);
     if (firstLaunch) {
       // 如果是第一次開啟，導航到 GuidingPage 頁面
       // 使用 Navigator 替換當前頁面為 Register 頁面
@@ -118,16 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // 在導航時返回一個空的容器或載入指示器
       return MaterialApp(home: Login());
     } else {
-      // 使用者已驗證，導航到 ExplorePage
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => ExplorePage(),
-          ), // 導航到 ExplorePage
-        );
-      });
-      // 在導航時返回一個空的容器或載入指示器
-      return Container(); // 或者一個載入指示器
+      return MaterialApp(home: ExplorePage());
     }
   }
 }
