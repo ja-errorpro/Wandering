@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'all_page.dart'; // 匯入所有頁面
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -12,10 +13,18 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('個人資訊', style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255), fontWeight: FontWeight.bold),),
+        title: Text(
+          '個人資訊',
+          style: TextStyle(
+            color: const Color.fromARGB(255, 255, 255, 255),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         backgroundColor: Colors.transparent, // 設置 AppBar 背景透明
         elevation: 0, // 去掉 AppBar 陰影
-        iconTheme: IconThemeData(color: const Color.fromARGB(255, 255, 255, 255)), // 設置返回按鈕顏色
+        iconTheme: IconThemeData(
+          color: const Color.fromARGB(255, 255, 255, 255),
+        ), // 設置返回按鈕顏色
       ),
       extendBodyBehindAppBar: true, // 讓 Body 內容延伸到 AppBar 後面
       body: Container(
@@ -30,20 +39,27 @@ class _ProfilePageState extends State<ProfilePage> {
         //   ),
         // ),
         decoration: BoxDecoration(
-          image: DecorationImage( // 添加圖片背景
-            image: AssetImage('assets/images/screen_size/9_16.png'), // 使用指定的圖片路徑
+          image: DecorationImage(
+            // 依據螢幕大小添加圖片背景
+            image: AssetImage(
+              screenSize,
+            ), // 使用指定的圖片路徑
             fit: BoxFit.cover, // 圖片填充方式
           ),
         ),
-        child: ListView( // 使用 ListView 使內容可滾動
+        child: ListView(
+          // 使用 ListView 使內容可滾動
           children: <Widget>[
             SizedBox(height: 20), // 留出 AppBar 的空間
             // 頭像、名稱和 ID
             Column(
               children: [
-                CircleAvatar( // 圓形頭像
+                CircleAvatar(
+                  // 圓形頭像
                   radius: 50,
-                  backgroundImage: AssetImage('assets/images/default_avatar.png'), // 替換成你的頭像圖片路徑
+                  backgroundImage: AssetImage(
+                    'assets/images/avatar.png',
+                  ), // 頭像圖片路徑
                 ),
                 SizedBox(height: 10),
                 Text(
@@ -57,10 +73,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 SizedBox(height: 5),
                 Text(
                   'ID 12345678', // 用戶 ID
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black54,
-                  ),
+                  style: TextStyle(fontSize: 16, color: Colors.black54),
                 ),
               ],
             ),
@@ -79,13 +92,16 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             SizedBox(height: 30),
             // 列表項
-            Card( // 將列表項放在 Card 中
+            Card(
+              // 將列表項放在 Card 中
               margin: EdgeInsets.symmetric(horizontal: 20.0),
               elevation: 5, // 添加陰影
-              shape: RoundedRectangleBorder( // 設置圓角
+              shape: RoundedRectangleBorder(
+                // 設置圓角
                 borderRadius: BorderRadius.circular(15),
               ),
-              child: Column( // 使用 Column 垂直排列列表項
+              child: Column(
+                // 使用 Column 垂直排列列表項
                 children: <Widget>[
                   buildProfileListItem(Icons.person_outline, '我的資料'),
                   Divider(indent: 20, endIndent: 20), // 分隔線
@@ -114,9 +130,16 @@ class _ProfilePageState extends State<ProfilePage> {
       onPressed: () {
         // 處理按鈕點擊事件
         print('$label 點擊');
+        if (label == '偏好設定') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PreferenceSelectionPage()),
+          );
+        } 
       },
       style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.black87, backgroundColor: Colors.white, // 按鈕文字和圖標顏色，以及背景顏色
+        foregroundColor: Colors.black87,
+        backgroundColor: Colors.white, // 按鈕文字和圖標顏色，以及背景顏色
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10), // 設置圓角
         ),
@@ -124,11 +147,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 30),
-          SizedBox(height: 5),
-          Text(label),
-        ],
+        children: [Icon(icon, size: 30), SizedBox(height: 5), Text(label)],
       ),
     );
   }
@@ -138,11 +157,14 @@ class _ProfilePageState extends State<ProfilePage> {
     return ListTile(
       leading: Icon(icon, color: Colors.black54), // 圖標
       title: Text(title), // 文字
-      trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.black54), // 箭頭
+      trailing: Icon(
+        Icons.arrow_forward_ios,
+        size: 16,
+        color: Colors.black54,
+      ), // 箭頭
       onTap: () {
         // 處理列表項點擊事件
         print('$title 點擊');
-        
       },
     );
   }

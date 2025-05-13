@@ -94,6 +94,11 @@ flutter:
     - family: FangZhengFangSongFanTi
       fonts:
         - asset: assets/fonts/FangZhengFangSongFanTi-1.ttf
+    - family: ChenYuluoyan
+      fonts:
+        - asset: assets/fonts/ChenYuluoyan-Thin-Monospaced.ttf
+        - asset: assets/fonts/ChenYuluoyan-2.0-Thin.ttf
+
         # - asset: assets/fonts/HolidayFree.otf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
