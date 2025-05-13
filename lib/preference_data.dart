@@ -71,16 +71,21 @@ class UserPreferences extends ChangeNotifier {
   Set<String> locationTypes;
   Set<String> accommodationTypes;
   Set<String> avoidTypes; // 添加 avoidTypes
+  int minCost; // 使用者偏好金額範圍
+  int maxCost;
 
   UserPreferences({
     Set<String>? travelStyles,
     Set<String>? locationTypes,
     Set<String>? accommodationTypes,
     Set<String>? avoidTypes, // 添加 avoidTypes 參數
+    this.minCost = 0,
+    this.maxCost = 0,
   }) : travelStyles = travelStyles ?? {},
        locationTypes = locationTypes ?? {},
        accommodationTypes = accommodationTypes ?? {},
-       avoidTypes = avoidTypes ?? {}; // 初始化 avoidTypes
+       avoidTypes = avoidTypes ?? {};
+  // 初始化 avoidTypes
 
   // 更新偏好 (您原有的方法)
   void updatePreference(
@@ -129,6 +134,8 @@ class UserPreferences extends ChangeNotifier {
       'locationTypes': locationTypes.join(','),
       'accommodationTypes': accommodationTypes.join(','),
       'avoidTypes': avoidTypes.join(','), // 添加 avoidTypes
+      'minCost': minCost,
+      'maxCost': maxCost,
     };
   }
 
@@ -144,6 +151,8 @@ class UserPreferences extends ChangeNotifier {
       avoidTypes: Set<String>.from(
         map['avoidTypes']?.split(',') ?? [],
       ), // 添加 avoidTypes
+      minCost: map['minCost'] ?? 0,
+      maxCost: map['maxCost'] ?? 0,
     );
   }
 
