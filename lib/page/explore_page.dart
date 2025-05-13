@@ -32,27 +32,217 @@ class _ExplorePageState extends State<ExplorePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Explore'),
-      ),
-      
+      backgroundColor: Colors.white, // 白色背景
       body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            // 依據螢幕大小添加圖片背景
-            image: AssetImage(
-              screenSize,
-            ), // 使用指定的圖片路徑
-            fit: BoxFit.cover, // 圖片填充方式
-          ),
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Replace the location icon with the custom image
+                Container(
+                  margin: EdgeInsets.only(right: 8.0),
+                  child: Image.asset(
+                    'assets/images/wandering_loc.PNG',
+                    width: 24, // Adjust size as needed
+                    height: 24, // Adjust size as needed
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(left: 8.0),
+                    padding: EdgeInsets.symmetric(horizontal: 12.0),
+                    decoration: BoxDecoration(
+                      
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: '搜尋景點、活動',
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Expanded(
+                  child: buildRoundedButton('住宿'),
+                ),
+                SizedBox(width: 8.0),
+                Expanded(
+                  child: buildRoundedButton('活動'),
+                ),
+                SizedBox(width: 8.0),
+                Expanded(
+                  child: buildRoundedButton('景點'),
+                ),
+              ],
+            ),
+            SizedBox(height: 16.0),
+            // Make the \"中原大學\" section horizontally scrollable
+            SizedBox(
+              height: 220, // Give the ListView a fixed height
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16.0),
+                    ),
+                    elevation: 4.0,
+                    child: Container(
+                      width: 300, // Adjust width as needed
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Colors.blue, Colors.lightBlueAccent],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '中原大學',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(height: 8.0),
+                            Text(
+                              '與您偏好 90% 符合',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16.0),
+                    ),
+                    elevation: 4.0,
+                    child: Container(
+                      width: 300, // Adjust width as needed
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Colors.blue, Colors.lightBlueAccent],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '中原大學',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(height: 8.0),
+                            Text(
+                              '與您偏好 90% 符合',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            
+            SizedBox(height: 16.0),
+            Text(
+              '其他推薦',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 8.0),
+            Expanded(
+              child: ListView(
+                // Make the \"其他推薦\" section horizontally scrollable
+                scrollDirection: Axis.horizontal,
+                children: [
+                  buildHorizontalRecommendationCard(),
+                  SizedBox(width: 12.0), // Added spacing between cards
+                  buildHorizontalRecommendationCard(),
+                  SizedBox(width: 12.0), // Added spacing between cards
+                  buildHorizontalRecommendationCard(),
+                  SizedBox(width: 12.0), // Added spacing between cards
+                  // Add more items as needed
+                ],
+
+              ),
+            ),
+          ],
         ),
-        child: Text('Explore Page - Selected Index: $_selectedIndex'),
-        
       ),
       bottomNavigationBar: CustomBottomNavigationBar( // 使用自訂的底部導航欄
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
       ),
+    );
+  }
+
+  Widget buildRoundedButton(String text) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 12.0),
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      child: Center(
+        child: Text(
+          text,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Helper widget for horizontal recommendation cards
+  Widget buildHorizontalRecommendationCard() {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+      elevation: 2.0,
+      child: Container(
+        width: 150, // Adjust width as needed
+        color: Colors.grey[300], // Placeholder color
+        // Add content for the recommendation card here
+      )
     );
   }
 }

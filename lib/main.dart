@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'icons.dart'; // 匯入圖片 Icon
+import 'package:permission_handler/permission_handler.dart';
 import 'page/all_page.dart'; // 匯入所有頁面
 import 'permissions.dart'; // 向使用者要求權限
 import 'package:provider/provider.dart';
 import 'auth.dart'; // 登入
+import 'permissions.dart';
 
 Future<bool> isFirstLaunch() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -18,6 +20,14 @@ void setFirstLaunchDone() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   // 設定 'first_launch' 為 false，表示 App 已經開啟過
   await prefs.setBool('first_launch', false);
+}
+
+Future<void> CheckNeccessaryPermissions(BuildContext context) async {
+  var permission_manager = PermissionManager();
+  permission_manager.message = '需要一些權限才能繼續使用';
+  permission_manager.deniedmessage = '檢測到權限被拒，請同意權限後才能繼續使用';
+  permission_manager.getPermission(context, Permission.location);
+  permission_manager.getPermission(context, Permission.storage);
 }
 
 void main() async {
@@ -77,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _EnterWelcomePage(BuildContext context) async {
     bool firstLaunch = await isFirstLaunch();
-
+    // await CheckNeccessaryPermissions(context);
     if (firstLaunch) {
       // 如果是第一次開啟，導航到 GuidingPage 頁面
       // 使用 Navigator 替換當前頁面為 Register 頁面
@@ -105,9 +115,9 @@ class _MyHomePageState extends State<MyHomePage> {
       // !auth.isAuthenticated
       // 使用者未驗證，導航到 Register 頁面
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => Login()),
-        );
+        Navigator.of(
+          context,
+        ).pushReplacement(MaterialPageRoute(builder: (context) => Login()));
       });
 
       // 在導航時返回一個空的容器或載入指示器
@@ -116,7 +126,9 @@ class _MyHomePageState extends State<MyHomePage> {
       // 使用者已驗證，導航到 ExplorePage
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => ExplorePage()), // 導航到 ExplorePage
+          MaterialPageRoute(
+            builder: (context) => ExplorePage(),
+          ), // 導航到 ExplorePage
         );
       });
       // 在導航時返回一個空的容器或載入指示器

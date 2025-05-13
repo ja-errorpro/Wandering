@@ -4,6 +4,7 @@ import 'package:path/path.dart';
 import 'dart:io';
 
 import './preference_data.dart'; // 確保 UserPreferences 類別在這裡可以訪問
+import 'model/user_model.dart';
 
 class DatabaseHelper {
   static final _databaseName = "preferences.db"; // 資料庫文件名
@@ -22,10 +23,13 @@ class DatabaseHelper {
 
   // 初始化資料庫
   _initDatabase() async {
-    Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, _databaseName);
-    return await openDatabase(path,
-        version: _databaseVersion, onCreate: _onCreate);
+    String documentsDirectory = await getDatabasesPath();
+    String path = join(documentsDirectory, _databaseName);
+    return await openDatabase(
+      path,
+      version: _databaseVersion,
+      onCreate: _onCreate,
+    );
   }
 
   // 創建資料庫表
@@ -50,12 +54,19 @@ class DatabaseHelper {
 
     // 嘗試更新，如果不存在則插入
     int count = await db.update(
-        preferencesTable, row,
-        where: 'id = ?', whereArgs: [1]);
+      preferencesTable,
+      row,
+      where: 'id = ?',
+      whereArgs: [1],
+    );
 
     if (count == 0) {
       // 如果沒有更新（表示id為1的記錄不存在），則插入新記錄
-      count = await db.insert(preferencesTable, row, conflictAlgorithm: ConflictAlgorithm.replace);
+      count = await db.insert(
+        preferencesTable,
+        row,
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
       print('用戶偏好已插入到資料庫。');
     } else {
       print('用戶偏好已更新到資料庫。');
@@ -66,10 +77,18 @@ class DatabaseHelper {
   // 獲取用戶偏好
   Future<UserPreferences?> getPreferences() async {
     Database db = await instance.database;
-    List<Map> maps = await db.query(preferencesTable,
-        columns: ['id', 'travelStyles', 'locationTypes', 'accommodationTypes', 'avoidTypes'],
-        where: 'id = ?',
-        whereArgs: [1]);
+    List<Map> maps = await db.query(
+      preferencesTable,
+      columns: [
+        'id',
+        'travelStyles',
+        'locationTypes',
+        'accommodationTypes',
+        'avoidTypes',
+      ],
+      where: 'id = ?',
+      whereArgs: [1],
+    );
 
     if (maps.isNotEmpty) {
       // 從資料庫行創建 UserPreferences 對象
