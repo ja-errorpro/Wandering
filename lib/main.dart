@@ -9,6 +9,8 @@ import 'permissions.dart'; // 向使用者要求權限
 import 'package:provider/provider.dart';
 import 'auth.dart'; // 登入
 import 'permissions.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<bool> isFirstLaunch() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -56,10 +58,7 @@ class _MyApp extends State<MyApp> {
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Wandering App Home'),
-      supportedLocales: const [
-        Locale('en', ''), // 英文
-        Locale('zh', ''), // 中文
-      ],
+      supportedLocales: AppLocalizations.supportedLocales,
     );
   }
 }

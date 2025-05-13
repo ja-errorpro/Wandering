@@ -1,0 +1,18 @@
+{
+    "@@locale": "zh",
+
+    "hello": "你好",
+    "@hello": {
+    "description": "歡迎語"
+    },
+
+    "Welcome": "歡迎！",
+    "@Welcome": {
+        "description": "歡迎語"
+    },
+    
+    "Personalinfo": "個人資訊",
+    "@Personalinfo": {
+        "description": "個人資訊"
+    }
+}
