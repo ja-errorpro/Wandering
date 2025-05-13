@@ -86,7 +86,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: <Widget>[
                   buildFeatureButton(Icons.assignment, '行程記錄'),
                   buildFeatureButton(Icons.bookmark, '我的收藏'),
-                  buildFeatureButton(Icons.settings, '偏好設定'),
+                  buildFeatureButton(Icons.settings, '設定'),
                 ],
               ),
             ),
@@ -134,6 +134,12 @@ class _ProfilePageState extends State<ProfilePage> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => PreferenceSelectionPage()),
+          );
+        } 
+        else if (label == '設定') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SettingsPage()),
           );
         } 
       },

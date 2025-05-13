@@ -1,3 +1,4 @@
+export './../local_environment.dart';
 export 'preference_selection_page.dart'; // 偏好設定
 export 'welcome_page.dart'; // 歡迎介面
 export 'register_page.dart';
@@ -8,4 +9,4 @@ export 'AvoidTypeSelection_page.dart';
 export 'AccommodationTypeSelection_page.dart';
 export 'explore_page.dart';
 export 'profile_page.dart';
-export './../local_environment.dart';
+export 'settings_page.dart';
