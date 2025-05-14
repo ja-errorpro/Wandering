@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'all_page.dart'; // 匯入所有頁面
-import 'dart:ui'; // 引入backdropFilter所需的庫
+import 'dart:ui';
+import 'all_page.dart';
+
+
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({Key? key}) : super(key: key);
@@ -16,238 +18,322 @@ class _ExplorePageState extends State<ExplorePage> {
     setState(() {
       _selectedIndex = index;
     });
-    // 在這裡處理按鈕點擊事件，切換頁面
-    if (index == 4) { // 如果點擊的是「我的」按鈕 (索引為 4)
-      Navigator.push( // 使用 Navigator 導航到 ProfilePage
+    if (index == 0) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ExplorePage()),
+      );
+    }
+    if (index == 1) {
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => ExplorePage()),
+      // );
+    }
+    else if (index == 2) {
+      // Navigator.push(
+      //   context,
+        // MaterialPageRoute(builder: (context) => ProfilePage()),
+      // );
+    }
+    else if (index == 3) {
+      Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => ProfilePage()),
       );
     }
-    // 其他按鈕的處理邏輯 (如果需要切換其他頁面)
-    // else if (index == 0) { ... 導航到探索頁面 ... }
-    // else if (index == 1) { ... 導航到行程頁面 ... }
-    // ...
+    else if (index == 4) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ProfilePage()),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // 白色背景
-      body: Container(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Replace the location icon with the custom image
-                Container(
-                  margin: EdgeInsets.only(right: 8.0),
-                  child: Image.asset(
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(right: 16, left: 16, top: 50),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Image.asset(
                     'assets/images/wandering_loc.PNG',
-                    width: 24, // Adjust size as needed
-                    height: 24, // Adjust size as needed
+                    width: 36,
+                    height: 36,
                   ),
-                ),
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.only(left: 8.0),
-                    padding: EdgeInsets.symmetric(horizontal: 12.0),
-                    decoration: BoxDecoration(
-                      
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: '搜尋景點、活動',
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 16.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Expanded(
-                  child: buildRoundedButton('住宿'),
-                ),
-                SizedBox(width: 8.0),
-                Expanded(
-                  child: buildRoundedButton('活動'),
-                ),
-                SizedBox(width: 8.0),
-                Expanded(
-                  child: buildRoundedButton('景點'),
-                ),
-              ],
-            ),
-            SizedBox(height: 16.0),
-            // Make the \"中原大學\" section horizontally scrollable
-            SizedBox(
-              height: 220, // Give the ListView a fixed height
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
-                    elevation: 4.0,
+                  SizedBox(width: 8.0),
+                  Expanded(
                     child: Container(
-                      width: 300, // Adjust width as needed
+                      padding: EdgeInsets.symmetric(horizontal: 12.0),
                       decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Colors.blue, Colors.lightBlueAccent],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(16.0),
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(20.0),
                       ),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '中原大學',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                            SizedBox(height: 8.0),
-                            Text(
-                              '與您偏好 90% 符合',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: '搜尋景點、活動',
+                          border: InputBorder.none,
                         ),
                       ),
                     ),
                   ),
-                  Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
-                    elevation: 4.0,
-                    child: Container(
-                      width: 300, // Adjust width as needed
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Colors.blue, Colors.lightBlueAccent],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '中原大學',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                            SizedBox(height: 8.0),
-                            Text(
-                              '與您偏好 90% 符合',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
                 ],
               ),
-            ),
-            
-            SizedBox(height: 16.0),
-            Text(
-              '其他推薦',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 8.0),
-            Expanded(
-              child: ListView(
-                // Make the \"其他推薦\" section horizontally scrollable
-                scrollDirection: Axis.horizontal,
+              SizedBox(height: 16.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  buildHorizontalRecommendationCard(),
-                  SizedBox(width: 12.0), // Added spacing between cards
-                  buildHorizontalRecommendationCard(),
-                  SizedBox(width: 12.0), // Added spacing between cards
-                  buildHorizontalRecommendationCard(),
-                  SizedBox(width: 12.0), // Added spacing between cards
-                  // Add more items as needed
+                  buildRoundedButton('住宿'),
+                  buildRoundedButton('活動'),
+                  buildRoundedButton('景點'),
                 ],
+              ),
+              SizedBox(height: 16.0),
+              Text(
+                '為你推薦',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 8.0),
+              SizedBox(
+                height: 210,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    buildImageRecommendationCard(
+                      imagePath: 'assets/images/jiufen.png',
+                      title: '九份老街',
+                      matchRate: '88%',
+                      tags: ['親子', '民宿', '湖畔'],
+                    ),
+                    buildImageRecommendationCard(
+                      imagePath: 'assets/images/jinshan.jpg',
+                      title: '金山老街',
+                      matchRate: '85%',
+                      tags: ['親子', '自然'],
+                    ),
+                    buildImageRecommendationCard(
+                      imagePath: 'assets/images/wandering_init.png',
+                      title: '金山老街',
+                      matchRate: '85%',
+                      tags: ['親子', '自然'],
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 16.0),
+              Text(
+                '當前城市推薦',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                '自然 × 美食 × 步道 > 九份老街 > 陽陽海',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.black54,
+                ),
+              ),
+              SizedBox(
+                height: 210,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    buildFeaturedCard('九份老街', '88%'),
+                    buildFeaturedCard('金山老街', '85%'),
+                    buildFeaturedCard('金山老街', '85%'),
 
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-      bottomNavigationBar: CustomBottomNavigationBar( // 使用自訂的底部導航欄
+      bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
       ),
     );
   }
-
   Widget buildRoundedButton(String text) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 12.0),
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       decoration: BoxDecoration(
         color: Colors.grey[300],
         borderRadius: BorderRadius.circular(20.0),
       ),
-      child: Center(
-        child: Text(
-          text,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
   }
 
-  // Helper widget for horizontal recommendation cards
-  Widget buildHorizontalRecommendationCard() {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0),
+  Widget buildFeaturedCard(String title, String matchRate) {
+    return Container(
+      width: 280,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16.0),
+        gradient: LinearGradient(
+          colors: [Color(0xFF00e4ff), Color(0xFF00c3ff), Color(0xFF7beec5)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+
+        ),
       ),
-      elevation: 2.0,
-      child: Container(
-        width: 150, // Adjust width as needed
-        color: Colors.grey[300], // Placeholder color
-        // Add content for the recommendation card here
-      )
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              matchRate,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
+  }
+
+  Widget buildPlaceholderCard() {
+    return Container(
+      width: 100,
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(16.0),
+      ),
+    );
+  }
+
+  Widget buildImageRecommendationCard({
+    required String imagePath,
+    required String title,
+    required String matchRate,
+    required List<String> tags,
+  }) {
+    return Container(
+      width: 240,
+      margin: EdgeInsets.only(right: 12.0),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: getCardGradientColors(theme: GetTheme(), page: 'explore'),
+
+        ),
+        borderRadius: BorderRadius.circular(16.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 8,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
+                ),
+                child: Image.asset(
+                  imagePath,
+                  height: 140,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Positioned(
+                top: 8,
+                left: 8,
+                child: Wrap(
+                  spacing: 4,
+                  runSpacing: 4,
+                  children: tags.map((tag) => Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: tagColor(tag),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      '#$tag',
+                      style: TextStyle(fontSize: 12, color: Colors.white),
+                    ),
+                  )).toList(),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Text(
+              title,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              children: [
+                Icon(Icons.check_circle, color: Colors.green, size: 16),
+                SizedBox(width: 4),
+                Text(
+                  '與你偏好 $matchRate 符合',
+                  style: TextStyle(fontSize: 12, color: Colors.black87),
+                ),
+                Spacer(),
+                Icon(Icons.favorite_border, size: 18, color: Colors.grey),
+              ],
+            ),
+          ),
+          SizedBox(height: 12),
+        ],
+      ),
+    );
+  }
+
+  Color tagColor(String tag) {
+    switch (tag) {
+      case '親子': return Colors.green;
+      case '自然': return Colors.blue;
+      case '文青': return Colors.indigo;
+      case '民宿': return Colors.blueAccent;
+      default: return Colors.grey;
+    }
   }
 }
 
-// 自訂的底部導航欄 Widget
+
+
 class CustomBottomNavigationBar extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onItemTapped;
@@ -260,23 +346,23 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect( // 使用 ClipRRect 來實現圓角
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20)), // 設置頂部圓角
-      child: BackdropFilter( // 使用 BackdropFilter 來實現磨砂玻璃效果
-        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10), // 設置模糊程度
+    return ClipRRect(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: Container(
-          height: 70, // 設置底部導航欄的高度
+          height: 70,
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.3), // 設置背景色和透明度
+            color: Colors.white.withOpacity(0.3),
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround, // 平均分佈按鈕
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              buildNavBarItem(Icons.explore, 0, '探索'), // 羅盤圖標
-              buildNavBarItem(Icons.calendar_today, 1, '行程'), // 日曆圖標
-              buildFloatingNavBarItem(Icons.airplanemode_active_outlined, 2, '推薦'), // 骰子圖標 (中間突出按鈕)
-              buildNavBarItem(Icons.chat_bubble_outline, 3, '聊天'), // 聊天圖標
-              buildNavBarItem(Icons.person_outline, 4, '我的'), // 個人圖標
+              buildNavBarItem(Icons.home, 0, '探索'),
+              buildNavBarItem(Icons.tag, 1, '分類'),
+              buildFloatingNavBarItem(Icons.airplanemode_active_outlined, 2, ''),
+              buildNavBarItem(Icons.calendar_today, 3, '行程'),
+              buildNavBarItem(Icons.person_outline, 4, '我的'),
             ],
           ),
         ),
@@ -284,41 +370,42 @@ class CustomBottomNavigationBar extends StatelessWidget {
     );
   }
 
-  // 普通按鈕的構建函數
   Widget buildNavBarItem(IconData icon, int index, String label) {
-    return InkWell( // 使用 InkWell 實現點擊效果
+    return InkWell(
       onTap: () => onItemTapped(index),
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 8.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              size: 24,
-              color: selectedIndex == index ? Colors.blue : Colors.grey, // 根據是否選中改變顏色
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            icon,
+            color: selectedIndex == index ? Colors.blue : Colors.grey,
+          ),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              color: selectedIndex == index ? Colors.blue : Colors.grey,
             ),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12,
-                color: selectedIndex == index ? Colors.blue : Colors.grey,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  // 中間突出按鈕的構建函數
   Widget buildFloatingNavBarItem(IconData icon, int index, String label) {
     return Container(
-      margin: EdgeInsets.only(bottom: 20), // 向下偏移以實現突出效果
-      child: FloatingActionButton( // 使用 FloatingActionButton 來實現中間突出效果
-        onPressed: () => onItemTapped(index),
-        child: Icon(icon),
-        elevation: 0, // 去掉陰影
+      margin: EdgeInsets.only(bottom: 20),
+
+      child: SizedBox(
+        width: 56,
+        height: 56,
+        child: FloatingActionButton(
+          onPressed: () => onItemTapped(index),
+          backgroundColor: Color(0xFF00e4ff),
+          child: Icon(icon, color: Colors.white),
+          elevation: 0,
+          shape: const CircleBorder(), // 圓形按鈕
+        ),
       ),
     );
   }

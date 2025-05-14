@@ -24,7 +24,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFB2F5EA), // 淺藍綠背景
+      backgroundColor: const Color(0xffffffff), // 淺藍綠背景
       appBar: AppBar(
         title: const Text('設定'),
         backgroundColor: Colors.transparent,
@@ -39,15 +39,6 @@ class _SettingsPageState extends State<SettingsPage> {
             onExpansionChanged: (expanded) =>
                 setState(() => _isAccountExpanded = expanded),
             children: [
-              ListTile(
-                title: Text('登入'),
-                onTap: () {
-                  // 跳轉到登入頁面
-                  Navigator.of(
-                    context,
-                  ).push(MaterialPageRoute(builder: (context) => Login()));
-                },
-              ),
               ListTile(
                 title: Text('登出'),
                 onTap: () {
@@ -96,9 +87,35 @@ class _SettingsPageState extends State<SettingsPage> {
             isExpanded: _isAppearanceExpanded,
             onExpansionChanged: (expanded) =>
                 setState(() => _isAppearanceExpanded = expanded),
-            children: const [
-              ListTile(title: Text('主題模式')),
-              ListTile(title: Text('字體大小')),
+            children: [
+              ListTile(
+                title: Text('主題模式'),
+                onTap: () {
+                  // 顯示主題選擇對話框
+                  _showThemeDialog();
+                },
+              ),
+              ListTile(
+                title: Text('字體大小'),
+                subtitle: StatefulBuilder(
+                  builder: (context, setLocalState) {
+                    double sliderValue = GetFontSize().toDouble();
+                    return Slider(
+                      value: sliderValue,
+                      min: 10.0,
+                      max: 24.0,
+                      divisions: 7,
+                      label: sliderValue.toStringAsFixed(0),
+                      onChanged: (value) {
+                        setLocalState(() {}); // 更新 Slider 本地 UI
+                        SetFontSize(value.toInt());
+                        setState(() {}); // 若 ExplorePage 也需要重繪
+                      },
+                    );
+                  },
+                ),
+              ),
+
               ListTile(title: Text('導航模式切換')),
             ],
           ),
@@ -150,6 +167,61 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
     );
   }
+
+  void _showThemeDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        final currentTheme = GetTheme();
+        return AlertDialog(
+          title: Text('選擇主題'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: ['default', 'sunset', 'forest', 'pastel']
+                .map((theme) => RadioListTile<String>(
+              title: Text(theme),
+              value: theme,
+              groupValue: currentTheme,
+              onChanged: (value) async {
+                if (value != null) {
+                  // 顯示 loading 對話框
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (_) => AlertDialog(
+                      content: Row(
+                        children: [
+                          CircularProgressIndicator(),
+                          SizedBox(width: 16),
+                          Text("正在為你套用新設定⋯⋯"),
+                        ],
+                      ),
+                    ),
+                  );
+
+                  await Future.delayed(Duration(milliseconds: 800));
+
+                  // 儲存主題設定
+                  SetTheme(value);
+
+                  // 關閉 loading 對話框
+                  Navigator.of(context).pop();
+
+                  // 跳轉回 ExplorePage 並刷新
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (_) => const ExplorePage()),
+                  );
+                }
+              },
+            ))
+                .toList(),
+          ),
+        );
+      },
+    );
+  }
+
+
 }
 
 

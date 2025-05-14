@@ -35,6 +35,7 @@ void main() async {
   await Firebase.initializeApp();
 
   // runApp(MyApp()); // 假設你的主頁面路由是 '/'
+
   runApp(
     ChangeNotifierProvider(create: (context) => AuthModel(), child: MyApp()),
   );
@@ -89,7 +90,8 @@ class _MyHomePageState extends State<MyHomePage> {
     bool firstLaunch = await isFirstLaunch();
     await CheckNeccessaryPermissions(context);
     if (firstLaunch) {
-      // 如果是第一次開啟，導航到 GuidingPage 頁面
+      // 如果是第一次開啟，導航到 GuidingPage 頁面、初始化全域數據
+      initializeGlobals();
       // 使用 Navigator 替換當前頁面為 Register 頁面
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pushReplacement(

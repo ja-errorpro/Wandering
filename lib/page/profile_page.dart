@@ -36,6 +36,10 @@ class _ProfilePageState extends State<ProfilePage> {
             // 依據螢幕大小添加圖片背景
             image: AssetImage(screenSize), // 使用指定的圖片路徑
             fit: BoxFit.cover, // 圖片填充方式
+            colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.7), // 調整透明度，0.0~1.0
+              BlendMode.dstATop,
+            ),
           ),
         ),
         child: ListView(

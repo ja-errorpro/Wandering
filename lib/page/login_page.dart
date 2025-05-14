@@ -19,7 +19,7 @@ class _LoginState extends State<Login> {
   final TextEditingController userEmailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool agreeTerms = false;
-  
+
   Future<void> _showError(BuildContext context, LoginError error) async {
     // 當登入失敗時顯示錯誤訊息
     ScaffoldMessenger.of(context).showSnackBar(
