@@ -1,8 +1,10 @@
 import 'package:Wandering/preference_data.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'place_model.dart';
 
 class UserModel {
-  final int uid;
+  final String uid;
+  final User firebaseUser;
   final String username;
   final String email;
   final UserPreferences preferences;
@@ -11,6 +13,7 @@ class UserModel {
   UserModel({
     required this.uid,
     required this.username,
+    required this.firebaseUser,
     required this.email,
     required this.preferences,
     this.favoritePlaces = const [],
@@ -32,6 +35,7 @@ class UserModel {
     return UserModel(
       uid: map['uid'],
       username: map['username'],
+      firebaseUser: map['firebaseUser'],
       email: map['email'],
       preferences: UserPreferences.fromMap(map['preferences']),
       favoritePlaces: (map['favoritePlaces'] as List)

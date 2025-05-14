@@ -83,7 +83,7 @@ class UserDatabaseHandler {
   }
 
   // 獲取使用者資料
-  Future<UserModel?> getUser(int uid) async {
+  Future<UserModel?> getUser(String uid) async {
     Database db = await instance.database;
     List<Map<String, dynamic>> maps = await db.query(
       userTable,
