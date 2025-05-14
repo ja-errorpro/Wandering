@@ -9,7 +9,7 @@ import 'dart:ui' as ui;
 // 全域變數
 String screenSize = 'assets/images/screen_size/9_16.png';
 String language = 'zh-TW';
-late int fontSize;
+double fontSize = 14;
 String theme = 'default'; // 預設主題
 
 final Map<String, Map<String, String>> _translations = {
@@ -52,12 +52,12 @@ String GetTheme() {
   return theme;
 }
 
-void SetFontSize(int size) {
+void SetFontSize(double size) {
   fontSize = size;
   print('字體大小設置為 $fontSize');
 }
 
-int GetFontSize() {
+double GetFontSize() {
   return fontSize;
 }
 
@@ -142,7 +142,7 @@ void initializeGlobals() {
   print('language: $language');
   theme = 'default';
   // 取得使用者字體大小
-  fontSize = (ui.PlatformDispatcher.instance.textScaleFactor * 16).toInt();
+  fontSize = ui.PlatformDispatcher.instance.textScaleFactor * 16;
   print('fontSize: $fontSize');
 }
 

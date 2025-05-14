@@ -205,7 +205,7 @@ class _ExplorePageState extends State<ExplorePage> {
               title,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 22,
+                fontSize: GetFontSize() + 8,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -213,7 +213,7 @@ class _ExplorePageState extends State<ExplorePage> {
               matchRate,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 14,
+                fontSize: GetFontSize(),
               ),
             ),
           ],

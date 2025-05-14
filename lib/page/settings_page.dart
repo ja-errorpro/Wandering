@@ -26,7 +26,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       backgroundColor: const Color(0xffffffff), // 淺藍綠背景
       appBar: AppBar(
-        title: const Text('設定'),
+        title: Text('設定', style: TextStyle(fontSize: GetFontSize())),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -40,7 +40,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 setState(() => _isAccountExpanded = expanded),
             children: [
               ListTile(
-                title: Text('登出'),
+                title: Text('登出', style: TextStyle(fontSize: GetFontSize())),
                 onTap: () {
                   // 執行登出操作
                   Provider.of<AuthModel>(context, listen: false).logout();
@@ -55,25 +55,25 @@ class _SettingsPageState extends State<SettingsPage> {
                 },
               ),
               ListTile(
-                title: Text('刪除帳號'),
+                title: Text('刪除帳號', style: TextStyle(fontSize: GetFontSize())),
                 onTap: () {
                   // 執行刪除帳號操作
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
-                      title: Text('確認刪除'),
-                      content: Text('您確定要刪除帳號嗎？此操作無法撤銷。'),
+                      title: Text('確認刪除', style: TextStyle(fontSize: GetFontSize())),
+                      content: Text('您確定要刪除帳號嗎？此操作無法撤銷。', style: TextStyle(fontSize: GetFontSize())),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.of(context).pop(),
-                          child: Text('取消'),
+                          child: Text('取消', style: TextStyle(fontSize: GetFontSize())),
                         ),
                         TextButton(
                           onPressed: () {
                             // TODO: 執行刪除帳號邏輯
                             Navigator.of(context).pop();
                           },
-                          child: Text('確認'),
+                          child: Text('確認', style: TextStyle(fontSize: GetFontSize())),
                         ),
                       ],
                     ),
@@ -89,17 +89,18 @@ class _SettingsPageState extends State<SettingsPage> {
                 setState(() => _isAppearanceExpanded = expanded),
             children: [
               ListTile(
-                title: Text('主題模式'),
+                title: Text('主題模式', style: TextStyle(fontSize: GetFontSize())),
                 onTap: () {
                   // 顯示主題選擇對話框
                   _showThemeDialog();
                 },
               ),
               ListTile(
-                title: Text('字體大小'),
+                title: Text('字體大小', style: TextStyle(fontSize: GetFontSize())),
                 subtitle: StatefulBuilder(
                   builder: (context, setLocalState) {
-                    double sliderValue = GetFontSize().toDouble();
+                    double sliderValue = GetFontSize().toDouble(); // 初始值
+
                     return Slider(
                       value: sliderValue,
                       min: 10.0,
@@ -107,16 +108,19 @@ class _SettingsPageState extends State<SettingsPage> {
                       divisions: 7,
                       label: sliderValue.toStringAsFixed(0),
                       onChanged: (value) {
-                        setLocalState(() {}); // 更新 Slider 本地 UI
-                        SetFontSize(value.toInt());
-                        setState(() {}); // 若 ExplorePage 也需要重繪
+                        setLocalState(() {
+                          sliderValue = value; // 更新本地狀態
+                        });
+                        SetFontSize(value); // 設定字體
+                        setState(() {}); // 刷新父級畫面（設定區域、文字樣式會即時變）
                       },
                     );
                   },
                 ),
               ),
 
-              ListTile(title: Text('導航模式切換')),
+
+              ListTile(title: Text('導航模式切換', style: TextStyle(fontSize: GetFontSize()))),
             ],
           ),
           _buildExpansionTile(
@@ -124,9 +128,9 @@ class _SettingsPageState extends State<SettingsPage> {
             isExpanded: _isNotificationExpanded,
             onExpansionChanged: (expanded) =>
                 setState(() => _isNotificationExpanded = expanded),
-            children: const [
-              ListTile(title: Text('系統推播開關')),
-              ListTile(title: Text('行程到期提醒')),
+            children: [
+              ListTile(title: Text('系統推播開關', style: TextStyle(fontSize: GetFontSize()))),
+              ListTile(title: Text('行程到期提醒', style: TextStyle(fontSize: GetFontSize()))),
             ],
           ),
           _buildExpansionTile(
@@ -134,10 +138,10 @@ class _SettingsPageState extends State<SettingsPage> {
             isExpanded: _isSupportExpanded,
             onExpansionChanged: (expanded) =>
                 setState(() => _isSupportExpanded = expanded),
-            children: const [
-              ListTile(title: Text('App版本資訊')),
-              ListTile(title: Text('聯絡我們')),
-              ListTile(title: Text('法律條款')),
+            children: [
+              ListTile(title: Text('App版本資訊', style: TextStyle(fontSize: GetFontSize()))),
+              ListTile(title: Text('聯絡我們', style: TextStyle(fontSize: GetFontSize()))),
+              ListTile(title: Text('法律條款', style: TextStyle(fontSize: GetFontSize()))),
             ],
           ),
         ],
@@ -158,7 +162,7 @@ class _SettingsPageState extends State<SettingsPage> {
         borderRadius: BorderRadius.circular(16),
       ),
       child: ExpansionTile(
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: GetFontSize())),
         backgroundColor: Colors.transparent,
         collapsedBackgroundColor: Colors.transparent,
         onExpansionChanged: onExpansionChanged,
@@ -174,12 +178,12 @@ class _SettingsPageState extends State<SettingsPage> {
       builder: (BuildContext context) {
         final currentTheme = GetTheme();
         return AlertDialog(
-          title: Text('選擇主題'),
+          title: Text('選擇主題', style: TextStyle(fontSize: GetFontSize())),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: ['default', 'sunset', 'forest', 'pastel']
                 .map((theme) => RadioListTile<String>(
-              title: Text(theme),
+              title: Text(theme, style: TextStyle(fontSize: GetFontSize())),
               value: theme,
               groupValue: currentTheme,
               onChanged: (value) async {
