@@ -18,29 +18,29 @@ class _ExplorePageState extends State<ExplorePage> {
     setState(() {
       _selectedIndex = index;
     });
-    if (index == 0) {
+    // if (index == 0) {
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(builder: (context) => ExplorePage()),
+    //   );
+    // }
+    if (index == 1) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => ExplorePage()),
+        MaterialPageRoute(builder: (context) => MainCategoryPage()),
       );
-    }
-    if (index == 1) {
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => ExplorePage()),
-      // );
     }
     else if (index == 2) {
-      // Navigator.push(
-      //   context,
-        // MaterialPageRoute(builder: (context) => ProfilePage()),
-      // );
-    }
-    else if (index == 3) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => ProfilePage()),
+      MaterialPageRoute(builder: (context) => StartTravelPage()),
       );
+    }
+    else if (index == 3) {
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => ProfilePage()),
+      // );
     }
     else if (index == 4) {
       Navigator.push(
@@ -176,7 +176,7 @@ class _ExplorePageState extends State<ExplorePage> {
       child: Text(
         text,
         style: TextStyle(
-          fontSize: 14,
+          fontSize: GetFontSize(),
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -278,15 +278,25 @@ class _ExplorePageState extends State<ExplorePage> {
                 child: Wrap(
                   spacing: 4,
                   runSpacing: 4,
-                  children: tags.map((tag) => Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: tagColor(tag),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      '#$tag',
-                      style: TextStyle(fontSize: 12, color: Colors.white),
+                  children: tags.map((tag) => GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CategoryPage(tag: tag),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: tagColor(tag),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        '#$tag',
+                        style: const TextStyle(fontSize: 12, color: Colors.white),
+                      ),
                     ),
                   )).toList(),
                 ),

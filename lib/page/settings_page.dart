@@ -96,28 +96,28 @@ class _SettingsPageState extends State<SettingsPage> {
                 },
               ),
               ListTile(
-                title: Text('字體大小', style: TextStyle(fontSize: GetFontSize())),
+                title: Text('字體大小'),
                 subtitle: StatefulBuilder(
                   builder: (context, setLocalState) {
-                    double sliderValue = GetFontSize().toDouble(); // 初始值
-
+                    double sliderValue = GetFontSize(); // 初始值
                     return Slider(
                       value: sliderValue,
                       min: 10.0,
-                      max: 24.0,
-                      divisions: 7,
+                      max: 22.0,
+                      divisions: 6,
                       label: sliderValue.toStringAsFixed(0),
                       onChanged: (value) {
                         setLocalState(() {
-                          sliderValue = value; // 更新本地狀態
+                          sliderValue = value;
                         });
-                        SetFontSize(value); // 設定字體
+                        SetFontSize(value);
                         setState(() {}); // 刷新父級畫面（設定區域、文字樣式會即時變）
                       },
                     );
                   },
                 ),
               ),
+
 
 
               ListTile(title: Text('導航模式切換', style: TextStyle(fontSize: GetFontSize()))),

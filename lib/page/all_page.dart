@@ -11,3 +11,5 @@ export 'AccommodationTypeSelection_page.dart';
 export 'explore_page.dart';
 export 'profile_page.dart';
 export 'settings_page.dart';
+export 'category_page.dart';
+export 'start_travel_page.dart';

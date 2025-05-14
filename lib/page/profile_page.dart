@@ -19,8 +19,10 @@ class _ProfilePageState extends State<ProfilePage> {
         title: Text(
           '個人資訊',
           style: TextStyle(
+            fontSize: GetFontSize(),
             color: const Color.fromARGB(255, 255, 255, 255),
             fontWeight: FontWeight.bold,
+
           ),
         ),
         backgroundColor: Colors.transparent, // 設置 AppBar 背景透明
@@ -60,7 +62,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Text(
                   'Wandering', // 用戶名稱
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: GetFontSize()+10,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
                   ),
@@ -144,6 +146,7 @@ class _ProfilePageState extends State<ProfilePage> {
           borderRadius: BorderRadius.circular(10), // 設置圓角
         ),
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15), // 內邊距
+        // textStyle: TextStyle(fontSize: GetFontSize()), // 設定字體大小
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -156,10 +159,10 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget buildProfileListItem(IconData icon, String title) {
     return ListTile(
       leading: Icon(icon, color: Colors.black54), // 圖標
-      title: Text(title), // 文字
+      title: Text(title, style: TextStyle(fontSize: GetFontSize())), // 文字
       trailing: Icon(
         Icons.arrow_forward_ios,
-        size: 16,
+        size: GetFontSize() + 4,
         color: Colors.black54,
       ), // 箭頭
       onTap: () {
