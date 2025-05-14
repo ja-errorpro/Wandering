@@ -23,7 +23,7 @@ class PlaceModel {
     longitude = json['longitude'];
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['name'] = name;
     data['description'] = description;
@@ -33,5 +33,15 @@ class PlaceModel {
     data['latitude'] = latitude;
     data['longitude'] = longitude;
     return data;
+  }
+
+  factory PlaceModel.fromMap(Map<String, dynamic> map) {
+    return PlaceModel(
+      name: map['name'],
+      description: map['description'],
+      image: map['image'] != null ? Image.network(map['image']) : null,
+      latitude: map['latitude'],
+      longitude: map['longitude'],
+    );
   }
 }

@@ -111,6 +111,30 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'個人資訊'**
   String get personalinfo;
+
+  /// 登出
+  ///
+  /// In zh, this message translates to:
+  /// **'登出'**
+  String get logout;
+
+  /// 刪除帳號
+  ///
+  /// In zh, this message translates to:
+  /// **'刪除帳號'**
+  String get deleteaccount;
+
+  /// 確定
+  ///
+  /// In zh, this message translates to:
+  /// **'確定'**
+  String get sure;
+
+  /// 取消
+  ///
+  /// In zh, this message translates to:
+  /// **'取消'**
+  String get cancel;
 }
 
 class _AppLocalizationsDelegate

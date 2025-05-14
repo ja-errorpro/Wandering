@@ -16,4 +16,16 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get personalinfo => '個人資訊';
+
+  @override
+  String get logout => '登出';
+
+  @override
+  String get deleteaccount => '刪除帳號';
+
+  @override
+  String get sure => '確定';
+
+  @override
+  String get cancel => '取消';
 }
