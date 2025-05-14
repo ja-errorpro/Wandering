@@ -61,29 +61,73 @@ double GetFontSize() {
   return fontSize;
 }
 
-List<Color> getCardGradientColors({String theme = 'default', String page = 'default'}) {
+List<Color> getCardGradientColors({String theme = 'grand blue', String page = 'default'}) {
   switch (theme) {
-    case 'sunset':
-      return const [
-        Color(0xffffe0b2), // 淺橙
-        Color(0xffffcc80), // 橙
-        Color(0xffffb74d), // 深橙
-        Color(0xffffa726), // 暗橙
-      ];
-    case 'forest':
-      return const [
-        Color(0xffb2dfdb), // 淺綠藍
-        Color(0xff80cbc4), // 綠藍
-        Color(0xff4db6ac), // 中綠藍
-        Color(0xff26a69a), // 深綠藍
-      ];
-    case 'pastel': //
-      return const [
-        Color(0xfff8bbd0), // 粉紅
-        Color(0xffe1bee7), // 淡紫
-        Color(0xffd1c4e9), // 淡藍紫
-        Color(0xffc5cae9), // 藍灰
-      ];
+  case 'grand blue':
+    return const [
+      Color(0xFF7beec5), // 薄荷綠
+      Color(0xFF01e6fa), // 亮藍
+      Color(0xFF32c8ff), // 天藍
+      Color(0xFFc0e8cb), // 淡綠
+    ];
+
+  case 'uncolored': //'黑白'
+    return const [
+      Color(0xFFFFFFFF), // 白
+      Color(0xFFa6a6a6), // 灰
+      Color(0xFF898282), // 淺棕
+      Color(0xFFb4b4b4), // 淺灰
+    ];
+
+  case 'fall': //'秋天'
+  return const [
+    Color(0xFFdbb8a5), // 肉色
+    Color(0xFFffc7af), // 粉橘
+    Color(0xFFebdac6), // 米黃
+    Color(0xFFad7445), // 紅棕
+  ];
+
+  case 'the forest': //'迷霧森林'
+  return const [
+    Color(0xFFa4bac3), // 淺藍
+    Color(0xFFc4dbd2), // 薄荷綠
+    Color(0xFFb8cfc1), // 綠
+    Color(0xFF4d7d79), // 深綠
+  ];
+
+  case 'bubble candy': //'泡泡糖'
+  return const [
+    Color(0xFFffb6b6), // 桃紅
+    Color(0xFFeed9ef), // 藕
+    Color(0xFFffd7ec), // 粉
+    Color(0xFFffbac9), // 紅
+  ];
+
+  case 'Lavender': // '薰衣草'
+  return const [
+    Color(0xFFc6a5a5), // 粉紫
+    Color(0xFFd5bbcc), // 紫
+    Color(0xFFe1d2e4), // 淺紫
+    Color(0xFFa892cb), // 紫
+  ];
+
+  case 'sunrise': //'日出'
+  return const [
+    Color(0xFFffe67a), // 黃
+    Color(0xFFffca7a), // 橙
+    Color(0xFFffa74c), // 橘
+    Color(0xFFffdfaf), // 淺橘
+  ];
+
+  case 'rainbow': //'彩虹'
+  return const [
+    Color(0xFFFFBABA), // 紅
+    Color(0xFFFFDA88), // 橙
+    Color(0xFFEfec8e), // 黃
+    Color(0xFFc6e8c0), // 薄荷綠
+    Color(0xFFC0E8E4), // 藍
+    Color(0xFFC0CCE8), //靛
+  ];
     case 'default':
     default:
       switch (page) {

@@ -181,7 +181,7 @@ class _SettingsPageState extends State<SettingsPage> {
           title: Text('選擇主題', style: TextStyle(fontSize: GetFontSize())),
           content: Column(
             mainAxisSize: MainAxisSize.min,
-            children: ['default', 'sunset', 'forest', 'pastel']
+            children: ['grand blue', 'uncolored','fall' , 'the forest', 'bubble candy', 'Lavender', 'sunrise', 'rainbow']
                 .map((theme) => RadioListTile<String>(
               title: Text(theme, style: TextStyle(fontSize: GetFontSize())),
               value: theme,
