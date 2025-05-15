@@ -117,6 +117,24 @@ class _StartTravelPageState extends State<StartTravelPage> {
               ),
               child: TextButton.icon(
                 onPressed: () {
+                  if (selectedRegion == null || selectedRegion!.isEmpty ||
+                      selectedTags.isEmpty ||
+                      selectedDateRange == null) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('請完成所有欄位'),
+                        content: const Text('請選擇地區、類型和日期範圍後再搜尋。'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text('確定'),
+                          ),
+                        ],
+                      ),
+                    );
+                    return;
+                  }
                   // TODO: Execute search with selected values
                   print('Selected Region: $selectedRegion');
                   print('Selected Tags: $selectedTags');
@@ -126,7 +144,6 @@ class _StartTravelPageState extends State<StartTravelPage> {
                     context,
                     MaterialPageRoute(builder: (context) => GeneratedLoadingPage()),
                   );
-
                 },
                 label: Row(
                   mainAxisSize: MainAxisSize.min,
