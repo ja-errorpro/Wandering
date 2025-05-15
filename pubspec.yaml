@@ -101,13 +101,13 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: HolidayFree
-      fonts:
-        - asset: assets/fonts/FontsFree-Net-HolidayFree.ttf
-        - asset: assets/fonts/HolidayFree.otf
-    - family: FangZhengFangSongFanTi
-      fonts:
-        - asset: assets/fonts/FangZhengFangSongFanTi-1.ttf
+#    - family: HolidayFree
+#      fonts:
+#        - asset: assets/fonts/FontsFree-Net-HolidayFree.ttf
+#        - asset: assets/fonts/HolidayFree.otf
+#    - family: FangZhengFangSongFanTi
+#      fonts:
+#        - asset: assets/fonts/FangZhengFangSongFanTi-1.ttf
     - family: ChenYuluoyan
       fonts:
         - asset: assets/fonts/ChenYuluoyan-Thin-Monospaced.ttf
