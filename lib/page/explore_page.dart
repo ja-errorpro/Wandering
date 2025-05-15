@@ -85,11 +85,24 @@ class _ExplorePageState extends State<ExplorePage> {
               ),
               SizedBox(height: 16.0),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  buildRoundedButton('住宿'),
-                  buildRoundedButton('活動'),
-                  buildRoundedButton('景點'),
+                  // 可左右拉動的可點擊主題色按鈕列
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        buildSelectableButton('景點', getCardGradientColors()[0], 0),
+                        SizedBox(width: 12),
+                        buildSelectableButton('住宿', getCardGradientColors()[0], 1),
+                        SizedBox(width: 12),
+                        buildSelectableButton('活動', getCardGradientColors()[0], 2),
+                        SizedBox(width: 12),
+
+                      ],
+                    ),
+                  ),
                 ],
               ),
               SizedBox(height: 16.0),
@@ -164,6 +177,44 @@ class _ExplorePageState extends State<ExplorePage> {
       ),
     );
   }
+
+  Widget buildSelectableButton(String text, Color color, int index) {
+    final isSelected = _selectedIndex == index;
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _selectedIndex = index;
+        });
+        // 這裡可根據 index 做對應操作
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+        decoration: BoxDecoration(
+          color: isSelected ? color : Colors.grey[300],
+          borderRadius: BorderRadius.circular(20.0),
+          boxShadow: isSelected
+              ? [BoxShadow(color: color.withOpacity(0.3), blurRadius: 8)]
+              : [],
+        ),
+        child: Text(
+          text,
+          style: TextStyle(
+            fontSize: GetFontSize(),
+            fontWeight: FontWeight.bold,
+            color: isSelected ? Colors.white : Colors.black87,
+            shadows: [
+              Shadow(
+                color: Colors.grey.withOpacity(0.6),
+                offset: Offset(1, 1),
+                blurRadius: 2,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget buildRoundedButton(String text) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),

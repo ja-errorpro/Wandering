@@ -17,10 +17,10 @@ class TravelStyleSelectionPage extends StatefulWidget {
 class _TravelStyleSelectionPageState extends State<TravelStyleSelectionPage> {
   // 顯示選擇數量警告視窗 (與之前相同，可以提取為一個通用函數)
   void _showSelectionCountWarningDialog(
-    PreferenceCategory category,
-    int minCount,
-    int maxCount,
-  ) {
+      PreferenceCategory category,
+      int minCount,
+      int maxCount,
+      ) {
     // ... 你的警告視窗實現 ...
     String message = '';
     String categoryName = '';
@@ -67,10 +67,10 @@ class _TravelStyleSelectionPageState extends State<TravelStyleSelectionPage> {
 
   // 驗證選擇數量是否在指定區間內 (與之前相同)
   bool _isSelectionCountValid(
-    Set<String> selectedSet,
-    int minCount,
-    int maxCount,
-  ) {
+      Set<String> selectedSet,
+      int minCount,
+      int maxCount,
+      ) {
     return selectedSet.length >= minCount && selectedSet.length <= maxCount;
   }
 
@@ -99,33 +99,33 @@ class _TravelStyleSelectionPageState extends State<TravelStyleSelectionPage> {
                   spacing: 8.0,
                   runSpacing: 8.0,
                   children:
-                      TravelStyle.values.map((style) {
-                        final styleValue = style.toString().split('.').last;
-                        final isSelected = userPreferences.travelStyles
-                            .contains(styleValue);
-                        return FilterChip(
-                          label: Text(styleValue),
-                          selected: isSelected,
-                          onSelected: (bool selected) {
-                            // 檢查選擇數量是否超過最大限制
-                            if (selected &&
-                                userPreferences.travelStyles.length >= 3) {
-                              _showSelectionCountWarningDialog(
-                                PreferenceCategory.travelStyles,
-                                1,
-                                3,
-                              );
-                              return; // 不允許選擇更多
-                            }
-                            // 更新 UserPreferences 中的旅行風格
-                            userPreferences.updatePreference(
-                              PreferenceCategory.travelStyles,
-                              styleValue,
-                              selected,
-                            );
-                          },
+                  TravelStyle.values.map((style) {
+                    final styleValue = style.toString().split('.').last;
+                    final isSelected = userPreferences.travelStyles
+                        .contains(styleValue);
+                    return FilterChip(
+                      label: Text(styleValue),
+                      selected: isSelected,
+                      onSelected: (bool selected) {
+                        // 檢查選擇數量是否超過最大限制
+                        if (selected &&
+                            userPreferences.travelStyles.length >= 3) {
+                          _showSelectionCountWarningDialog(
+                            PreferenceCategory.travelStyles,
+                            1,
+                            3,
+                          );
+                          return; // 不允許選擇更多
+                        }
+                        // 更新 UserPreferences 中的旅行風格
+                        userPreferences.updatePreference(
+                          PreferenceCategory.travelStyles,
+                          styleValue,
+                          selected,
                         );
-                      }).toList(),
+                      },
+                    );
+                  }).toList(),
                 ),
                 const Spacer(), // 將按鈕推到底部
                 ElevatedButton(

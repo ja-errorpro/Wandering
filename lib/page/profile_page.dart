@@ -176,7 +176,7 @@ class _ProfilePageState extends State<ProfilePage> {
         if (title == '我的資料') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => SettingsPage()),
+            MaterialPageRoute(builder: (context) => UserInfoPage()),
           );
         }
         else if (title == '我的收藏') {
@@ -188,7 +188,7 @@ class _ProfilePageState extends State<ProfilePage> {
         else if (title == '我的探索記錄') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => SettingsPage()),
+            MaterialPageRoute(builder: (context) => MyExploreLogPage()),
           );
         }
         else if (title == '評論與心得') {
@@ -198,10 +198,10 @@ class _ProfilePageState extends State<ProfilePage> {
           // );
         }
         else if (title == '分享 App') {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => ShareApp_Page()),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => InfoSharePage()),
+          );
         } else if (title == '聯絡我們') {
           Navigator.push(
             context,
