@@ -11,6 +11,7 @@ export 'AccommodationTypeSelection_page.dart';
 export 'explore_page.dart';
 export 'profile_page.dart';
 
+export 'self_info_page.dart';
 export 'review_page.dart';
 
 export 'ShareApp_page.dart';

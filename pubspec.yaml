@@ -53,6 +53,7 @@ dependencies:
   fl_chart: ^1.0.0
   url_launcher: ^6.3.1
   csv: ^6.0.0
+  share_plus: ^11.0.0
 
 dev_dependencies:
   flutter_test:
@@ -101,6 +102,10 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
+    - family: ChenYuluoyan
+      fonts:
+        - asset: assets/fonts/ChenYuluoyan-Thin-Monospaced.ttf
+        - asset: assets/fonts/ChenYuluoyan-2.0-Thin.ttf
 #    - family: HolidayFree
 #      fonts:
 #        - asset: assets/fonts/FontsFree-Net-HolidayFree.ttf
@@ -108,10 +113,7 @@ flutter:
 #    - family: FangZhengFangSongFanTi
 #      fonts:
 #        - asset: assets/fonts/FangZhengFangSongFanTi-1.ttf
-    - family: ChenYuluoyan
-      fonts:
-        - asset: assets/fonts/ChenYuluoyan-Thin-Monospaced.ttf
-        - asset: assets/fonts/ChenYuluoyan-2.0-Thin.ttf
+
 
         # - asset: assets/fonts/HolidayFree.otf
   #       - asset: fonts/Schyler-Italic.ttf

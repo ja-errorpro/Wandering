@@ -174,10 +174,10 @@ class _ProfilePageState extends State<ProfilePage> {
         // 處理列表項點擊事件
         print('$title 點擊');
         if (title == '我的資料') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => SettingsPage()),
-          );
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => SelfInfoPage()),
+          // );
         }
         else if (title == '我的收藏') {
           Navigator.push(
@@ -198,10 +198,10 @@ class _ProfilePageState extends State<ProfilePage> {
           // );
         }
         else if (title == '分享 App') {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => ShareApp_Page()),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => InfoSharePage()),
+          );
         } else if (title == '聯絡我們') {
           Navigator.push(
             context,
