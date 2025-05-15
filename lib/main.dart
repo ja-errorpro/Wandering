@@ -10,11 +10,19 @@ import 'package:provider/provider.dart';
 import 'auth.dart'; // 登入
 import 'permissions.dart';
 
-Future<bool> isFirstLaunch() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
+bool isFirstLaunch() {
+  Future<SharedPreferences> prefs = SharedPreferences.getInstance();
   // 檢查 'first_launch' 這個 key 是否存在或其值為 true
-  bool isFirst = prefs.getBool('first_launch') ?? true; // 預設為 true
-  return isFirst;
+  // bool isFirst = prefs.getBool('first_launch') ?? true; // 預設為 true
+  Future<bool> isFirst = prefs.then((prefs) {
+    return prefs.getBool('first_launch') ?? true; // 預設為 true
+  });
+
+  if (isFirst == true) {
+    return true; // 如果是第一次開啟，返回 true
+  } else {
+    return false; // 否則返回 false
+  }
 }
 
 void setFirstLaunchDone() async {
@@ -86,27 +94,25 @@ class _MyHomePageState extends State<MyHomePage> {
     return HomePage(context);
   }
 
-  void _EnterWelcomePage(BuildContext context) async {
-    bool firstLaunch = await isFirstLaunch();
-    await CheckNeccessaryPermissions(context);
+  Widget _EnterWelcomePage(BuildContext context) {
+    bool firstLaunch = isFirstLaunch();
+    CheckNeccessaryPermissions(context);
     if (firstLaunch) {
       // 如果是第一次開啟，導航到 GuidingPage 頁面、初始化全域數據
       initializeGlobals();
-      // 使用 Navigator 替換當前頁面為 Register 頁面
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const GuidingPage()),
-        );
-      });
-      // runApp(MyApp(initialRoute: '/register')); // 假設你的註冊頁面路由是 '/register'
       setFirstLaunchDone(); // 設定標誌為已開啟過
+      return MaterialApp(home: GuidingPage());
     }
-    // 不是第一次開啟，或者剛開啟過歡迎頁面，導航到主頁
+
+    return const SizedBox(); // 返回一個空的容器
   }
 
   Widget HomePage(BuildContext context) {
-    // 判斷是否需要導航到歡迎頁面
-    _EnterWelcomePage(context);
+    // 判斷需要導航到歡迎頁面還是主頁面
+    Widget welcomePage = _EnterWelcomePage(context);
+    if (welcomePage is MaterialApp) {
+      return welcomePage;
+    }
     return Consumer<AuthModel>(
       builder: (context, auth, child) => _buildHomePage(context, auth),
     );
