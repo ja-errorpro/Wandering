@@ -111,13 +111,8 @@ class _StartTravelPageState extends State<StartTravelPage> {
               height: 50,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(32),
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFF7beec5),
-                    Color(0xFF01e6fa),
-                    Color(0xFF32c8ff),
-                    Color(0xFFc0e8cb),
-                  ],
+                gradient: LinearGradient(
+                  colors: getCardGradientColors(), // 使用定義好的漸層顏色
                 ),
               ),
               child: TextButton.icon(

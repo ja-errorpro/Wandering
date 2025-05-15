@@ -39,7 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
             image: AssetImage(screenSize), // 使用指定的圖片路徑
             fit: BoxFit.cover, // 圖片填充方式
             colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(0.7), // 調整透明度，0.0~1.0
+              Colors.black.withOpacity(1), // 調整透明度，0.0~1.0
               BlendMode.dstATop,
             ),
           ),
@@ -60,7 +60,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  'Wandering', // 用戶名稱
+                  Provider.of<AuthModel>(context, listen: false).user?.displayName ?? 'unknow', // 用戶名稱
                   style: TextStyle(
                     fontSize: GetFontSize()+10,
                     fontWeight: FontWeight.bold,
@@ -127,15 +127,20 @@ class _ProfilePageState extends State<ProfilePage> {
       onPressed: () {
         // 處理按鈕點擊事件
         print('$label 點擊');
-        if (label == '偏好設定') {
+        if (label == '行程紀錄') {
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => SettingsPage()),
+          // );
+        } else if (label == '我的收藏') {
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => SettingsPage()),
+          // );
+        } else if (label == '偏好設定') {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => PreferenceSelectionPage()),
-          );
-        } else if (label == '設定') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => SettingsPage()),
           );
         }
       },
@@ -168,7 +173,42 @@ class _ProfilePageState extends State<ProfilePage> {
       onTap: () {
         // 處理列表項點擊事件
         print('$title 點擊');
-        if (title == '設定') {
+        if (title == '我的資料') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SettingsPage()),
+          );
+        }
+        else if (title == '我的收藏') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SettingsPage()),
+          );
+        }
+        else if (title == '我的探索記錄') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SettingsPage()),
+          );
+        }
+        else if (title == '評論與心得') {
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => ReviewFeedbackPage()),
+          // );
+        }
+        else if (title == '分享 App') {
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => ShareApp_Page()),
+          // );
+        } else if (title == '聯絡我們') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ContactPage()),
+          );
+        }
+        else if (title == '設定') {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => SettingsPage()),

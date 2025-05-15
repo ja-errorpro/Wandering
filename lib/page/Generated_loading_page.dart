@@ -92,8 +92,8 @@ class _GeneratedLoadingPageState extends State<GeneratedLoadingPage> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF01e6fa)),
+            CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(getCardGradientColors()[2]),
             ),
           ],
         ),

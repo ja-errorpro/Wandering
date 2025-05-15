@@ -55,7 +55,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 },
               ),
               ListTile(
-                title: Text('刪除帳號', style: TextStyle(fontSize: GetFontSize())),
+                title: Text('刪除帳號', style: TextStyle(fontSize: GetFontSize(), color: Colors.red)),
                 onTap: () {
                   // 執行刪除帳號操作
                   showDialog(
