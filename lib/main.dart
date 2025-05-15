@@ -8,7 +8,6 @@ import 'page/all_page.dart'; // 匯入所有頁面
 import 'permissions.dart'; // 向使用者要求權限
 import 'package:provider/provider.dart';
 import 'auth.dart'; // 登入
-import 'permissions.dart';
 
 bool isFirstLaunch() {
   Future<SharedPreferences> prefs = SharedPreferences.getInstance();
@@ -41,8 +40,6 @@ Future<void> CheckNeccessaryPermissions(BuildContext context) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
-  // runApp(MyApp()); // 假設你的主頁面路由是 '/'
 
   runApp(
     ChangeNotifierProvider(create: (context) => AuthModel(), child: MyApp()),
