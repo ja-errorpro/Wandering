@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PlaceModel {
+  String? id;
   String? name;
   String? description;
   Image? image;
@@ -8,6 +9,7 @@ class PlaceModel {
   // double? longitude; // 經度
 
   PlaceModel({
+    this.id,
     this.name,
     this.description,
     this.image,
