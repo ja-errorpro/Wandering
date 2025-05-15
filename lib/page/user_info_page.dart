@@ -35,16 +35,7 @@ class UserInfoPage extends StatelessWidget {
             _buildInfoTile('生日', userInfo['birthday']!),
             _buildInfoTile('性別', userInfo['gender']!),
             const Spacer(),
-            Center(
-              child: ElevatedButton.icon(
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.arrow_back),
-                label: const Text('返回'),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                ),
-              ),
-            ),
+
           ],
         ),
       ),
