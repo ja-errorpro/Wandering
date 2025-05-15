@@ -13,7 +13,9 @@ class PermissionManager {
   set permanentlyDeniedmessage(value) => _permanentlyDeniedmessage = value;
 
   Future<bool> getPermission(
-      BuildContext context, Permission permission) async {
+    BuildContext context,
+    Permission permission,
+  ) async {
     Future<bool> dorequest() async {
       var available = false;
       var status = await _showTip(context);
@@ -83,56 +85,62 @@ class PermissionManager {
 
   Future<bool> _showTip(BuildContext context) async {
     return await showDialog<bool>(
-            context: context,
-            builder: (context) => AlertDialog(
-                    title: Text(_title),
-                    content: Text(_message),
-                    actions: [
-                      TextButton(
-                        child: Text('確定'),
-                        onPressed: () => Navigator.of(context).pop(true),
-                      ),
-                      TextButton(
-                        child: Text('取消'),
-                        onPressed: () => Navigator.of(context).pop(false),
-                      )
-                    ])) ??
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(_title),
+            content: Text(_message),
+            actions: [
+              TextButton(
+                child: Text('取消'),
+                onPressed: () => Navigator.of(context).pop(false),
+              ),
+              TextButton(
+                child: Text('確定'),
+                onPressed: () => Navigator.of(context).pop(true),
+              ),
+            ],
+          ),
+        ) ??
         false;
   }
 
   _showTipOnDenied(BuildContext context) async {
     showDialog<bool>(
-        context: context,
-        builder: (context) => AlertDialog(
-                title: Text(_title),
-                content: Text(_deniedmessage),
-                actions: [
-                  TextButton(
-                    child: Text('確定'),
-                    onPressed: () => Navigator.of(context).pop(true),
-                  ),
-                  TextButton(
-                    child: Text('取消'),
-                    onPressed: () => Navigator.of(context).pop(false),
-                  )
-                ]));
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(_title),
+        content: Text(_deniedmessage),
+        actions: [
+          TextButton(
+            child: Text('取消'),
+            onPressed: () => Navigator.of(context).pop(false),
+          ),
+          TextButton(
+            child: Text('確定'),
+            onPressed: () => Navigator.of(context).pop(true),
+          ),
+        ],
+      ),
+    );
   }
 
   _showTipOnPermanentlyDenied(BuildContext context) async {
     showDialog<bool>(
-        context: context,
-        builder: (context) => AlertDialog(
-                title: Text(_title),
-                content: Text(_permanentlyDeniedmessage),
-                actions: [
-                  TextButton(
-                    child: Text('確定'),
-                    onPressed: () => Navigator.of(context).pop(true),
-                  ),
-                  TextButton(
-                    child: Text('取消'),
-                    onPressed: () => Navigator.of(context).pop(false),
-                  )
-                ]));
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(_title),
+        content: Text(_permanentlyDeniedmessage),
+        actions: [
+          TextButton(
+            child: Text('取消'),
+            onPressed: () => Navigator.of(context).pop(false),
+          ),
+          TextButton(
+            child: Text('確定'),
+            onPressed: () => Navigator.of(context).pop(true),
+          ),
+        ],
+      ),
+    );
   }
 }

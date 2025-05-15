@@ -26,7 +26,9 @@ class ContactPage extends StatelessWidget {
   // 啟動 Instagram 的函數
   Future<void> _launchInstagram() async {
     // 請替換成您的 Instagram 個人檔案連結
-    final Uri instagramUri = Uri.parse('https://www.instagram.com/your_handle/');
+    final Uri instagramUri = Uri.parse(
+      'https://www.instagram.com/your_handle/',
+    );
     await _launchUrlHelper(instagramUri, 'Instagram');
   }
 
@@ -34,17 +36,7 @@ class ContactPage extends StatelessWidget {
   Future<void> _launchUrlHelper(Uri uri, String platformName) async {
     try {
       // 檢查是否可以啟動該 URL
-      if (await canLaunchUrl(uri)) {
-        // 使用 externalApplication 模式，嘗試在外部應用程式（如瀏覽器或郵件客戶端）中開啟
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
-      } else {
-        // 如果無法啟動，在 Debug Console 顯示錯誤
-        debugPrint('無法開啟 $platformName: $uri');
-        // 您也可以在此處顯示使用者友善的錯誤提示，例如 SnackBar
-        // ScaffoldMessenger.of(context).showSnackBar(
-        //   SnackBar(content: Text('無法開啟 $platformName，請檢查應用程式或網路。')),
-        // );
-      }
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     } catch (e) {
       // 捕獲啟動過程中的其他錯誤
       debugPrint('開啟 $platformName 時發生錯誤: $e');
@@ -61,7 +53,8 @@ class ContactPage extends StatelessWidget {
         title: Text('聯絡我們'),
         backgroundColor: getCardGradientColors()[0], // 可以設置 App Bar 顏色
       ),
-      body: Center( // 使用 Center 將 Column 垂直和水平置中
+      body: Center(
+        // 使用 Center 將 Column 垂直和水平置中
         child: Padding(
           padding: const EdgeInsets.all(24.0), // 為內容添加內邊距
           child: Column(
@@ -94,12 +87,13 @@ class ContactPage extends StatelessWidget {
                     shadowColor: Colors.transparent,
                     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                     textStyle: TextStyle(fontSize: 18),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
                   ),
                 ),
               ),
               SizedBox(height: 20), // 按鈕之間的垂直間距
-
               // GDG 社群頁按鈕
               Container(
                 decoration: BoxDecoration(
@@ -112,7 +106,9 @@ class ContactPage extends StatelessWidget {
                 ),
                 child: ElevatedButton.icon(
                   onPressed: () async {
-                    final Uri gdgUri = Uri.parse('https://gdg.community.dev/gdg-on-campus-chung-yuan-christian-university-taoyuan-taiwan/');
+                    final Uri gdgUri = Uri.parse(
+                      'https://gdg.community.dev/gdg-on-campus-chung-yuan-christian-university-taoyuan-taiwan/',
+                    );
                     await _launchUrlHelper(gdgUri, 'GDG 社群頁');
                   },
                   icon: Icon(Icons.link),
@@ -122,12 +118,13 @@ class ContactPage extends StatelessWidget {
                     shadowColor: Colors.transparent,
                     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                     textStyle: TextStyle(fontSize: 18),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
                   ),
                 ),
               ),
               SizedBox(height: 20), // 按鈕之間的垂直間距
-
               // Instagram 按鈕
               Container(
                 decoration: BoxDecoration(
@@ -140,7 +137,9 @@ class ContactPage extends StatelessWidget {
                 ),
                 child: ElevatedButton.icon(
                   onPressed: () async {
-                    final Uri instagramUri = Uri.parse('https://www.instagram.com/gdg.on.campus_cycu/');
+                    final Uri instagramUri = Uri.parse(
+                      'https://www.instagram.com/gdg.on.campus_cycu/',
+                    );
                     await _launchUrlHelper(instagramUri, 'Instagram');
                   },
                   icon: Icon(Icons.camera_alt_outlined), // 使用相機圖標作為替代
@@ -150,11 +149,12 @@ class ContactPage extends StatelessWidget {
                     shadowColor: Colors.transparent,
                     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                     textStyle: TextStyle(fontSize: 18),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
                   ),
                 ),
               ),
-
 
               // 您可以在這裡添加其他聯絡方式的按鈕或文字，例如電話、地址等
             ],
