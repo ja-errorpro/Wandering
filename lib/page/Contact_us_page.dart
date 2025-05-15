@@ -99,12 +99,7 @@ class ContactPage extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
                   gradient: LinearGradient(
-                    colors: [
-                      Color(0xFF7beec5), // 薄荷綠
-                      Color(0xFF01e6fa), // 亮藍
-                      Color(0xFF32c8ff), // 天藍
-                      Color(0xFFc0e8cb), // 淡綠
-                    ],
+                    colors: getCardGradientColors(),
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
