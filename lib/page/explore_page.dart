@@ -37,7 +37,7 @@ class _ExplorePageState extends State<ExplorePage> {
     else if (index == 3) {
       // Navigator.push(
       //   context,
-      //   MaterialPageRoute(builder: (context) => ProfilePage()),
+      //   MaterialPageRoute(builder: (context) => ListLtineraryPage()),
       // );
     }
     else if (index == 4) {
