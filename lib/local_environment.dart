@@ -10,7 +10,7 @@ import 'dart:ui' as ui;
 String screenSize = 'assets/images/screen_size/9_16.png';
 String language = 'zh-TW';
 double fontSize = 14;
-String theme = 'default'; // 預設主題
+String theme = 'grand blue'; // 預設主題
 
 final Map<String, Map<String, String>> _translations = {
   '你好': {'en': 'Hello', 'zh-TW': '你好', 'ja': 'こんにちは'},
@@ -41,6 +41,11 @@ String translate(String key) {
 void setLanguage(String lang) {
   language = lang;
   print('語言設置為 $language');
+}
+
+String GetLanguage() {
+  print('語言設置為 $language');
+  return language;
 }
 
 void SetTheme(String th) {
