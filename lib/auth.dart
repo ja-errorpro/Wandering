@@ -74,10 +74,6 @@ class AuthModel extends ChangeNotifier {
       UserCredential result = await _auth.signInWithCredential(credential);
       await user?.updateDisplayName(username);
 
-      print('userCredential : $userCredential');
-      print('credential : $credential');
-      print('result : $result');
-      print('Current user after registration: ${_auth.currentUser}');
       notifyListeners();
       Navigator.pop(context);
     } catch (e) {
@@ -87,5 +83,13 @@ class AuthModel extends ChangeNotifier {
 
   Future<void> logout() async {
     await _auth.signOut();
+  }
+
+  Future<String> getUserName() async {
+    if (_user != null) {
+      return _user!.displayName ?? '';
+    } else {
+      return '';
+    }
   }
 }
