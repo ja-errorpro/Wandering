@@ -11,9 +11,9 @@ export 'AccommodationTypeSelection_page.dart';
 export 'explore_page.dart';
 export 'profile_page.dart';
 
-export 'self_info_page.dart';
+export 'user_info_page.dart';
+export 'MyExplore_log_page.dart';
 export 'review_page.dart';
-
 export 'ShareApp_page.dart';
 export 'Contact_us_page.dart';
 export 'settings_page.dart';

@@ -174,10 +174,10 @@ class _ProfilePageState extends State<ProfilePage> {
         // 處理列表項點擊事件
         print('$title 點擊');
         if (title == '我的資料') {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => SelfInfoPage()),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => UserInfoPage()),
+          );
         }
         else if (title == '我的收藏') {
           Navigator.push(
@@ -188,7 +188,7 @@ class _ProfilePageState extends State<ProfilePage> {
         else if (title == '我的探索記錄') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => SettingsPage()),
+            MaterialPageRoute(builder: (context) => MyExploreLogPage()),
           );
         }
         else if (title == '評論與心得') {

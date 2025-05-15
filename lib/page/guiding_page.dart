@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart'; // 假設您使用 Google Fonts
 import 'all_page.dart'; // 假設您的所有頁面都在這個文件中匯入
 // import '../icons.dart'; // 假設您的自定義圖標在這個文件中
 
