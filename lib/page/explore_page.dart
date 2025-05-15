@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'all_page.dart';
 
-
-
 class ExplorePage extends StatefulWidget {
   const ExplorePage({Key? key}) : super(key: key);
 
@@ -222,15 +220,15 @@ class _ExplorePageState extends State<ExplorePage> {
     );
   }
 
-  Widget buildPlaceholderCard() {
-    return Container(
-      width: 100,
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(16.0),
-      ),
-    );
-  }
+  // Widget buildPlaceholderCard() {
+  //   return Container(
+  //     width: 100,
+  //     decoration: BoxDecoration(
+  //       color: Colors.grey[200],
+  //       borderRadius: BorderRadius.circular(16.0),
+  //     ),
+  //   );
+  // }
 
   Widget buildImageRecommendationCard({
     required String imagePath,
@@ -243,7 +241,7 @@ class _ExplorePageState extends State<ExplorePage> {
       margin: EdgeInsets.only(right: 12.0),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: getCardGradientColors(theme: GetTheme(), page: 'explore'),
+          colors: getCardGradientColors(),
 
         ),
         borderRadius: BorderRadius.circular(16.0),

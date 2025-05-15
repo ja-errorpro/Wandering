@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
+import 'package:table_calendar/table_calendar.dart';
 import 'all_page.dart';
 class StartTravelPage extends StatefulWidget {
   const StartTravelPage({super.key});
@@ -19,32 +20,31 @@ class _StartTravelPageState extends State<StartTravelPage> {
     setState(() {
       _selectedIndex = index;
     });
+    // 為了避免重複推送相同的頁面，可以在導航前檢查當前路由
+    // 或者使用 pushReplacement 代替 push
     if (index == 0) {
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => ExplorePage()),
       );
     }
     if (index == 1) {
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => MainCategoryPage()),
       );
     }
     else if (index == 2) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => StartTravelPage()),
-      );
+      // 如果已經在 StartTravelPage，則不進行導航
+      // 或者使用 pushReplacement 來確保 BottomNavigationBar 狀態正確
+      // Navigator.pushReplacement(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => StartTravelPage()),
+      // );
+      // 如果使用 pushReplacement 則會重新載入頁面，通常如果已在當前頁面則不導航
     }
-    // else if (index == 3) {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => ProfilePage()),
-    // );
-    // }
-    else if (index == 4) {
-      Navigator.push(
+    else if (index == 4) { // 根據您的程式碼，index 4 是 ProfilePage
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => ProfilePage()),
       );
@@ -55,7 +55,7 @@ class _StartTravelPageState extends State<StartTravelPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: [
@@ -69,7 +69,7 @@ class _StartTravelPageState extends State<StartTravelPage> {
                   fit: BoxFit.cover,
                 ),
                 Image.asset(
-                  'assets/images/wandering_5.PNG',
+                  'assets/images/wandering_6.PNG',
                   width: 80,
                   height: 80,
                 ),
@@ -84,12 +84,14 @@ class _StartTravelPageState extends State<StartTravelPage> {
                     context,
                     label: selectedRegion ?? '輸入您想去的地區',
                     onTap: () => _selectRegion(context),
+                    isDateField: false,
                   ),
                   const SizedBox(height: 16),
                   _tappableInputField(
                     context,
                     label: selectedTags.isEmpty ? '選擇你想玩的景點或類型' : selectedTags.join('、'),
                     onTap: () => _selectTags(context),
+                    isDateField: false,
                   ),
                   const SizedBox(height: 16),
                   _tappableInputField(
@@ -98,6 +100,7 @@ class _StartTravelPageState extends State<StartTravelPage> {
                         ? '輸入預定的時間'
                         : '${selectedDateRange!.start.year}/${selectedDateRange!.start.month}/${selectedDateRange!.start.day} - ${selectedDateRange!.end.year}/${selectedDateRange!.end.month}/${selectedDateRange!.end.day}',
                     onTap: () => _selectDateRange(context),
+                    isDateField: true, // 這是日期欄位，應用漸層色
                   ),
                 ],
               ),
@@ -120,11 +123,25 @@ class _StartTravelPageState extends State<StartTravelPage> {
               child: TextButton.icon(
                 onPressed: () {
                   // TODO: Execute search with selected values
+                  print('Selected Region: $selectedRegion');
+                  print('Selected Tags: $selectedTags');
+                  print('Selected Date Range: $selectedDateRange');
+
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => GeneratedLoadingPage()),
+                  );
+
                 },
-                icon: const Icon(Icons.airplanemode_active, color: Colors.white),
-                label: const Text(
-                  '一鍵搜尋',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+                label: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Text('一鍵', style: TextStyle(color: Colors.white, fontSize: 16)),
+                    SizedBox(width: 4),
+                    Icon(Icons.airplanemode_active, color: Colors.white, size: 20),
+                    SizedBox(width: 4),
+                    Text('搜尋', style: TextStyle(color: Colors.white, fontSize: 16)),
+                  ],
                 ),
               ),
             ),
@@ -138,24 +155,26 @@ class _StartTravelPageState extends State<StartTravelPage> {
     );
   }
 
-  Widget _tappableInputField(BuildContext context, {required String label, required VoidCallback onTap}) {
-    bool isDateField = label.contains('/');
+  // 修改 _tappableInputField 以明確傳遞 isDateField 參數
+  Widget _tappableInputField(BuildContext context, {required String label, required VoidCallback onTap, required bool isDateField}) {
+    //bool isDateField = label.contains('/'); // 不再依賴 label 內容判斷
     return GestureDetector(
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          gradient: isDateField
-              ? LinearGradient(
-            colors: [
-              Color(0xFF7beec5),
-              Color(0xFF01e6fa),
-              Color(0xFF32c8ff),
-              Color(0xFFc0e8cb),
-            ],
-          )
-              : null,
-          color: isDateField ? null : Colors.white,
+          // gradient: isDateField // 如果是日期欄位，應用漸層
+          //     ? LinearGradient(
+          //   colors: getCardGradientColors(), // 使用定義好的漸層顏色
+          //   begin: Alignment.topLeft,
+          //   end: Alignment.bottomRight,
+          // )
+          //     : null,
+          color: Colors.white, // 背景色為白色
           borderRadius: BorderRadius.circular(32),
+          border: Border.all(
+            color: Colors.grey[300]!,
+            width: 2,
+          ),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 20),
         height: 48,
@@ -163,10 +182,11 @@ class _StartTravelPageState extends State<StartTravelPage> {
         child: Text(
           label,
           style: TextStyle(
-            color: isDateField ? Colors.white : Colors.black54,
+            color: Colors.black54, // 欄位文字黑色
             fontSize: 14,
-            fontWeight: isDateField ? FontWeight.bold : FontWeight.normal,
+            fontWeight: FontWeight.normal, // 日期欄位文字加粗
           ),
+          overflow: TextOverflow.ellipsis, // 防止文字過長溢出
         ),
       ),
     );
@@ -179,6 +199,7 @@ class _StartTravelPageState extends State<StartTravelPage> {
         title: const Text('選擇地區'),
         children: [
           '亞洲', '歐洲', '美洲', '非洲', '大洋洲'
+          // 您可以在這裡添加更多地區選項
         ].map((e) => SimpleDialogOption(
           onPressed: () => Navigator.pop(context, e),
           child: Text(e),
@@ -193,8 +214,12 @@ class _StartTravelPageState extends State<StartTravelPage> {
       '旅遊風格': ['任意風格', '輕鬆自由', '深度文化', '戶外冒險'],
       '景點類型': ['都可以', '自然景觀', '博物館', '主題樂園'],
       '住宿類型': ['都可以', '青年旅館', '飯店', '民宿']
+      // 您可以在這裡添加更多分類和標籤
     };
     final selected = <String>[];
+    // 初始化時如果已有選取的標籤，則加入到 local selected 中
+    selected.addAll(selectedTags);
+
 
     await showModalBottomSheet(
       context: context,
@@ -205,39 +230,96 @@ class _StartTravelPageState extends State<StartTravelPage> {
       builder: (context) {
         return StatefulBuilder(builder: (context, setModalState) {
           return Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom, // 鍵盤彈起時自動調整高度
+              left: 16.0,
+              right: 16.0,
+              top: 16.0,
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start, // 左對齊內容
               children: [
-                const Text('選擇類型（每類必選一個）', style: TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 12),
+                const Center( // 標題居中
+                  child: Text(
+                    '選擇類型（每類必選一個）',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                ),
+                const SizedBox(height: 16), // 增加間距
                 ...tagMap.entries.map((entry) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start, // 類別名稱左對齊
                   children: [
-                    Text(entry.key, style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text(entry.key, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                    const SizedBox(height: 8), // 類別名稱與標籤間距
                     Wrap(
-                      spacing: 8,
-                      children: entry.value.map((tag) => ChoiceChip(
-                        label: Text(tag),
-                        selected: selected.contains(tag),
-                        onSelected: (_) {
-                          entry.value.forEach(selected.remove);
-                          setModalState(() => selected.add(tag));
-                        },
-                      )).toList(),
+                      spacing: 8, // 標籤之間的水平間距
+                      runSpacing: 8, // 標籤之間的垂直間距
+                      children: entry.value.map((tag) {
+                        final isSelected = selected.contains(tag);
+                        return ChoiceChip(
+                          label: Text(tag),
+                          selected: isSelected,
+                          onSelected: (_) {
+                            setModalState(() {
+                              // 移除同一類別中已經選取的標籤
+                              entry.value.forEach((otherTag) {
+                                if (selected.contains(otherTag)) {
+                                  selected.remove(otherTag);
+                                }
+                              });
+                              // 加入當前選取的標籤
+                              selected.add(tag);
+                            });
+                          },
+                          // 自訂選取和未選取時的顏色
+                          selectedColor: getCardGradientColors().first.withOpacity(0.8), // 選取時的背景色
+                          backgroundColor: Colors.grey[200], // 未選取時的背景色
+                          labelStyle: TextStyle(
+                            color: isSelected ? Colors.white : Colors.black87, // 選取時文字白色，未選取時黑色
+                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                          ),
+                          shape: RoundedRectangleBorder( // 自訂邊框形狀
+                            borderRadius: BorderRadius.circular(20),
+                            side: BorderSide(
+                              color: getCardGradientColors().first, // 漸層的第一個顏色作為選取時的邊框色
+                              width: 1,
+                            ),
+                          ),
+                          elevation: isSelected ? 4 : 1, // 選取時增加陰影
+                          pressElevation: 2, // 按下時的陰影
+                        );
+                      }).toList(),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 16), // 每類標籤組之間的間距
                   ],
-                )),
-                ElevatedButton(
-                  onPressed: () {
-                    if (selected.length >= 3) {
-                      setState(() => selectedTags = List.from(selected));
+                )).toList(),
+                Center( // 確認按鈕居中
+                  child: ElevatedButton(
+                    // 檢查每個類別是否都有選到至少一個標籤
+                    onPressed: tagMap.keys.every((category) {
+                      final tagsInCategory = tagMap[category]!;
+                      return tagsInCategory.any((tag) => selected.contains(tag));
+                    })
+                        ? () {
+                      // 過濾掉所有類別的 "任意風格", "都可以" 標籤，只保留具體的選取
+                      final resultTags = selected.where((tag) => !['任意風格', '都可以'].contains(tag)).toList();
+                      setState(() => selectedTags = resultTags.isEmpty ? selected : resultTags); // 如果沒有選具體標籤，保留默認選的"任意風格"或"都可以"
                       Navigator.pop(context);
                     }
-                  },
-                  child: const Text('確認'),
-                )
+                        : null, // 如果有類別沒有選取，按鈕禁用
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: getCardGradientColors().first, // 按鈕背景色使用主題色
+                      foregroundColor: Colors.white, // 按鈕文字顏色
+                      padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                    ),
+                    child: const Text('確認選擇'),
+                  ),
+                ),
+                const SizedBox(height: 8), // 按鈕下方間距
               ],
             ),
           );
@@ -247,11 +329,215 @@ class _StartTravelPageState extends State<StartTravelPage> {
   }
 
   Future<void> _selectDateRange(BuildContext context) async {
-    final picked = await showDateRangePicker(
+    await showModalBottomSheet(
       context: context,
-      firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(const Duration(days: 365)),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent, // 讓 DraggableScrollableSheet 自己的圓角可見
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.6, // 初始高度佔螢幕的比例
+        minChildSize: 0.5, // 最小高度
+        maxChildSize: 0.9, // 最大高度
+        expand: false,
+        builder: (context, scrollController) => CustomDateRangePicker(
+          // 將漸層顏色傳遞給 CustomDateRangePicker
+          themeColors: getCardGradientColors(),
+          onConfirm: (start, end) {
+            setState(() {
+              selectedDateRange = DateTimeRange(start: start, end: end);
+            });
+            // 在 CustomDateRangePicker 內部已經 pop 了，這裡不需要再 pop
+          },
+          // 如果想傳入當前已選擇的日期範圍以使 Picker 初始化顯示
+          initialRange: selectedDateRange,
+        ),
+      ),
     );
-    if (picked != null) setState(() => selectedDateRange = picked);
+  }
+
+
+}
+
+
+class CustomDateRangePicker extends StatefulWidget {
+  final Function(DateTime start, DateTime end) onConfirm;
+  final List<Color> themeColors; // 接收主題顏色列表
+  final DateTimeRange? initialRange; // 接收初始選定的日期範圍
+  final ScrollController? scrollController;
+
+  const CustomDateRangePicker({
+    super.key,
+    required this.onConfirm,
+    required this.themeColors,
+    this.initialRange,
+    this.scrollController,
+  });
+
+  @override
+  State<CustomDateRangePicker> createState() => _CustomDateRangePickerState();
+}
+
+class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
+  DateTime? _rangeStart;
+  DateTime? _rangeEnd;
+  DateTime _focusedDay = DateTime.now();
+  final DateTime _today = DateTime.now();
+  late final DateTime _normalizedToday;
+
+  @override
+  void initState() {
+    super.initState();
+    _normalizedToday = DateTime(_today.year, _today.month, _today.day);
+
+    if (widget.initialRange != null) {
+      _rangeStart = widget.initialRange!.start;
+      _rangeEnd = widget.initialRange!.end;
+      _focusedDay = widget.initialRange!.start;
+      if (_rangeStart!.isBefore(_normalizedToday)) {
+        _focusedDay = _normalizedToday;
+      }
+    } else {
+      _focusedDay = _normalizedToday;
+    }
+  }
+
+  // 檢查給定日期是否在今天或之後
+  bool _isSelectable(DateTime day) {
+    // 將要檢查的日期也規範化，移除時間部分
+    final normalizedDay = DateTime(day.year, day.month, day.day);
+    // 如果規範化後的日期在規範化後的今天或之後，則返回 true
+    return !normalizedDay.isBefore(_normalizedToday);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final Color primaryColor = widget.themeColors.isNotEmpty ? widget.themeColors.first : Colors.blue;
+    final Color rangeFillColor = widget.themeColors.isNotEmpty ? widget.themeColors.first.withOpacity(0.2) : Colors.blue.withOpacity(0.2);
+    final LinearGradient rangeMarkerGradient = LinearGradient(
+      colors: widget.themeColors.isNotEmpty ? widget.themeColors : [Colors.blue, Colors.lightBlueAccent],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    );
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            height: 4,
+            width: 40,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(2),
+            ),
+            margin: const EdgeInsets.only(bottom: 16),
+          ),
+          const Text(
+            '選擇日期範圍 (今天或之後)',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
+          ),
+          const SizedBox(height: 16),
+          Expanded(
+            child: SingleChildScrollView(
+              // --- 修改點 3: 將接收到的 scrollController 賦值給 SingleChildScrollView ---
+              // controller: widget.scrollController,
+              child: TableCalendar(
+                firstDay: _normalizedToday, // 將最早可顯示日期設定為今天
+                lastDay: DateTime.utc(_today.year + 5, 12, 31), // 5 年後
+                focusedDay: _focusedDay,
+                rangeStartDay: _rangeStart,
+                rangeEndDay: _rangeEnd,
+                rangeSelectionMode: RangeSelectionMode.toggledOn,
+                onRangeSelected: (start, end, focusedDay) {
+                  if (start != null && _isSelectable(start)) {
+                    setState(() {
+                      _rangeStart = start;
+                      _rangeEnd = end;
+                      _focusedDay = focusedDay;
+                    });
+                  } else if (start == null && end == null) {
+                    setState(() {
+                      _rangeStart = null;
+                      _rangeEnd = null;
+                      _focusedDay = focusedDay;
+                    });
+                  }
+                },
+                onPageChanged: (focusedDay) {
+                  _focusedDay = focusedDay;
+                },
+                selectedDayPredicate: (day) => false, // rangeSelectionMode 優先
+                enabledDayPredicate: _isSelectable, // 不可選取當天之前的日期
+
+                // --- 日曆樣式自訂 ---
+                calendarStyle: CalendarStyle(
+                  disabledTextStyle: TextStyle(color: Colors.grey[400], decoration: TextDecoration.lineThrough),
+                  disabledDecoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.transparent),
+
+                  isTodayHighlighted: true,
+                  rangeHighlightColor: rangeFillColor,
+                  rangeStartDecoration: BoxDecoration( gradient: rangeMarkerGradient, shape: BoxShape.circle, ),
+                  rangeStartTextStyle: const TextStyle(color: Colors.white),
+                  rangeEndDecoration: BoxDecoration( gradient: rangeMarkerGradient, shape: BoxShape.circle, ),
+                  rangeEndTextStyle: const TextStyle(color: Colors.white),
+                  selectedDecoration: BoxDecoration( gradient: rangeMarkerGradient, shape: BoxShape.circle, ),
+                  selectedTextStyle: const TextStyle(color: Colors.white),
+                  todayDecoration: BoxDecoration( color: primaryColor.withOpacity(0.4), shape: BoxShape.circle, ),
+                  todayTextStyle: const TextStyle(color: Colors.black87),
+                  defaultDecoration: const BoxDecoration( shape: BoxShape.circle, color: Colors.transparent, ),
+                  defaultTextStyle: const TextStyle(color: Colors.black87),
+                  weekendDecoration: const BoxDecoration( shape: BoxShape.circle, color: Colors.transparent, ),
+                  weekendTextStyle: const TextStyle(color: Colors.redAccent),
+                  outsideDaysVisible: false,
+                  // rangeTextStyle: const TextStyle(color: Colors.black87),
+                  outsideTextStyle: const TextStyle(color: Colors.grey),
+                ),
+
+                // --- 日曆標頭樣式自訂 ---
+                headerStyle: const HeaderStyle(
+                  formatButtonVisible: false,
+                  titleCentered: true,
+                  titleTextStyle: TextStyle(color: Colors.black87, fontSize: 18, fontWeight: FontWeight.bold),
+                  // leftIcon: Icon(Icons.chevron_left, color: Colors.black54),
+                  // rightIcon: Icon(Icons.chevron_right, color: Colors.black54),
+                ),
+
+                // --- 星期標籤樣式自訂 ---
+                daysOfWeekStyle: const DaysOfWeekStyle(
+                  weekdayStyle: TextStyle(color: Colors.black54),
+                  weekendStyle: TextStyle(color: Colors.red),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            // 只有當開始日期和結束日期都已選擇，且開始日期不晚於結束日期時，按鈕才可用
+            onPressed: _rangeStart != null && _rangeEnd != null && !_rangeStart!.isAfter(_rangeEnd!)
+                ? () {
+              widget.onConfirm(_rangeStart!, _rangeEnd!);
+              Navigator.pop(context);
+            }
+                : null,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: primaryColor,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
+              disabledBackgroundColor: (primaryColor).withOpacity(0.3),
+              disabledForegroundColor: Colors.white.withOpacity(0.6),
+            ),
+            child: const Text('確認選擇'),
+          ),
+          const SizedBox(height: 8),
+        ],
+      ),
+    );
   }
 }

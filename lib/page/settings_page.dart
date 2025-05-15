@@ -96,7 +96,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 },
               ),
               ListTile(
-                title: Text('字體大小'),
+                title: Text('字體大小', style: TextStyle(fontSize: GetFontSize())),
                 subtitle: StatefulBuilder(
                   builder: (context, setLocalState) {
                     double sliderValue = GetFontSize(); // 初始值
