@@ -61,7 +61,8 @@ double GetFontSize() {
   return fontSize;
 }
 
-List<Color> getCardGradientColors({String theme = 'grand blue', String page = 'default'}) {
+List<Color> getCardGradientColors() {
+  print('選取主題: $theme');
   switch (theme) {
   case 'grand blue':
     return const [
@@ -128,39 +129,14 @@ List<Color> getCardGradientColors({String theme = 'grand blue', String page = 'd
     Color(0xFFC0E8E4), // 藍
     Color(0xFFC0CCE8), //靛
   ];
-    case 'default':
-    default:
-      switch (page) {
-        case 'login':
-          return const [
-            Color(0xFF7beec5), // 薄荷綠
-            Color(0xFF01e6fa), // 亮藍
-            Color(0xFF32c8ff), // 天藍
-            Color(0xFFc0e8cb), // 淡綠
-          ];
-        case 'preference':
-          return const [
-            Color(0xFF7beec5), // 薄荷綠
-            Color(0xFF01e6fa), // 亮藍
-            Color(0xFF32c8ff), // 天藍
-            Color(0xFFc0e8cb), // 淡綠
-          ];
-        case 'explore':
-          return const [
-            Color(0xFF7beec5), // 薄荷綠
-            Color(0xFF01e6fa), // 亮藍
-            Color(0xFF32c8ff), // 天藍
-            Color(0xFFc0e8cb), // 淡綠
-          ];
-        default:
-        return const [
-          Color(0xffd5f6ff), // 亮藍
-          Color(0xff89c8e3), // 天藍
-          Color(0xff82b1c1), // 天藍
-          Color(0xffafd9ef), // 天藍
-        ];
-      }
 
+  default:
+  return const [
+    Color(0xFF7beec5), // 薄荷綠
+    Color(0xFF01e6fa), // 亮藍
+    Color(0xFF32c8ff), // 天藍
+    Color(0xFFc0e8cb), // 淡綠
+  ];
   }
 }
 
