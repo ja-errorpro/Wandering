@@ -115,7 +115,7 @@ class _LocationTypeSelectionPageState extends State<LocationTypeSelectionPage> {
   @override
   void initState() {
     super.initState();
-    _loadPreferencesFromDatabase();
+    // _loadPreferencesFromDatabase();
   }
 
   // 從資料庫加載用戶偏好

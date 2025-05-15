@@ -43,7 +43,7 @@ class _StartTravelPageState extends State<StartTravelPage> {
       // );
       // 如果使用 pushReplacement 則會重新載入頁面，通常如果已在當前頁面則不導航
     }
-    else if (index == 4) { // 根據您的程式碼，index 4 是 ProfilePage
+    else if (index == 4) { // index 4 是 ProfilePage
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => ProfilePage()),
@@ -193,8 +193,10 @@ class _StartTravelPageState extends State<StartTravelPage> {
       builder: (context) => SimpleDialog(
         title: const Text('選擇地區'),
         children: [
-          '亞洲', '歐洲', '美洲', '非洲', '大洋洲'
-          // 您可以在這裡添加更多地區選項
+          '台北市', '新北市', '基隆市', '桃園市', '新竹市', '新竹縣', '苗栗縣',
+          '台中市', '彰化縣', '南投縣', '雲林縣', '嘉義市', '嘉義縣',
+          '台南市', '高雄市', '屏東縣', '宜蘭縣', '花蓮縣', '台東縣',
+          '澎湖縣', '金門縣', '連江縣'
         ].map((e) => SimpleDialogOption(
           onPressed: () => Navigator.pop(context, e),
           child: Text(e),
@@ -206,11 +208,13 @@ class _StartTravelPageState extends State<StartTravelPage> {
 
   Future<void> _selectTags(BuildContext context) async {
     final tagMap = {
-      '旅遊風格': ['任意風格', '輕鬆自由', '深度文化', '戶外冒險'],
-      '景點類型': ['都可以', '自然景觀', '博物館', '主題樂園'],
-      '住宿類型': ['都可以', '青年旅館', '飯店', '民宿']
+      '旅遊風格': ['文化體驗', '自然景觀', '美食探索', '小眾秘境', '夜生活', '運動戶外', '購物逛街', '文青藝文', '親子同樂', '慢活療癒'],
+      '景點類型': ['博物館', '地標建築', '市場/夜市', '老街', '公園／廣場', '咖啡廳', '藝文空間', '廟宇／宗教地', '夜景觀景點', '步道/自然', '海邊／湖畔'],
+      '住宿類型': ['青年旅館', '民宿', '星級飯店', '豪華渡假村', '露營/野營', '公寓/套房', '任意皆可'],
+      '避免的地點': ['無', '人多的地方', '高消費景點', '行程太緊湊', '冒險刺激活動', '潮濕悶熱氣候', '高溫炎熱地點', '吵雜環境', '不乾淨的空間', '害怕動物']
       // 您可以在這裡添加更多分類和標籤
     };
+    // 使用一個本地變數來追蹤選取的標籤，只在確認時更新外部的 selectedTags
     final selected = <String>[];
     // 初始化時如果已有選取的標籤，則加入到 local selected 中
     selected.addAll(selectedTags);
@@ -218,104 +222,119 @@ class _StartTravelPageState extends State<StartTravelPage> {
 
     await showModalBottomSheet(
       context: context,
-      isScrollControlled: true,
+      isScrollControlled: true, // 確保底部彈窗可以拉伸，以便 ConstraintBox 生效
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) {
         return StatefulBuilder(builder: (context, setModalState) {
-          return Padding(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom, // 鍵盤彈起時自動調整高度
-              left: 16.0,
-              right: 16.0,
-              top: 16.0,
+          // === 加入 ConstrainedBox 來設定最大高度 ===
+          return ConstrainedBox(
+            constraints: BoxConstraints(
+              // 設定最大高度為螢幕高度的 80%
+              maxHeight: MediaQuery.of(context).size.height * 0.8,
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start, // 左對齊內容
-              children: [
-                const Center( // 標題居中
-                  child: Text(
-                    '選擇類型（每類必選一個）',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  ),
+            // 將 SingleChildScrollView 包裹在 ConstrainedBox 裡面
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom, // 鍵盤彈起時自動調整高度
+                  left: 16.0,
+                  right: 16.0,
+                  top: 16.0,
                 ),
-                const SizedBox(height: 16), // 增加間距
-                ...tagMap.entries.map((entry) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start, // 類別名稱左對齊
+                child: Column(
+                  mainAxisSize: MainAxisSize.min, // Column 維持最小尺寸
+                  crossAxisAlignment: CrossAxisAlignment.start, // 左對齊內容
                   children: [
-                    Text(entry.key, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                    const SizedBox(height: 8), // 類別名稱與標籤間距
-                    Wrap(
-                      spacing: 8, // 標籤之間的水平間距
-                      runSpacing: 8, // 標籤之間的垂直間距
-                      children: entry.value.map((tag) {
-                        final isSelected = selected.contains(tag);
-                        return ChoiceChip(
-                          label: Text(tag),
-                          selected: isSelected,
-                          onSelected: (_) {
-                            setModalState(() {
-                              // 移除同一類別中已經選取的標籤
-                              entry.value.forEach((otherTag) {
-                                if (selected.contains(otherTag)) {
-                                  selected.remove(otherTag);
-                                }
-                              });
-                              // 加入當前選取的標籤
-                              selected.add(tag);
-                            });
-                          },
-                          // 自訂選取和未選取時的顏色
-                          selectedColor: getCardGradientColors().first.withOpacity(0.8), // 選取時的背景色
-                          backgroundColor: Colors.grey[200], // 未選取時的背景色
-                          labelStyle: TextStyle(
-                            color: isSelected ? Colors.white : Colors.black87, // 選取時文字白色，未選取時黑色
-                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                          ),
-                          shape: RoundedRectangleBorder( // 自訂邊框形狀
-                            borderRadius: BorderRadius.circular(20),
-                            side: BorderSide(
-                              color: getCardGradientColors().first, // 漸層的第一個顏色作為選取時的邊框色
-                              width: 1,
-                            ),
-                          ),
-                          elevation: isSelected ? 4 : 1, // 選取時增加陰影
-                          pressElevation: 2, // 按下時的陰影
-                        );
-                      }).toList(),
-                    ),
-                    const SizedBox(height: 16), // 每類標籤組之間的間距
-                  ],
-                )).toList(),
-                Center( // 確認按鈕居中
-                  child: ElevatedButton(
-                    // 檢查每個類別是否都有選到至少一個標籤
-                    onPressed: tagMap.keys.every((category) {
-                      final tagsInCategory = tagMap[category]!;
-                      return tagsInCategory.any((tag) => selected.contains(tag));
-                    })
-                        ? () {
-                      // 過濾掉所有類別的 "任意風格", "都可以" 標籤，只保留具體的選取
-                      final resultTags = selected.where((tag) => !['任意風格', '都可以'].contains(tag)).toList();
-                      setState(() => selectedTags = resultTags.isEmpty ? selected : resultTags); // 如果沒有選具體標籤，保留默認選的"任意風格"或"都可以"
-                      Navigator.pop(context);
-                    }
-                        : null, // 如果有類別沒有選取，按鈕禁用
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: getCardGradientColors().first, // 按鈕背景色使用主題色
-                      foregroundColor: Colors.white, // 按鈕文字顏色
-                      padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
+                    const Center( // 標題居中
+                      child: Text(
+                        '選擇類型（每類必選一個）',
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                       ),
                     ),
-                    child: const Text('確認選擇'),
-                  ),
+                    const SizedBox(height: 16), // 增加間距
+
+                    // 遍歷每個類別及其標籤
+                    ...tagMap.entries.map((entry) => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start, // 類別名稱左對齊
+                      children: [
+                        Text(entry.key, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                        const SizedBox(height: 8), // 類別名稱與標籤間距
+                        Wrap(
+                          spacing: 8, // 標籤之間的水平間距
+                          runSpacing: 8, // 標籤之間的垂直間距
+                          children: entry.value.map((tag) {
+                            final isSelected = selected.contains(tag);
+                            return ChoiceChip(
+                              label: Text(tag),
+                              selected: isSelected,
+                              onSelected: (_) {
+                                setModalState(() {
+                                  // 移除同一類別中已經選取的標籤
+                                  entry.value.forEach((otherTag) {
+                                    if (selected.contains(otherTag)) {
+                                      selected.remove(otherTag);
+                                    }
+                                  });
+                                  // 加入當前選取的標籤
+                                  selected.add(tag);
+                                });
+                              },
+                              // 自訂選取和未選取時的顏色
+                              selectedColor: getCardGradientColors().first.withOpacity(0.8), // 選取時的背景色 (假設 getCardGradientColors() 存在並返回 List<Color>)
+                              backgroundColor: Colors.grey[200], // 未選取時的背景色
+                              labelStyle: TextStyle(
+                                color: isSelected ? Colors.white : Colors.black87, // 選取時文字白色，未選取時黑色
+                                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                              ),
+                              shape: RoundedRectangleBorder( // 自訂邊框形狀
+                                borderRadius: BorderRadius.circular(20),
+                                side: BorderSide(
+                                  color: getCardGradientColors().first, // 漸層的第一個顏色作為選取時的邊框色
+                                  width: 1,
+                                ),
+                              ),
+                              elevation: isSelected ? 4 : 1, // 選取時增加陰影
+                              pressElevation: 2, // 按下時的陰影
+                            );
+                          }).toList(),
+                        ),
+                        const SizedBox(height: 16), // 每類標籤組之間的間距
+                      ],
+                    )).toList(),
+
+                    // 確認按鈕
+                    Center( // 確認按鈕居中
+                      child: ElevatedButton(
+                        // 檢查每個類別是否都有選到至少一個標籤
+                        onPressed: tagMap.keys.every((category) {
+                          final tagsInCategory = tagMap[category]!;
+                          return tagsInCategory.any((tag) => selected.contains(tag));
+                        })
+                            ? () {
+                          // 過濾掉所有類別的 "任意風格", "都可以" 標籤，只保留具體的選取
+                          // 這裡保留了您原來的邏輯，處理「任意風格」或「都可以」的情況
+                          final resultTags = selected.where((tag) => !['任意風格', '都可以'].contains(tag)).toList();
+                          setState(() => selectedTags = resultTags.isEmpty && selected.isNotEmpty ? selected : resultTags);
+                          Navigator.pop(context);
+                        }
+                            : null, // 如果有類別沒有選取，按鈕禁用
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: getCardGradientColors().first, // 按鈕背景色使用主題色
+                          foregroundColor: Colors.white, // 按鈕文字顏色
+                          padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                        ),
+                        child: const Text('確認選擇'),
+                      ),
+                    ),
+                    const SizedBox(height: 8), // 按鈕下方間距
+                  ],
                 ),
-                const SizedBox(height: 8), // 按鈕下方間距
-              ],
+              ),
             ),
           );
         });
@@ -348,8 +367,6 @@ class _StartTravelPageState extends State<StartTravelPage> {
       ),
     );
   }
-
-
 }
 
 

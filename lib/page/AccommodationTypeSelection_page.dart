@@ -20,25 +20,25 @@ class _AccommodationTypeSelectionPageState
   @override
   void initState() {
     super.initState();
-    _loadPreferencesFromDatabase();
+    // _loadPreferencesFromDatabase();
   }
 
   // 從資料庫加載用戶偏好
-  Future<void> _loadPreferencesFromDatabase() async {
-    final userPreferences = Provider.of<UserPreferences>(context, listen: false);
-    final loadedPreferences = await DatabaseHelper.instance.getPreferences();
-
-    if (loadedPreferences != null) {
-      // 如果資料庫有數據，更新 Provider 中的 UserPreferences
-      userPreferences.travelStyles = loadedPreferences.travelStyles;
-      userPreferences.locationTypes = loadedPreferences.locationTypes;
-      userPreferences.accommodationTypes = loadedPreferences.accommodationTypes;
-      userPreferences.avoidTypes = loadedPreferences.avoidTypes;
-      print('從資料庫加載了用戶偏好。');
-    } else {
-       print('資料庫中沒有用戶偏好數據。');
-    }
-  }
+  // Future<void> _loadPreferencesFromDatabase() async {
+  //   final userPreferences = Provider.of<UserPreferences>(context, listen: false);
+  //   final loadedPreferences = await DatabaseHelper.instance.getPreferences();
+  //
+  //   if (loadedPreferences != null) {
+  //     // 如果資料庫有數據，更新 Provider 中的 UserPreferences
+  //     userPreferences.travelStyles = loadedPreferences.travelStyles;
+  //     userPreferences.locationTypes = loadedPreferences.locationTypes;
+  //     userPreferences.accommodationTypes = loadedPreferences.accommodationTypes;
+  //     userPreferences.avoidTypes = loadedPreferences.avoidTypes;
+  //     print('從資料庫加載了用戶偏好。');
+  //   } else {
+  //      print('資料庫中沒有用戶偏好數據。');
+  //   }
+  // }
 
   // 顯示選擇數量警告視窗 (通用函數)
   void _showSelectionCountWarningDialog(
