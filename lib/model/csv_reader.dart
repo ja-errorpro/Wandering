@@ -27,6 +27,11 @@ class CSVFileReader {
         id: row[0].toString(),
         name: row[1].toString(),
         description: row[2].toString(),
+        // categories format: "['1', '2', '3']"
+        categories: row[7]
+            .toString()
+            .replaceAll(RegExp(r"[\[\]']"), '')
+            .split(','),
       );
       places.add(place);
     }
