@@ -106,10 +106,9 @@ flutter:
       fonts:
         - asset: assets/fonts/ChenYuluoyan-Thin-Monospaced.ttf
         - asset: assets/fonts/ChenYuluoyan-2.0-Thin.ttf
-#    - family: HolidayFree
-#      fonts:
-#        - asset: assets/fonts/FontsFree-Net-HolidayFree.ttf
-#        - asset: assets/fonts/HolidayFree.otf
+    - family: HolidayFree
+      fonts:
+        - asset: assets/fonts/HolidayFree.otf
 #    - family: FangZhengFangSongFanTi
 #      fonts:
 #        - asset: assets/fonts/FangZhengFangSongFanTi-1.ttf

@@ -16,6 +16,7 @@ List<String> selectedTravelStyles = [];
 List<String> selectedLocationTypes = [];
 List<String> selectedAccommodationTypes = [];
 List<String> selectedAvoidTypes = [];
+bool preferenceChanged = false;
 
 // 依據名稱取得對應的 List
 List<String> getSelectedListByName(String name) {
@@ -42,9 +43,13 @@ Map<String, List<String>> getAllPreferences() {
   };
 }
 
+bool getPreferenceChanged() {
+  return preferenceChanged;
+}
 
 // 依據名稱設定對應的 List
 void setSelectedListByName(String name, List<String> values) {
+  preferenceChanged = true;
   switch (name) {
     case 'selectedTravelStyles':
       selectedTravelStyles = List.from(values);

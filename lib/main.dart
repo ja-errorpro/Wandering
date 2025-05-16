@@ -128,36 +128,3 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-
-/*  // 使用者已驗證，顯示主要內容
-      return MaterialApp(
-        home: Scaffold(
-          appBar: AppBar(
-            leading: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: MainIcon(), // 顯示自訂圖片 icon
-            ),
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            title: Text(widget.title),
-          ),
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                const MainIcon(), // 主頁面也顯示一次 Icon
-                const SizedBox(height: 16),
-                const Text('You have pushed the button this many times:'),
-                Text(
-                  '$_counter',
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
-              ],
-            ),
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: _incrementCounter,
-            tooltip: 'Increment',
-            child: const Icon(Icons.add),
-          ),
-        ),
-      ); */

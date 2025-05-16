@@ -29,14 +29,10 @@ class GuidingPage extends StatelessWidget {
                       foreground: Paint()
                         ..shader = const LinearGradient(
                           colors: <Color>[
-                            Color.fromARGB(255, 34, 167, 255), //  // 藍色
-                            Color.fromARGB(255, 69, 205, 255), // 
-                            Color.fromARGB(255, 124, 196, 255),
-                            Color.fromARGB(255, 124, 196, 255), // 藍色
-                            Color.fromARGB(255, 122, 243, 209),
-                            Color.fromARGB(255, 69, 205, 255), // 
-                            Color.fromARGB(255, 124, 196, 255), // 藍色
-                            Color.fromARGB(255, 69, 205, 255), // 
+                            Color(0xFF7beec5), // 薄荷綠
+                            Color(0xFF01e6fa), // 亮藍
+                            Color(0xFF32c8ff), // 天藍
+                            Color(0xFFc0e8cb), // 淡綠
                           ],
                         ).createShader(const Rect.fromLTWH(0.0, 0.0, 300.0, 70.0)), // 根據需要調整 Rect
                     ),
@@ -68,16 +64,35 @@ class GuidingPage extends StatelessWidget {
                 });
               },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue, // 按鈕背景顏色
-                  padding: const EdgeInsets.symmetric(horizontal: 60.0, vertical: 15.0), // 按鈕內邊距
+                  padding: const EdgeInsets.symmetric(horizontal: 60.0, vertical: 15.0),
                   textStyle: const TextStyle(fontSize: 18),
-                  shape: RoundedRectangleBorder( // 圓角按鈕
+                  shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
                   ),
+                  // 移除 backgroundColor，改用漸層
+                  backgroundColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
                 ),
-                child: const Text(
-                  '一鍵生成屬於你的旅程',
-                  style: TextStyle(color: Colors.white), // 按鈕文字顏色
+                child: Ink(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(0xFF7beec5), // 薄荷綠
+                        Color(0xFF01e6fa), // 亮藍
+                        Color(0xFF32c8ff), // 天藍
+                        Color(0xFFc0e8cb), // 淡綠
+                      ],
+                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                  ),
+                  child: Container(
+                    alignment: Alignment.center,
+                    constraints: const BoxConstraints(minWidth: 180, minHeight: 48),
+                    child: const Text(
+                      '一鍵生成屬於你的旅程',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(height: 60.0), // 添加間距

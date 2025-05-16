@@ -11,6 +11,18 @@ class ExplorePage extends StatefulWidget {
 
 class _ExplorePageState extends State<ExplorePage> {
   int _selectedIndex = 0;
+  @override
+  void initState() {
+    super.initState();
+    if (getPreferenceChanged() == false) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => PreferenceSelectionPage()),
+        );
+      });
+    }
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -47,7 +59,6 @@ class _ExplorePageState extends State<ExplorePage> {
       );
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

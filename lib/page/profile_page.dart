@@ -138,10 +138,10 @@ class _ProfilePageState extends State<ProfilePage> {
           //   MaterialPageRoute(builder: (context) => SettingsPage()),
           // );
         } else if (label == '偏好設定') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => PreferenceSelectionPage()),
-          );
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => PreferenceSummaryPage()),
+            );
         }
       },
       style: ElevatedButton.styleFrom(

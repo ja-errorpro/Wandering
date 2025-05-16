@@ -50,7 +50,7 @@ class WelcomePage extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 40.0),
-              // 開始按鈕
+              // 開始按鈕.
               ElevatedButton(
                 onPressed: () {
                   // TODO: 在這裡導航到下一個頁面 (偏好設定頁面)PreferenceSelectionPage
