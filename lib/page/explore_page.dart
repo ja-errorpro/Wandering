@@ -192,37 +192,36 @@ class _ExplorePageState extends State<ExplorePage> {
                       ),
                     ),
                     SizedBox(height: 8.0), // 添加一些間距
-
-                    // 使用 Column 使卡片垂直堆疊，並讓它們貢獻於父級 SingleChildScrollView 的高度
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start, // 保持與父 Column 對齊
-                      children: [
-                        // buildFeaturedCard('金山老街', '85%'),
-                        buildImageRecommendationCard(
-                          imagePath: 'assets/images/Songshan_Cultural_and_Creative_Park.jpg',
-                          title: '松三文創園區',
-                          matchRate: '79%',
-                          tags: ['購物', '景點', '夜景'],
-                        ),
-                        SizedBox(height: 12.0),
-                        // buildFeaturedCard('九份老街', '88%'),
-                        buildImageRecommendationCard(
-                          imagePath: 'assets/images/taipei_zoo.png',
-                          title: '台北市立木柵動物園',
-                          matchRate: '73%',
-                          tags: ['親子', '景點'],
-                        ),
-                        SizedBox(height: 12.0),
-                        buildImageRecommendationCard(
-                          imagePath: 'assets/images/Taipei_101_blue_hour_2016.jpg',
-                          title: '台北101',
-                          matchRate: '68%',
-                          tags: ['購物', '景點', '夜景'],
-                        ),
-                        // buildFeaturedCard('金山老街', '85%'),
-                        // 如果還有更多卡片，繼續在這裡添加，並在它們之間加上 SizedBox
-                      ],
+                    SizedBox(
+                      height: 210, // 固定高度給水平 ListView
+                      child: ListView( // 水平滑動，沒問題
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          buildImageRecommendationCard(
+                            imagePath: 'assets/images/recommends/Songshan_Cultural_and_Creative_Park.jpg',
+                            title: '松三文創園區',
+                            matchRate: '79%',
+                            tags: ['購物', '景點', '夜景'],
+                          ),
+                          SizedBox(width: 12),
+                          buildImageRecommendationCard(
+                            imagePath: 'assets/images/recommends/taipei_zoo.png',
+                            title: '台北市立木柵動物園',
+                            matchRate: '73%',
+                            tags: ['親子', '景點'],
+                          ),
+                          SizedBox(width: 12.0),
+                          buildImageRecommendationCard(
+                            imagePath: 'assets/images/recommends/Taipei_101_blue_hour_2016.jpg',
+                            title: '台北101',
+                            matchRate: '68%',
+                            tags: ['購物', '景點', '夜景'],
+                          ),
+                          // ... 其他推薦卡片
+                        ],
+                      ),
                     ),
+
                     SizedBox(height: 8.0),
                     Text(
                       '美食',
@@ -232,41 +231,35 @@ class _ExplorePageState extends State<ExplorePage> {
                       ),
                     ),
                     SizedBox(height: 8.0),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start, // 保持與父 Column 對齊
-                      children: [
-                        buildImageRecommendationCard(
-                          imagePath: 'assets/images/Shilin_Night_Market.jpg',
-                          title: '士林夜市',
-                          matchRate: '79%',
-                          tags: ['美食', '景點', '夜市'],
-                        ),
-                        SizedBox(height: 12.0),
-                        buildImageRecommendationCard(
-                          imagePath: 'assets/images/west_door.jpg',
-                          title: '西門紅樓',
-                          matchRate: '73%',
-                          tags: ['購物', '美食', '夜市'],
-                        ),
-                        SizedBox(height: 12.0),
-                        buildImageRecommendationCard(
-                          imagePath: 'assets/images/ximending.jpg',
-                          title: '西門區',
-                          matchRate: '68%',
-                          tags: ['購物', '美食'],
-                        ),
-                        // 如果還有更多卡片，繼續在這裡添加，並在它們之間加上 SizedBox
-                      ],
-                    ),
-                    SizedBox(height: 8.0),
-                    Text(
-                      '旅館',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black54,
+                    SizedBox(
+                      height: 210, // 固定高度給水平 ListView
+                      child: ListView( // 水平滑動，沒問題
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          buildImageRecommendationCard(
+                            imagePath: 'assets/images/recommends/Shilin_Night_Market.jpg',
+                            title: '士林夜市',
+                            matchRate: '79%',
+                            tags: ['美食', '景點', '夜市'],
+                          ),
+                          SizedBox(height: 12.0),
+                          buildImageRecommendationCard(
+                            imagePath: 'assets/images/recommends/west_door.jpg',
+                            title: '西門紅樓',
+                            matchRate: '73%',
+                            tags: ['購物', '美食', '夜市'],
+                          ),
+                          SizedBox(width: 12.0),
+                          buildImageRecommendationCard(
+                            imagePath: 'assets/images/recommends/ximending.jpg',
+                            title: '西門區',
+                            matchRate: '68%',
+                            tags: ['購物', '美食'],
+                          ),
+                          // ... 其他推薦卡片
+                        ],
                       ),
                     ),
-
 
                     SizedBox(height: 20.0), // 在底部增加一些額外的空間，確保最後的內容不會被底部導航欄遮擋
                   ],
