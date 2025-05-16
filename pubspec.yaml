@@ -87,6 +87,7 @@ flutter:
     - assets/images/screen_size/
     - assets/images/screen_size/9_16.png
     - assets/images/icon/
+    - assets/images/recommends/
     - assets/csv/
   #   - images/a_dot_ham.jpeg
 
