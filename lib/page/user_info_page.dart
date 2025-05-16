@@ -9,17 +9,18 @@ class UserInfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userInfo = {
-      'name': Provider.of<AuthModel>(context, listen: false).user?.uid ?? 'unknown',
-      'email': 'cycugdsc@gmail.com',
+      'name':
+          Provider.of<AuthModel>(context, listen: false).getUserName() ??
+          'unknown',
+      'email':
+          '${Provider.of<AuthModel>(context, listen: false).getUserEmail()}',
       'location': '台北市, 台灣',
       'birthday': '2003/10/01',
       'gender': '未知',
     };
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('用戶資訊'),
-      ),
+      appBar: AppBar(title: const Text('用戶資訊')),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
@@ -36,7 +37,6 @@ class UserInfoPage extends StatelessWidget {
             _buildInfoTile('生日', userInfo['birthday']!),
             _buildInfoTile('性別', userInfo['gender']!),
             const Spacer(),
-
           ],
         ),
       ),
@@ -58,7 +58,13 @@ class UserInfoPage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          Text(
+            label,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           Text(value, style: const TextStyle(color: Colors.white)),
         ],
       ),

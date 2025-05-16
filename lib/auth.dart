@@ -116,11 +116,35 @@ class AuthModel extends ChangeNotifier {
     await auth.signOut();
   }
 
-  Future<String> getUserName() async {
+  String getUserName() {
     if (_user != null) {
-      return _user!.displayName ?? '';
+      return _user!.displayName ?? 'unknown';
     } else {
-      return '';
+      return 'unknown';
+    }
+  }
+
+  String getUserEmail() {
+    if (_user != null) {
+      return _user!.email ?? 'unknown';
+    } else {
+      return 'unknown';
+    }
+  }
+
+  String getUserUid() {
+    if (_user != null) {
+      return _user!.uid;
+    } else {
+      return 'unknown';
+    }
+  }
+
+  UserPreferences? getUserPreferences() {
+    if (_userModel != null) {
+      return _userModel!.preferences;
+    } else {
+      return UserPreferences();
     }
   }
 }
