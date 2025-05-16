@@ -108,7 +108,7 @@ class _ExplorePageState extends State<ExplorePage> {
                         SizedBox(width: 12),
                         buildSelectableButton('住宿', getCardGradientColors()[0], 1),
                         SizedBox(width: 12),
-                        buildSelectableButton('活動', getCardGradientColors()[0], 2),
+                        buildSelectableButton('親子', getCardGradientColors()[0], 2),
                         SizedBox(width: 12),
 
                       ],

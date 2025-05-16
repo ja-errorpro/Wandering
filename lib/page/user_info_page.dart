@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:Wandering/auth.dart';
+import 'package:provider/provider.dart';
 import 'all_page.dart';
 
 class UserInfoPage extends StatelessWidget {
@@ -8,11 +9,11 @@ class UserInfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userInfo = {
-      'name': 'Unknown',
+      'name': Provider.of<AuthModel>(context, listen: false).user?.uid ?? 'unknown',
       'email': 'cycugdsc@gmail.com',
       'location': '台北市, 台灣',
-      'birthday': '2004/06/01',
-      'gender': '女性',
+      'birthday': '2003/10/01',
+      'gender': '未知',
     };
 
     return Scaffold(

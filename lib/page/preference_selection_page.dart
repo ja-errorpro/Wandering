@@ -35,10 +35,10 @@ class _PreferenceSelectionPageState extends State<PreferenceSelectionPage> {
       extendBodyBehindAppBar: true, //
       body: Container(
         decoration: BoxDecoration(
-          image: DecorationImage(
-            // 依據螢幕大小添加圖片背景
-            image: AssetImage(screenSize), // 使用指定的圖片路徑
-            fit: BoxFit.cover, // 圖片填充方式
+          gradient: LinearGradient(
+            colors: getCardGradientColors(),
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
         ),
         child: Padding(

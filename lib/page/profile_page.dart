@@ -13,7 +13,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    String uid = Provider.of<AuthModel>(context, listen: false).user?.uid ?? '';
+    String uid = Provider.of<AuthModel>(context, listen: false).user?.uid ?? 'unknown';
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -34,14 +34,10 @@ class _ProfilePageState extends State<ProfilePage> {
       extendBodyBehindAppBar: true, // 讓 Body 內容延伸到 AppBar 後面
       body: Container(
         decoration: BoxDecoration(
-          image: DecorationImage(
-            // 依據螢幕大小添加圖片背景
-            image: AssetImage(screenSize), // 使用指定的圖片路徑
-            fit: BoxFit.cover, // 圖片填充方式
-            colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(1), // 調整透明度，0.0~1.0
-              BlendMode.dstATop,
-            ),
+          gradient: LinearGradient(
+            colors: getCardGradientColors(),
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
         ),
         child: ListView(
