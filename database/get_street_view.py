@@ -3,7 +3,7 @@ import requests
 import math
 import os
 
-API_KEY = "AIzaSyAUBEI-N5zgzAmFbDcyoU-gdPiiPmuw-i8"
+API_KEY = "Street_View_Static_API_key"
 
 def calculate_bearing(lat1, lon1, lat2, lon2):
     """

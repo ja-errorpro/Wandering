@@ -3,8 +3,8 @@ from pydantic import BaseModel
 import google.generativeai as genai
 import os
 
-API_KEY = "AIzaSyDcFG88LzgeXPBqE3-gOJ2DpKS3VO6mLh0"
-TUNED_MODEL_ID = "tunedModels/travelrecommendationmodelfromcsv-3n5xa71"
+API_KEY = "Vertex_API_Key"
+TUNED_MODEL_ID = "Tuned_Models"
 
 genai.configure(api_key=API_KEY)
 

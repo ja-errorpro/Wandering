@@ -4,7 +4,7 @@ from google import genai
 from google.genai import types
 
 
-API_KEY = "AIzaSyDcFG88LzgeXPBqE3-gOJ2DpKS3VO6mLh0"
+API_KEY = "Vertex_API_Key"
 client = genai.Client(api_key=API_KEY)
 
 def load_data_from_csv(file_path):

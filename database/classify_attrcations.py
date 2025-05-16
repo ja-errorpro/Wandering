@@ -3,9 +3,7 @@ import time
 import csv
 import json
 
-# 將 YOUR_API_KEY 替換成你的 API 金鑰
-API_KEY = "AIzaSyDMtazU-8JHUIRATuyI5yHAAT46fm2Oiew"
-
+API_KEY = "Vertex_API_Key"
 # 設定 Gemini API 金鑰
 genai.configure(api_key=API_KEY)
 
@@ -41,8 +39,6 @@ def classify_place(place_name, place_details, categories=CATEGORIES):
     try:
         time.sleep(3)
         response = model.generate_content(prompt)
-        # print(response.text)
-        # 將結果字串分割成列表，並移除空白字串
         return [category.strip() for category in response.text.split(',') if category.strip()]
     except Exception as e:
         print(f"Gemini API 發生錯誤：{e}")

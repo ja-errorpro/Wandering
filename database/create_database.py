@@ -4,7 +4,7 @@ import csv
 from collections import deque
 import json
 
-API_KEY = "AIzaSyAUBEI-N5zgzAmFbDcyoU-gdPiiPmuw-i8"
+API_KEY = "Place_API_Key"
 INITIAL_LOCATION = [
                     ("Keelung North Railway Station", "25.134274343711827, 121.74005245320404"), # 基隆北站
                     ("Qi Du Railway Station", "25.09468489648192, 121.7127353316717"),  # 七堵車站
