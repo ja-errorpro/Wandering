@@ -55,8 +55,8 @@ class _MainCategoryPageState extends State<MainCategoryPage> {
                           }
                         });
                       },
-                      selectedColor: Colors.blue.shade200,
-                      backgroundColor: Colors.blue.shade50,
+                      selectedColor: getCardGradientColors()[2],
+                      backgroundColor: getCardGradientColors()[2].withOpacity(0.3),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                     )).toList(),
                   ),
@@ -81,12 +81,30 @@ class _MainCategoryPageState extends State<MainCategoryPage> {
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF32c8ff),
+                backgroundColor: Colors.transparent,
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                elevation: 0,
+              ).copyWith(
+                backgroundColor: MaterialStateProperty.all(Colors.transparent),
+                shadowColor: MaterialStateProperty.all(Colors.transparent),
               ),
-              child: const Text('查看推薦內容', style: TextStyle(fontSize: 16)),
+              child: Ink(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: getCardGradientColors(),
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Container(
+                  alignment: Alignment.center,
+                  constraints: const BoxConstraints(minWidth: 88, minHeight: 36),
+                  child: const Text('查看推薦內容', style: TextStyle(fontSize: 16)),
+                ),
+              ),
             ),
           )
         ],
@@ -162,20 +180,34 @@ class SubCategoryPage extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton.icon(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ExplorePage()),
-                );
-              },
-              icon: const Icon(Icons.explore),
-              label: const Text('返回探索頁'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.teal,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: getCardGradientColors(),
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ExplorePage()),
+                  );
+                },
+                icon: const Icon(Icons.explore),
+                label: const Text('返回探索頁'),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                  backgroundColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                ).copyWith(
+                  elevation: MaterialStateProperty.all(0),
+                  backgroundColor: MaterialStateProperty.all(Colors.transparent),
+                  foregroundColor: MaterialStateProperty.all(Colors.white),
+                ),
               ),
             ),
           ),
