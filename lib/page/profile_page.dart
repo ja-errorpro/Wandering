@@ -13,7 +13,12 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    String uid = Provider.of<AuthModel>(context, listen: false).user?.uid ?? 'unknown';
+    String uid =
+        Provider.of<AuthModel>(context, listen: false).user?.uid ?? 'unknown';
+    String username = Provider.of<AuthModel>(
+      context,
+      listen: false,
+    ).getUserName();
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -22,7 +27,6 @@ class _ProfilePageState extends State<ProfilePage> {
             fontSize: GetFontSize(),
             color: const Color.fromARGB(255, 255, 255, 255),
             fontWeight: FontWeight.bold,
-
           ),
         ),
         backgroundColor: Colors.transparent, // 設置 AppBar 背景透明
@@ -56,9 +60,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  Provider.of<AuthModel>(context, listen: false).user?.displayName ?? 'unknow', // 用戶名稱
+                  username, // 用戶名稱
                   style: TextStyle(
-                    fontSize: GetFontSize()+10,
+                    fontSize: GetFontSize() + 10,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
                   ),
@@ -134,10 +138,10 @@ class _ProfilePageState extends State<ProfilePage> {
           //   MaterialPageRoute(builder: (context) => SettingsPage()),
           // );
         } else if (label == '偏好設定') {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => PreferenceSummaryPage()),
-            );
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PreferenceSummaryPage()),
+          );
         }
       },
       style: ElevatedButton.styleFrom(
@@ -174,26 +178,22 @@ class _ProfilePageState extends State<ProfilePage> {
             context,
             MaterialPageRoute(builder: (context) => UserInfoPage()),
           );
-        }
-        else if (title == '我的收藏') {
+        } else if (title == '我的收藏') {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => SettingsPage()),
           );
-        }
-        else if (title == '我的探索記錄') {
+        } else if (title == '我的探索記錄') {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => MyExploreLogPage()),
           );
-        }
-        else if (title == '評論與心得') {
+        } else if (title == '評論與心得') {
           // Navigator.push(
           //   context,
           //   MaterialPageRoute(builder: (context) => FeedbackStatsPage(averageRating: null,, wordFrequencies: {},)),
           // );
-        }
-        else if (title == '分享 App') {
+        } else if (title == '分享 App') {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => InfoSharePage()),
@@ -203,8 +203,7 @@ class _ProfilePageState extends State<ProfilePage> {
             context,
             MaterialPageRoute(builder: (context) => ContactPage()),
           );
-        }
-        else if (title == '設定') {
+        } else if (title == '設定') {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => SettingsPage()),

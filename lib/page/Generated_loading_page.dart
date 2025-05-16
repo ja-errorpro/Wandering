@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'dart:async';
 import 'all_page.dart';
+import 'package:Wandering/model/google_genai_model.dart';
 // import './../random_data.dart';
 
 class GeneratedLoadingPage extends StatefulWidget {
@@ -12,6 +13,8 @@ class GeneratedLoadingPage extends StatefulWidget {
 }
 
 class _GeneratedLoadingPageState extends State<GeneratedLoadingPage> {
+  final GenAIModel genAIModel = GenAIModel();
+
   @override
   void initState() {
     super.initState();
@@ -20,6 +23,14 @@ class _GeneratedLoadingPageState extends State<GeneratedLoadingPage> {
 
   Future<void> _loadItinerary() async {
     await Future.delayed(const Duration(seconds: 3));
+    await genAIModel
+        .getOneRecommendation('台北旅遊')
+        .then((recommendation) {
+          print('推薦的行程: $recommendation');
+        })
+        .catchError((error) {
+          print('獲取行程時發生錯誤: $error');
+        });
 
     // 假資料：模擬行程與飯店
     final Map<String, List<ItineraryItem>> sampleDailyItinerary = {
