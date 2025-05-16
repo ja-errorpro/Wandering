@@ -249,7 +249,7 @@ class _ExplorePageState extends State<ExplorePage> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16.0),
         gradient: LinearGradient(
-          colors: [Color(0xFF00e4ff), Color(0xFF00c3ff), Color(0xFF7beec5)],
+          colors: getCardGradientColors(),
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
 
@@ -343,7 +343,7 @@ class _ExplorePageState extends State<ExplorePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CategoryPage(tag: tag),
+                          builder: (context) => MainCategoryPage(),
                         ),
                       );
                     },
