@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'all_page.dart'; // 若接到 Summary 或 MainPage
 import './../preference_data.dart';
+import 'package:Wandering/auth.dart';
+import 'package:Wandering/model/user_model.dart';
+import 'package:provider/provider.dart';
 
 class AvoidTypeSelectionPage extends StatefulWidget {
   const AvoidTypeSelectionPage({super.key});
@@ -49,11 +52,13 @@ class _AvoidTypeSelectionPageState extends State<AvoidTypeSelectionPage> {
             onPressed: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (_) => const PreferenceSummaryPage()),
+                MaterialPageRoute(
+                  builder: (_) => const PreferenceSummaryPage(),
+                ),
               );
             },
             child: const Text('Skip', style: TextStyle(color: Colors.black)),
-          )
+          ),
         ],
       ),
       body: Padding(
@@ -96,22 +101,21 @@ class _AvoidTypeSelectionPageState extends State<AvoidTypeSelectionPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(item['icon'],
-                              size: 32,
-                              color:
-                              isSelected ? Colors.white : Colors.black),
+                          Icon(
+                            item['icon'],
+                            size: 32,
+                            color: isSelected ? Colors.white : Colors.black,
+                          ),
                           const SizedBox(height: 8),
                           Text(
                             label,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 14,
-                              color: isSelected
-                                  ? Colors.white
-                                  : Colors.black87,
+                              color: isSelected ? Colors.white : Colors.black87,
                               fontWeight: FontWeight.w500,
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -125,34 +129,44 @@ class _AvoidTypeSelectionPageState extends State<AvoidTypeSelectionPage> {
               child: Ink(
                 decoration: isValid
                     ? BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: getCardGradientColors(),
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                  borderRadius:
-                  const BorderRadius.all(Radius.circular(12)),
-                )
+                        gradient: LinearGradient(
+                          colors: getCardGradientColors(),
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(12),
+                        ),
+                      )
                     : const BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius:
-                  BorderRadius.all(Radius.circular(12)),
-                ),
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                      ),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(12),
                   onTap: isValid
                       ? () {
-                    // 儲存
-                    setSelectedListByName(
-                        'selectedAvoidTypes', selected.toList());
+                          // 儲存
+                          UserModel user = Provider.of<AuthModel>(
+                            context,
+                            listen: false,
+                          ).userModel!;
+                          user.preferences?.avoidTypes = selected;
 
-                    // 結束導引導入主頁
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => const PreferenceSummaryPage()),
-                    );
-                  }
+                          user.updateAvoidType(context, selected.toList());
+                          setSelectedListByName(
+                            'selectedAvoidTypes',
+                            selected.toList(),
+                          );
+
+                          // 結束導引導入主頁
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const PreferenceSummaryPage(),
+                            ),
+                          );
+                        }
                       : null,
                   child: Container(
                     height: 48,

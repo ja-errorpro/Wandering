@@ -1,4 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'model/user_model.dart';
+import 'preference_data.dart';
+import 'model/user_database_handler.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 enum Errorlog {
@@ -16,24 +20,39 @@ class LoginError implements Exception {
 }
 
 class AuthModel extends ChangeNotifier {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  static final FirebaseAuth auth = FirebaseAuth.instance;
   User? _user;
+  static UserModel? _userModel;
 
   AuthModel() {
-    _auth.authStateChanges().listen((User? user) {
+    auth.authStateChanges().listen((User? user) {
       print('recieved Changes: user = $user');
       _user = user;
+      _userModel = UserModel(
+        uid: user?.uid ?? '',
+        username: user?.displayName ?? '',
+        firebaseUser: user!,
+        email: user.email ?? '',
+        preferences: UserPreferences(),
+      );
       notifyListeners();
     });
   }
 
   User? get user => _user;
 
+  UserModel? get userModel => _userModel;
+  set userModel(UserModel? userModel) {
+    _userModel = userModel;
+    notifyListeners();
+  }
+
   bool get isAuthenticated => user != null;
 
   Future<LoginError> login(String email, String password) async {
     try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      await auth.signInWithEmailAndPassword(email: email, password: password);
+      _userModel = await UserDatabaseHandler.instance.getUser(user!.uid);
       return LoginError(Errorlog.success, 'Login successful');
     } catch (e) {
       if (e is FirebaseAuthException) {
@@ -65,14 +84,26 @@ class AuthModel extends ChangeNotifier {
     String password,
   ) async {
     try {
-      UserCredential userCredential = await _auth
-          .createUserWithEmailAndPassword(email: email, password: password);
+      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
       AuthCredential credential = EmailAuthProvider.credential(
         email: email,
         password: password,
       );
-      UserCredential result = await _auth.signInWithCredential(credential);
+      UserCredential result = await auth.signInWithCredential(credential);
       await user?.updateDisplayName(username);
+
+      FirebaseFirestore storage = FirebaseFirestore.instance;
+      await storage.collection("userperference").doc(_user!.uid).set({
+        'username': username,
+        'email': email,
+        'travelStyles': [],
+        'locationTypes': [],
+        'accommodationTypes': [],
+        'avoidTypes': [],
+      });
 
       notifyListeners();
       Navigator.pop(context);
@@ -82,7 +113,7 @@ class AuthModel extends ChangeNotifier {
   }
 
   Future<void> logout() async {
-    await _auth.signOut();
+    await auth.signOut();
   }
 
   Future<String> getUserName() async {

@@ -1,9 +1,9 @@
 import 'package:Wandering/auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'user_model.dart';
 import 'package:Wandering/preference_data.dart';
 
@@ -12,6 +12,7 @@ class UserDatabaseHandler {
   static final _databaseName = "user.db"; // 資料庫文件名
   static final _databaseVersion = 1; // 資料庫版本
   static final userTable = 'user'; // 使用者數據表名
+  static var _firebaseDB = FirebaseFirestore.instance; // Firebase 實例
 
   UserDatabaseHandler._privateConstructor();
   static final UserDatabaseHandler instance =
@@ -27,6 +28,7 @@ class UserDatabaseHandler {
   _initDatabase() async {
     String documentsDirectory = await getDatabasesPath();
     String path = join(documentsDirectory, _databaseName);
+    firebaseAuth();
     return await openDatabase(
       path,
       version: _databaseVersion,
@@ -38,13 +40,23 @@ class UserDatabaseHandler {
   Future _onCreate(Database db, int version) async {
     await db.execute('''
           CREATE TABLE $userTable (
-            uid INTEGER PRIMARY KEY,
+            uid TEXT PRIMARY KEY,
             username TEXT,
             email TEXT,
             preferences TEXT,
             favoritePlaces TEXT
           )
           ''');
+  }
+
+  Future<void> firebaseAuth() async {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user != null) {
+        print('User is signed in: ${user.uid}');
+      } else {
+        print('User is signed out');
+      }
+    });
   }
 
   // 插入或更新使用者資料(需要與 Firebase 上的使用者資料同步)
@@ -56,8 +68,16 @@ class UserDatabaseHandler {
 
     Database db = await instance.database;
     // 將 UserModel 對象轉換為 Map
-    final Map<String, dynamic> row = user.toMap();
-    row['uid'] = user.uid; // 使用者 ID
+    Map<String, dynamic> row = user.toMap();
+    row['uid'] = user.uid;
+    // change to string for sqflite
+    row['preferences'] = user.preferences?.toMap().toString();
+    row['favoritePlaces'] = user.favoritePlaces
+        .map((place) => place.toMap())
+        .toList()
+        .toString();
+
+    print('row: ${row['preferences']}');
 
     // 嘗試更新，如果不存在則插入
     int count = await db.update(
@@ -72,27 +92,47 @@ class UserDatabaseHandler {
 
     // 更新 Firebase 上的使用者資料
     try {
-      final userRef = FirebaseStorage.instance.ref().child(
-        'users/${user.uid}.json',
-      );
-      await userRef.putString(user.toMap().toString());
+      final firebaseData = {
+        'uid': user.uid,
+        'travelStyles': user.preferences?.travelStyles,
+        'locationTypes': user.preferences?.locationTypes,
+        'accommodationTypes': user.preferences?.accommodationTypes,
+        'avoidTypes': user.preferences?.avoidTypes,
+      };
+
+      await _firebaseDB
+          .collection('userpreference')
+          .doc(user.uid)
+          .set(firebaseData, SetOptions(merge: true));
     } catch (e) {
       print('Error updating Firebase user data: $e');
     }
     return count;
   }
 
-  // 獲取使用者資料
+  // 獲取使用者資料(從雲端)
   Future<UserModel?> getUser(String uid) async {
-    Database db = await instance.database;
-    List<Map<String, dynamic>> maps = await db.query(
-      userTable,
-      where: 'uid = ?',
-      whereArgs: [uid],
-    );
-
-    if (maps.isNotEmpty) {
-      return UserModel.fromMap(maps.first);
+    final dataRef = _firebaseDB.collection('userpreference').doc(uid);
+    final snapshot = await dataRef.get();
+    if (snapshot.exists) {
+      final data = snapshot.data();
+      if (data != null) {
+        // 將 Map 轉換為 UserModel
+        return UserModel(
+          uid: uid,
+          username: data['username'] ?? '',
+          email: data['email'] ?? '',
+          firebaseUser: FirebaseAuth.instance.currentUser!,
+          preferences: UserPreferences(
+            travelStyles: Set<String>.from(data['travelStyles'] ?? []),
+            locationTypes: Set<String>.from(data['locationTypes'] ?? []),
+            accommodationTypes: Set<String>.from(
+              data['accommodationTypes'] ?? [],
+            ),
+            avoidTypes: Set<String>.from(data['avoidTypes'] ?? []),
+          ),
+        );
+      }
     }
     return null;
   }

@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
+import 'package:provider/provider.dart';
 // import './../preference_data.dart'; // 確保導入你的 preference_data.dart
 // import './../savePreferencesLocally.dart'; // 導入
+import 'package:Wandering/model/user_model.dart';
+import 'package:Wandering/preference_data.dart';
+import 'package:Wandering/auth.dart';
 import 'all_page.dart';
 
 class TravelStylePreferencePage extends StatefulWidget {
   const TravelStylePreferencePage({super.key});
 
   @override
-  State<TravelStylePreferencePage> createState() => _TravelStylePreferencePageState();
+  State<TravelStylePreferencePage> createState() =>
+      _TravelStylePreferencePageState();
 }
 
 class _TravelStylePreferencePageState extends State<TravelStylePreferencePage> {
@@ -61,7 +65,7 @@ class _TravelStylePreferencePageState extends State<TravelStylePreferencePage> {
               );
             },
             child: const Text('Skip', style: TextStyle(color: Colors.black)),
-          )
+          ),
         ],
       ),
       body: Padding(
@@ -93,10 +97,14 @@ class _TravelStylePreferencePageState extends State<TravelStylePreferencePage> {
                       decoration: BoxDecoration(
                         color: isSelected
                             ? getCardGradientColors()[1]
-                            : (disabled ? Colors.white.withOpacity(0.2) : Colors.white.withOpacity(0.5)),
+                            : (disabled
+                                  ? Colors.white.withOpacity(0.2)
+                                  : Colors.white.withOpacity(0.5)),
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
-                          color: isSelected ? getCardGradientColors()[2] : Colors.white70,
+                          color: isSelected
+                              ? getCardGradientColors()[2]
+                              : Colors.white70,
                           width: 2,
                         ),
                       ),
@@ -105,17 +113,23 @@ class _TravelStylePreferencePageState extends State<TravelStylePreferencePage> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(item['icon'], size: 32, color: isSelected ? Colors.white : Colors.black),
+                            Icon(
+                              item['icon'],
+                              size: 32,
+                              color: isSelected ? Colors.white : Colors.black,
+                            ),
                             const SizedBox(height: 8),
                             Text(
                               label,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 14,
-                                color: isSelected ? Colors.white : Colors.black87,
+                                color: isSelected
+                                    ? Colors.white
+                                    : Colors.black87,
                                 fontWeight: FontWeight.w500,
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),
@@ -130,36 +144,46 @@ class _TravelStylePreferencePageState extends State<TravelStylePreferencePage> {
               child: Ink(
                 decoration: isValid
                     ? BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: getCardGradientColors(),
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
-                )
+                        gradient: LinearGradient(
+                          colors: getCardGradientColors(),
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                      )
                     : const BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
-                ),
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                      ),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(12),
                   onTap: isValid
                       ? () {
-                    // 儲存偏好
-                    setSelectedListByName(
-                      'selectedTravelStyles',
-                      selected.toList(),
-                    );
+                          // 儲存偏好
+                          UserModel? user = Provider.of<AuthModel>(
+                            context,
+                            listen: false,
+                          ).userModel;
+                          if (user != null) {
+                            user.preferences?.travelStyles = selected;
+                            user.updateTravelStyle(context, selected.toList());
+                          } else {
+                            print('Error: UserModel is null');
+                          }
 
-                    // 導向下一頁
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                        const LocationTypeSelectionPage(),
-                      ),
-                    );
-                  }
+                          setSelectedListByName(
+                            'selectedTravelStyles',
+                            selected.toList(),
+                          );
+
+                          // 導向下一頁
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const LocationTypeSelectionPage(),
+                            ),
+                          );
+                        }
                       : null,
                   child: Container(
                     height: 48,

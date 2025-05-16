@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'all_page.dart';
 import './../preference_data.dart';
+import 'package:Wandering/auth.dart';
+import 'package:Wandering/model/user_model.dart';
+import 'package:provider/provider.dart';
 
 class AccommodationTypeSelectionPage extends StatefulWidget {
   const AccommodationTypeSelectionPage({super.key});
@@ -67,11 +70,13 @@ class _AccommodationTypeSelectionPageState
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const AvoidTypeSelectionPage()),
+                MaterialPageRoute(
+                  builder: (_) => const AvoidTypeSelectionPage(),
+                ),
               );
             },
             child: const Text('Skip', style: TextStyle(color: Colors.black)),
-          )
+          ),
         ],
       ),
       body: Padding(
@@ -94,7 +99,8 @@ class _AccommodationTypeSelectionPageState
                 children: accommodationTypes.map((item) {
                   final label = item['label'] as String;
                   final isSelected = selected.contains(label);
-                  final isDisabled = !isSelected &&
+                  final isDisabled =
+                      !isSelected &&
                       selected.length >= 3 &&
                       !selected.contains('任意皆可') &&
                       label != '任意皆可';
@@ -122,10 +128,11 @@ class _AccommodationTypeSelectionPageState
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(item['icon'],
-                                size: 32,
-                                color:
-                                isSelected ? Colors.white : Colors.black),
+                            Icon(
+                              item['icon'],
+                              size: 32,
+                              color: isSelected ? Colors.white : Colors.black,
+                            ),
                             const SizedBox(height: 8),
                             Text(
                               label,
@@ -137,7 +144,7 @@ class _AccommodationTypeSelectionPageState
                                     : Colors.black87,
                                 fontWeight: FontWeight.w500,
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),
@@ -152,45 +159,56 @@ class _AccommodationTypeSelectionPageState
               child: Ink(
                 decoration: isValid
                     ? BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: getCardGradientColors(),
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                  borderRadius:
-                  const BorderRadius.all(Radius.circular(12)),
-                )
+                        gradient: LinearGradient(
+                          colors: getCardGradientColors(),
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(12),
+                        ),
+                      )
                     : const BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius:
-                  BorderRadius.all(Radius.circular(12)),
-                ),
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                      ),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(12),
                   onTap: isValid
                       ? () {
-                    // 特別邏輯：任意皆可轉換成 6 項全選
-                    List<String> finalList = selected.contains('任意皆可')
-                        ? [
-                      '青年旅館',
-                      '民宿',
-                      '星級飯店',
-                      '豪華渡假村',
-                      '露營／野營',
-                      '公寓／套房',
-                    ]
-                        : selected.toList();
+                          // 特別邏輯：任意皆可轉換成 6 項全選
+                          List<String> finalList = selected.contains('任意皆可')
+                              ? [
+                                  '青年旅館',
+                                  '民宿',
+                                  '星級飯店',
+                                  '豪華渡假村',
+                                  '露營／野營',
+                                  '公寓／套房',
+                                ]
+                              : selected.toList();
 
-                    setSelectedListByName(
-                        'selectedAccommodationTypes', finalList);
+                          // 儲存偏好
+                          UserModel user = Provider.of<AuthModel>(
+                            context,
+                            listen: false,
+                          ).userModel!;
+                          user.preferences?.accommodationTypes =
+                              Set<String>.from(finalList);
 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) =>
-                          const AvoidTypeSelectionPage()),
-                    );
-                  }
+                          user.updateAccommodationType(context, finalList);
+                          setSelectedListByName(
+                            'selectedAccommodationTypes',
+                            finalList,
+                          );
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const AvoidTypeSelectionPage(),
+                            ),
+                          );
+                        }
                       : null,
                   child: Container(
                     height: 48,

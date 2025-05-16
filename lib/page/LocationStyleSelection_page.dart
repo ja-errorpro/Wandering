@@ -1,13 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'all_page.dart';
-// import 'package:provider/provider.dart'; // 導入 Provider
+import 'package:provider/provider.dart'; // 導入 Provider
 // import './../preference_data.dart'; // 確保導入你的 preference_data.dart (包含 LocationType 枚舉和 UserPreferences 類)
 
 // import 'package:Wandering/model/user_database_handler.dart';
-// import 'package:Wandering/auth.dart';
-// import 'package:Wandering/model/user_model.dart';
-
+import 'package:Wandering/auth.dart';
+import 'package:Wandering/model/user_model.dart';
 
 class LocationTypeSelectionPage extends StatefulWidget {
   const LocationTypeSelectionPage({super.key});
@@ -36,7 +35,7 @@ class _LocationTypeSelectionPageState extends State<LocationTypeSelectionPage> {
 
   bool get isValid => selected.isNotEmpty;
   bool get isMaxSelected => selected.length >= 5;
-  
+
   void _toggleSelection(String label) {
     setState(() {
       if (selected.contains(label)) {
@@ -66,7 +65,7 @@ class _LocationTypeSelectionPageState extends State<LocationTypeSelectionPage> {
               );
             },
             child: const Text('Skip', style: TextStyle(color: Colors.black)),
-          )
+          ),
         ],
       ),
       body: Padding(
@@ -98,10 +97,14 @@ class _LocationTypeSelectionPageState extends State<LocationTypeSelectionPage> {
                       decoration: BoxDecoration(
                         color: isSelected
                             ? getCardGradientColors()[1]
-                            : (disabled ? Colors.white.withOpacity(0.2) : Colors.white.withOpacity(0.5)),
+                            : (disabled
+                                  ? Colors.white.withOpacity(0.2)
+                                  : Colors.white.withOpacity(0.5)),
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
-                          color: isSelected ? getCardGradientColors()[2] : Colors.white70,
+                          color: isSelected
+                              ? getCardGradientColors()[2]
+                              : Colors.white70,
                           width: 2,
                         ),
                       ),
@@ -110,17 +113,23 @@ class _LocationTypeSelectionPageState extends State<LocationTypeSelectionPage> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(item['icon'], size: 32, color: isSelected ? Colors.white : Colors.black),
+                            Icon(
+                              item['icon'],
+                              size: 32,
+                              color: isSelected ? Colors.white : Colors.black,
+                            ),
                             const SizedBox(height: 8),
                             Text(
                               label,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 14,
-                                color: isSelected ? Colors.white : Colors.black87,
+                                color: isSelected
+                                    ? Colors.white
+                                    : Colors.black87,
                                 fontWeight: FontWeight.w500,
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),
@@ -135,36 +144,43 @@ class _LocationTypeSelectionPageState extends State<LocationTypeSelectionPage> {
               child: Ink(
                 decoration: isValid
                     ? BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: getCardGradientColors(),
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
-                )
+                        gradient: LinearGradient(
+                          colors: getCardGradientColors(),
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                      )
                     : const BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
-                ),
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                      ),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(12),
                   onTap: isValid
                       ? () {
-                    // 儲存偏好
-                    setSelectedListByName(
-                      'selectedLocationTypes',
-                      selected.toList(),
-                    );
+                          // 儲存偏好
+                          UserModel user = Provider.of<AuthModel>(
+                            context,
+                            listen: false,
+                          ).userModel!;
+                          user.preferences?.locationTypes = selected;
 
-                    // 導向下一頁
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                        const AccommodationTypeSelectionPage(),
-                      ),
-                    );
-                  }
+                          user.updateLocationType(context, selected.toList());
+                          setSelectedListByName(
+                            'selectedLocationTypes',
+                            selected.toList(),
+                          );
+
+                          // 導向下一頁
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  const AccommodationTypeSelectionPage(),
+                            ),
+                          );
+                        }
                       : null,
                   child: Container(
                     height: 48,

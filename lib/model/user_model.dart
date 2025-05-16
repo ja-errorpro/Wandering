@@ -1,5 +1,9 @@
 import 'package:Wandering/preference_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
+import 'user_database_handler.dart';
+import 'package:Wandering/auth.dart';
 import 'place_model.dart';
 
 class UserModel {
@@ -7,7 +11,7 @@ class UserModel {
   final User firebaseUser;
   final String username;
   final String email;
-  final UserPreferences preferences;
+  UserPreferences? preferences;
   List<PlaceModel> favoritePlaces = [];
 
   UserModel({
@@ -15,7 +19,7 @@ class UserModel {
     required this.username,
     required this.firebaseUser,
     required this.email,
-    required this.preferences,
+    this.preferences,
     this.favoritePlaces = const [],
   });
 
@@ -25,7 +29,7 @@ class UserModel {
       'uid': uid,
       'username': username,
       'email': email,
-      'preferences': preferences.toMap(),
+      'preferences': preferences?.toMap(),
       'favoritePlaces': favoritePlaces.map((place) => place.toMap()).toList(),
     };
   }
@@ -50,5 +54,60 @@ class UserModel {
 
   bool removeFavoritePlace(PlaceModel place) {
     return favoritePlaces.remove(place);
+  }
+
+  Future<void> updatePreferences(
+    BuildContext context,
+    UserPreferences newPreferences,
+  ) async {
+    preferences = newPreferences;
+    await UserDatabaseHandler.instance.insertOrUpdateUser(
+      this,
+      Provider.of<AuthModel>(context, listen: false),
+    );
+  }
+
+  Future<void> updateTravelStyle(
+    BuildContext context,
+    List<String> travelStyle,
+  ) async {
+    preferences?.travelStyles = Set<String>.from(travelStyle);
+    await UserDatabaseHandler.instance.insertOrUpdateUser(
+      this,
+      Provider.of<AuthModel>(context, listen: false),
+    );
+  }
+
+  Future<void> updateLocationType(
+    BuildContext context,
+    List<String> locationType,
+  ) async {
+    preferences?.locationTypes = Set<String>.from(locationType);
+    await UserDatabaseHandler.instance.insertOrUpdateUser(
+      this,
+      Provider.of<AuthModel>(context, listen: false),
+    );
+  }
+
+  Future<void> updateAvoidType(
+    BuildContext context,
+    List<String> avoidType,
+  ) async {
+    preferences?.avoidTypes = Set<String>.from(avoidType);
+    await UserDatabaseHandler.instance.insertOrUpdateUser(
+      this,
+      Provider.of<AuthModel>(context, listen: false),
+    );
+  }
+
+  Future<void> updateAccommodationType(
+    BuildContext context,
+    List<String> accommodationType,
+  ) async {
+    preferences?.accommodationTypes = Set<String>.from(accommodationType);
+    await UserDatabaseHandler.instance.insertOrUpdateUser(
+      this,
+      Provider.of<AuthModel>(context, listen: false),
+    );
   }
 }

@@ -10,17 +10,25 @@ class GenAIModel {
 
   GenAIModel({this.config = const {}});
 
-  Future<String> getOneRecommendation(
-    List<UserPreferences> userPreferences,
-  ) async {
+  Future<String> getOneRecommendation(dynamic userPreferences) async {
     // call gemini API, input the user preferences and get the recommendations
 
     var httpClient = HttpClient();
     var request = await httpClient.postUrl(Uri.parse(apiUrl));
     List<String> travelStyles = [];
 
-    for (var preference in userPreferences) {
-      travelStyles.addAll(preference.travelStyles);
+    if (userPreferences is List<UserPreferences>) {
+      for (var preference in userPreferences) {
+        travelStyles.addAll(preference.travelStyles);
+      }
+    } else if (userPreferences is String) {
+      // Handle the case where userPreferences is a String
+      travelStyles.add(userPreferences);
+    } else if (userPreferences is List<String>) {
+      // Handle the case where userPreferences is a List<String>
+      travelStyles.addAll(userPreferences);
+    } else {
+      throw Exception('Invalid user preferences type');
     }
 
     String prompt = '我偏好 $travelStyles，請推薦給我一些適合我的景點，有沒有其他更適合我的呢?';
