@@ -172,13 +172,11 @@ String? getCurrentUserUid() {
   // return 1;
 }
 
-/*
 // 狀態變數來儲存選取的偏好
 Set<String> selectedTravelStyles = {};
 Set<String> selectedLocationTypes = {};
 Set<String> selectedAvoids = {};
 Set<String> selectedAccommodations = {};
-
 
 // 偏好類型資料 (保持不變)
 final List<String> travelStyles = [
@@ -228,5 +226,5 @@ final List<String> avoidTypes = [
   '不乾淨的空間', // 廁所、房間或設施不整潔
   '害怕動物', // 害怕狗、蛇、昆蟲或其他動物
 ];
-
+/*
 */
