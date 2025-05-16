@@ -1,43 +1,6 @@
-// Suggested code may be subject to a license. Learn more: ~LicenseLog:2095703226.
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart'; // 導入 Provider
-import 'package:firebase_auth/firebase_auth.dart';
-import './../preference_data.dart'; // 確保導入你的 preference_data.dart (包含 AvoidType 枚舉和 UserPreferences 類)
-import './../database_helper.dart'; // 導入資料庫幫助類
-import './../auth.dart'; // 導入 AuthServic
-import './../savePreferencesLocally.dart'; // 確保導入 savePreferencesLocally.dart
-// import 'completion_page.dart'; // 導入完成頁面 (如果有的話)
-// import 'home_page.dart'; // 假設完成後導向主頁面
-
-// 定義 AvoidType 的文字標籤
-extension AvoidTypeDetails on AvoidType {
-  String get label {
-    // 根據 AvoidType 枚舉值返回對應的中文標籤
-    switch (this) {
-      case AvoidType.crowdedPlaces:
-        return '擁擠的地方';
-      case AvoidType.highCostAttractions:
-        return '高消費景點';
-      case AvoidType.tightItinerary:
-        return '緊湊行程';
-      case AvoidType.adventurousActivities:
-        return '冒險活動';
-      case AvoidType.humidHotClimate:
-        return '濕熱氣候';
-      case AvoidType.hotSunnyLocations:
-        return '炎熱曝曬地點';
-      case AvoidType.noisyEnvironment:
-        return '嘈雜環境';
-      case AvoidType.uncleanSpaces:
-        return '不乾淨的空間';
-      case AvoidType.fearOfAnimals:
-        return '害怕動物';
-      default:
-        return this.toString().split('.').last; // 默認使用英文
-    }
-  }
-}
+import 'all_page.dart'; // 若接到 Summary 或 MainPage
+import './../preference_data.dart';
 
 class AvoidTypeSelectionPage extends StatefulWidget {
   const AvoidTypeSelectionPage({super.key});
@@ -47,233 +10,163 @@ class AvoidTypeSelectionPage extends StatefulWidget {
 }
 
 class _AvoidTypeSelectionPageState extends State<AvoidTypeSelectionPage> {
-  // 在 State 初始化時從資料庫加載偏好
-  @override
-  void initState() {
-    super.initState();
-    _loadPreferencesFromDatabase();
-  }
+  final List<Map<String, dynamic>> avoidTypes = [
+    {'label': '人多的地方', 'icon': Icons.groups},
+    {'label': '高消費景點', 'icon': Icons.attach_money},
+    {'label': '行程太緊湊', 'icon': Icons.schedule},
+    {'label': '冒險刺激活動', 'icon': Icons.dangerous},
+    {'label': '潮濕悶熱氣候', 'icon': Icons.wb_cloudy},
+    {'label': '高溫炎熱地點', 'icon': Icons.sunny},
+    {'label': '吵雜環境', 'icon': Icons.volume_up},
+    {'label': '不乾淨的空間', 'icon': Icons.cleaning_services},
+    {'label': '害怕動物', 'icon': Icons.pets},
+  ];
 
-  // 從資料庫加載用戶偏好
-  Future<void> _loadPreferencesFromDatabase() async {
-    final userPreferences = Provider.of<UserPreferences>(
-      context,
-      listen: false,
-    );
-    final loadedPreferences = await DatabaseHelper.instance.getPreferences();
+  final Set<String> selected = {};
 
-    if (loadedPreferences != null) {
-      // 如果資料庫有數據，更新 Provider 中的 UserPreferences
-      userPreferences.travelStyles = loadedPreferences.travelStyles;
-      userPreferences.locationTypes = loadedPreferences.locationTypes;
-      userPreferences.accommodationTypes = loadedPreferences.accommodationTypes;
-      userPreferences.avoidTypes = loadedPreferences.avoidTypes;
-      print('從資料庫加載了用戶偏好。');
-    } else {
-      print('資料庫中沒有用戶偏好數據。');
-    }
-  }
+  bool get isValid => selected.isNotEmpty;
 
-  // 顯示選擇數量警告視窗 (通用函數) - 避免類型通常沒有數量限制，所以這個函數可能不需要，但保留以便將來使用
-  void _showSelectionCountWarningDialog(
-    PreferenceCategory category,
-    int minCount,
-    int maxCount,
-  ) {
-    String message = '';
-    String categoryName = '';
-
-    switch (category) {
-      case PreferenceCategory.travelStyles:
-        categoryName = '旅行風格';
-        break;
-      case PreferenceCategory.locationTypes:
-        categoryName = '地點類型';
-        break;
-      case PreferenceCategory.accommodationTypes:
-        categoryName = '住宿類型';
-        break;
-      case PreferenceCategory.avoidTypes:
-        categoryName = '避免類型';
-        break;
-    }
-
-    if (minCount == maxCount) {
-      message = '$categoryName 必須選擇 $minCount 項。';
-    } else {
-      message = '$categoryName 必須選擇 $minCount 到 $maxCount 項。';
-    }
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('選擇數量不符'),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('確定'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  // 驗證選擇數量是否在指定區間內 (通用函數) - 避免類型通常沒有數量限制，所以這個函數可能不需要，但保留以便將來使用
-  bool _isSelectionCountValid(
-    Set<String> selectedSet,
-    int minCount,
-    int maxCount,
-  ) {
-    return selectedSet.length >= minCount && selectedSet.length <= maxCount;
+  void _toggleSelection(String label) {
+    setState(() {
+      if (selected.contains(label)) {
+        selected.remove(label);
+      } else {
+        selected.add(label);
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    // 使用 Consumer 來監聽 UserPreferences 的變化並重建 UI
     return Scaffold(
-      appBar: AppBar(title: const Text('選擇避免類型')),
-      body: Consumer<UserPreferences>(
-        builder: (context, userPreferences, child) {
-          // 在這裡構建避免類型的選擇 UI
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  '避免類型 (可複選)', // 避免類型通常沒有數量限制
-                  style: GoogleFonts.lato(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.redAccent,
-                  ), // 根據避免類型調整顏色
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  '以下是你特別想要避開的類型嗎？',
-                  style: GoogleFonts.lato(
-                    fontSize: 16,
-                    color: Colors.grey[700],
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 24),
-                Expanded(
-                  child: Wrap(
-                    spacing: 8.0,
-                    runSpacing: 8.0,
-                    children:
-                        AvoidType.values.map((type) {
-                          final typeValue = type.label; // 使用 extension 獲取標籤
-                          final isSelected = userPreferences.avoidTypes
-                              .contains(typeValue); // 從 UserPreferences 中獲取選擇狀態
-                          return FilterChip(
-                            label: Text(
-                              typeValue,
-                              style: TextStyle(
-                                color:
-                                    isSelected
-                                        ? Colors.white
-                                        : Colors.black87, // 根據選擇狀態改變文字顏色
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            selected: isSelected,
-                            backgroundColor: Colors.grey.shade300, // 默認背景色
-                            selectedColor:
-                                Colors.redAccent.withValues(), // 選中時的背景色
-                            checkmarkColor: Colors.white, // 選中時的勾選顏色
-                            onSelected: (bool selected) {
-                              // 避免類型通常沒有最大數量限制
-                              // if (selected && userPreferences.avoidTypes.length >= AvoidType.values.length) {
-                              //    _showSelectionCountWarningDialog(PreferenceCategory.avoidTypes, 0, AvoidType.values.length);
-                              //    return;
-                              // }
-
-                              // 更新 UserPreferences 中的避免類型
-                              userPreferences.updatePreference(
-                                PreferenceCategory.avoidTypes,
-                                typeValue,
-                                selected, // 直接使用 selected 的布爾值
-                              );
-
-                              // **在偏好更新後保存到資料庫**
-                              DatabaseHelper.instance.insertOrUpdatePreferences(
-                                userPreferences,
-                              );
-                            },
-                          );
-                        }).toList(),
-                  ),
-                ),
-                const SizedBox(height: 24), // 將按鈕推到底部
-                ElevatedButton(
-                  onPressed: () async {
-                    // 改為 async 以等待儲存完成
-
-                    // 避免類型通常沒有數量限制，所以不需要驗證
-                    // if (!_isSelectionCountValid(userPreferences.avoidTypes, 0, AvoidType.values.length)) {
-                    //    _showSelectionCountWarningDialog(PreferenceCategory.avoidTypes, 0, AvoidType.values.length);
-                    //    return;
-                    // } //
-
-                    // 在最後一個偏好頁面儲存偏好
-                    print('所有偏好已選擇，準備儲存：${userPreferences.toMap()}');
-                    // 調用儲存方法，但在這裡我們需要檢查登入狀態
-                    final authService = Provider.of<AuthModel>(
-                      context,
-                      listen: false,
-                    );
-                    final currentUser = authService.isAuthenticated;
-
-                    if (currentUser) {
-                      // 用戶已登入，將本地資料保存到用戶資料
-                      try {
-                        await savePreferencesLocally(userPreferences);
-                        print('本地偏好已成功覆蓋到用戶資料。');
-                        // 導航回主頁面
-                        Navigator.popUntil(context, (route) => route.isFirst);
-                      } catch (e) {
-                        print('覆蓋用戶資料時發生錯誤: $e');
-                        // 可以在這裡顯示一個錯誤提示
-                      }
-                    } else {
-                      // 用戶未登入，將資料存到本地
-                      await savePreferencesLocally(userPreferences);
-                      print('用戶未登入，所有偏好已保存到本地。');
-                      // 用戶未登入，導向登入畫面
-                      print('用戶未登入，導向登入畫面。');
-                      Navigator.pushReplacementNamed(
-                        context,
-                        '/login',
-                      ); // 請確保你定義了 '/login' 路由
-                    }
-                    // 或者
-                    // Navigator.pushReplacementNamed(context, '/completionPage'); // 導航到完成頁面 (你需要定義這個路由)
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    backgroundColor: Colors.red, // 根據避免類型調整按鈕顏色
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    elevation: 5,
-                  ),
-                  child: const Text(
-                    '完成選擇並儲存',
-                    style: TextStyle(fontSize: 18, color: Colors.white),
-                  ),
-                ),
-              ],
+      backgroundColor: getCardGradientColors()[0],
+      appBar: AppBar(
+        title: const Text('設定您的偏好'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const PreferenceSummaryPage()),
+              );
+            },
+            child: const Text('Skip', style: TextStyle(color: Colors.black)),
+          )
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                '避開這些，讓旅程更自在',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
             ),
-          );
-        },
+            const SizedBox(height: 16),
+            Expanded(
+              child: GridView.count(
+                crossAxisCount: 3,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                children: avoidTypes.map((item) {
+                  final label = item['label'] as String;
+                  final isSelected = selected.contains(label);
+
+                  return GestureDetector(
+                    onTap: () => _toggleSelection(label),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? getCardGradientColors()[1]
+                            : Colors.white.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: isSelected
+                              ? getCardGradientColors()[2]
+                              : Colors.white70,
+                          width: 2,
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(item['icon'],
+                              size: 32,
+                              color:
+                              isSelected ? Colors.white : Colors.black),
+                          const SizedBox(height: 8),
+                          Text(
+                            label,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: isSelected
+                                  ? Colors.white
+                                  : Colors.black87,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 24),
+              child: Ink(
+                decoration: isValid
+                    ? BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: getCardGradientColors(),
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                  borderRadius:
+                  const BorderRadius.all(Radius.circular(12)),
+                )
+                    : const BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius:
+                  BorderRadius.all(Radius.circular(12)),
+                ),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(12),
+                  onTap: isValid
+                      ? () {
+                    // 儲存
+                    setSelectedListByName(
+                        'selectedAvoidTypes', selected.toList());
+
+                    // 結束導引導入主頁
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const PreferenceSummaryPage()),
+                    );
+                  }
+                      : null,
+                  child: Container(
+                    height: 48,
+                    alignment: Alignment.center,
+                    child: const Text(
+                      '下一頁',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

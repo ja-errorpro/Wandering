@@ -8,6 +8,7 @@ export 'LocationStyleSelection_page.dart';
 export 'TravelStyleSelection_page.dart';
 export 'AvoidTypeSelection_page.dart';
 export 'AccommodationTypeSelection_page.dart';
+export 'PreferenceSummary_page.dart';
 export 'explore_page.dart';
 export 'profile_page.dart';
 

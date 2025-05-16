@@ -76,7 +76,7 @@ class _PreferenceSelectionPageState extends State<PreferenceSelectionPage> {
                       // Use push to allow back navigation
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const TravelStyleSelectionPage(),
+                        builder: (context) => const TravelStylePreferencePage(),
                       ),
                     );
                   },

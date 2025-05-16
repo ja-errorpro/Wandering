@@ -12,6 +12,59 @@ String language = 'zh-TW';
 double fontSize = 14;
 String theme = 'grand blue'; // 預設主題
 
+List<String> selectedTravelStyles = [];
+List<String> selectedLocationTypes = [];
+List<String> selectedAccommodationTypes = [];
+List<String> selectedAvoidTypes = [];
+
+// 依據名稱取得對應的 List
+List<String> getSelectedListByName(String name) {
+  switch (name) {
+    case 'selectedTravelStyles':
+      return selectedTravelStyles;
+    case 'selectedLocationTypes':
+      return selectedLocationTypes;
+    case 'selectedAccommodationTypes':
+      return selectedAccommodationTypes;
+    case 'selectedAvoidTypes':
+      return selectedAvoidTypes;
+    default:
+      throw ArgumentError('未知的名稱: $name');
+  }
+}
+
+Map<String, List<String>> getAllPreferences() {
+  return {
+    '旅遊風格': getSelectedListByName('selectedTravelStyles'),
+    '景點類型': getSelectedListByName('selectedLocationTypes'),
+    '住宿類型': getSelectedListByName('selectedAccommodationTypes'),
+    '避免項目': getSelectedListByName('selectedAvoidTypes'),
+  };
+}
+
+
+// 依據名稱設定對應的 List
+void setSelectedListByName(String name, List<String> values) {
+  switch (name) {
+    case 'selectedTravelStyles':
+      selectedTravelStyles = List.from(values);
+      break;
+    case 'selectedLocationTypes':
+      selectedLocationTypes = List.from(values);
+      break;
+    case 'selectedAccommodationTypes':
+      selectedAccommodationTypes = List.from(values);
+      break;
+    case 'selectedAvoidTypes':
+      selectedAvoidTypes = List.from(values);
+      break;
+    default:
+      throw ArgumentError('未知的名稱: $name');
+  }
+}
+
+
+
 final Map<String, Map<String, String>> _translations = {
   '你好': {'en': 'Hello', 'zh-TW': '你好', 'ja': 'こんにちは'},
   '歡迎！': {'en': 'Welcome!', 'zh-TW': '歡迎！', 'ja': 'ようこそ！'},
@@ -145,11 +198,20 @@ List<Color> getCardGradientColors() {
   }
 }
 
-// void main() {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   initializeGlobals();
-//   runApp(const MyApp());
-// }
+class UserPreference {
+  static final List<String> selectedTravelStyles = [];
+  static final List<String> selectedLocationTypes = [];
+  static final List<String> selectedAccommodationTypes = [];
+  static final List<String> selectedAvoidTypes = [];
+
+  // 清空所有偏好（重設用）
+  static void clearAll() {
+    selectedTravelStyles.clear();
+    selectedLocationTypes.clear();
+    selectedAccommodationTypes.clear();
+    selectedAvoidTypes.clear();
+  }
+}
 
 // 初始化函式
 void initializeGlobals() {
